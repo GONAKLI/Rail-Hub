@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Rail Radar</string>
+
+    //Drawer Related Work Here
+    
+    <string name="open_drawer"> open_drawer </string>
+    <string name="close_drawer"> close_drawer </string>
+</resources>

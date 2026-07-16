@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_theme"> Change light/dark mode </string>
+    <string name="application_feedback"> Feedback </string>
+    <string name="application_rate_us"> Rate us </string>
+    <string name="application_bug_report"> Report Issue </string>
+    <string name="settings"> Settings </string>
+    <string name="share_application"> Share App </string>
+    <string name="timetable"> Update Time-Table </string>
+
+
+</resources>
