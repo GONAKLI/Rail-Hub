@@ -25,8 +25,13 @@ public class Combined_Home_Screen_Dashboard extends Fragment {
 
     combined_Home_Screen = inflater.inflate(R.layout.combined_home_screen_dashboard, container, false);
     find_all_id();
+    add_Predictive_Text();
     from_station_to_station_fields();
    return combined_Home_Screen;
+    }
+
+    private void add_Predictive_Text() {
+
     }
 
     private void find_all_id() {

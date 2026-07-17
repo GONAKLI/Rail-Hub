@@ -1,5 +1,7 @@
 package com.gonakli.railradar;
 
+import androidx.annotation.NonNull;
+
 public class Station_List_Modal_Class {
     private final String station_Code;
     private final String station_Name;
@@ -15,5 +17,11 @@ public class Station_List_Modal_Class {
 
     public String getStation_Name() {
         return station_Name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return station_Code + " -> " + station_Name + " \n";
     }
 }

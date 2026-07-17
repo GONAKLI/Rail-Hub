@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class Make_Array_Of_Trains_And_Stations_List {
     ArrayList<Station_List_Modal_Class> arrStationList = new ArrayList<>();
-    public void addStations(Context context) {
+    public ArrayList<Station_List_Modal_Class> addStations(Context context) {
         try {
-            InputStream inputStream = context.getAssets().open("arr_station_list.txt");
+            InputStream inputStream = context.getResources().openRawResource(R.raw.arr_station_list);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
@@ -33,7 +33,7 @@ public class Make_Array_Of_Trains_And_Stations_List {
              e.printStackTrace();
         }
 
-        Log.d("stationList", "addStations: " +arrStationList);
+        return arrStationList;
     }
 
 

@@ -1,5 +1,7 @@
 package com.gonakli.railradar;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +29,30 @@ FrameLayout frameLayout;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
+        add_All_Stations_In_DB();
         findAllID();
         setUpApplicationToolBar();
         frameLayoutSetUp();
 
     }
+
+    private void add_All_Stations_In_DB() {
+        new Thread(()-> {
+            Station_List_DB_Helper DB_Helper = new Station_List_DB_Helper(getApplicationContext());
+            SQLiteDatabase db = DB_Helper.getReadableDatabase();
+           Cursor cursor = db.rawQuery(
+                    "select count(*) from STATION_LIST_TABLE " , null );
+           cursor.moveToFirst();
+           int count = cursor.getInt(0);
+           cursor.close();
+           if(count == 0){
+               DB_Helper.addStationInDB();
+           }
+
+        }).start();
+
+    }
+
 
     private void frameLayoutSetUp() {
 
