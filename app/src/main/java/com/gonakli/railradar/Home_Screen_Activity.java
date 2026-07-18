@@ -3,11 +3,7 @@ package com.gonakli.railradar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -17,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.google.android.material.navigation.NavigationView;
 
 public class Home_Screen_Activity extends AppCompatActivity {
@@ -35,6 +32,7 @@ FrameLayout frameLayout;
         frameLayoutSetUp();
 
     }
+
 
     private void add_All_Stations_In_DB() {
         new Thread(()-> {
