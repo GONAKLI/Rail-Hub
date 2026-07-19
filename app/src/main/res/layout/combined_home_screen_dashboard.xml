@@ -7,5 +7,9 @@
     <include
         layout="@layout/input_field_from_station_to_station"
         />
+    <com.gonakli.railradar.TrainNumber_NameSearch.Action_Settter_For_Train_Search_by_Number_Or_Name_Layout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

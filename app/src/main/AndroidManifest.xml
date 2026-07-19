@@ -21,6 +21,7 @@
         </activity>
 <activity android:name=".User_Route_Train_List"
     android:exported="false"/>
+       <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
     </application>
 
 </manifest>

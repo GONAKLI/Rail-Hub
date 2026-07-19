@@ -1,8 +1,10 @@
-package com.gonakli.railradar;
+package com.gonakli.railradar.ArrayGenerater;
 
 import android.content.Context;
 
 import com.gonakli.railradar.DB_MODAL.Station_List_Modal_Class;
+import com.gonakli.railradar.DB_MODAL.Train_List_Modal_Class;
+import com.gonakli.railradar.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 
 public class Make_Array_Of_Trains_And_Stations_List {
     ArrayList<Station_List_Modal_Class> arrStationList = new ArrayList<>();
+    ArrayList<Train_List_Modal_Class> arrTrainList = new ArrayList<>();
     public ArrayList<Station_List_Modal_Class> addStations(Context context) {
         try {
             InputStream inputStream = context.getResources().openRawResource(R.raw.arr_station_list);
@@ -35,6 +38,10 @@ public class Make_Array_Of_Trains_And_Stations_List {
         }
 
         return arrStationList;
+    }
+
+    public void addTrains( Context context){
+
     }
 
 

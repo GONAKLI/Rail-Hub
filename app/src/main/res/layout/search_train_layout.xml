@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="15dp"
+    android:background="@drawable/train_search_container_border"
+android:layout_margin="10dp"
+    android:backgroundTint="#BABF82"
+    >
+
+    <!-- Left Icon -->
+    <ImageView
+        android:id="@+id/icon_left"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/home_screen_train_icon"
+        android:contentDescription="Icon" />
+
+    <!-- Middle Text -->
+    <TextView
+        android:id="@+id/search_input_area"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:hint="Train No./ Train Name"
+        android:textSize="16sp"
+        android:paddingLeft="25dp"
+        android:gravity="center_vertical" />
+
+    <!-- Right Search Icon -->
+    <ImageButton
+        android:id="@+id/btn_icon_search"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/search_icon"
+        android:background="@android:color/transparent"
+        android:contentDescription="Search" />
+
+</LinearLayout>

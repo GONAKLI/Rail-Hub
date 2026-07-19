@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.gonakli.railradar.Make_Array_Of_Trains_And_Stations_List;
+import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
 import com.gonakli.railradar.DB_MODAL.Station_List_Modal_Class;
 
 import java.util.ArrayList;
