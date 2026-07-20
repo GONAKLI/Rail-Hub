@@ -3,6 +3,7 @@ package com.gonakli.railradar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
@@ -13,7 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
+import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
 import com.google.android.material.navigation.NavigationView;
 
 public class Home_Screen_Activity extends AppCompatActivity {
@@ -27,11 +30,30 @@ FrameLayout frameLayout;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
         add_All_Stations_In_DB();
+        add_All_Trains_In_DB();
         findAllID();
         setUpApplicationToolBar();
         frameLayoutSetUp();
 
     }
+
+    private void add_All_Trains_In_DB() {
+        new Thread(() ->{
+        Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+           Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_List_DB_Helper.TABLE_NAME, null);
+           cursor.moveToFirst();
+
+           int count = cursor.getInt(0);
+           if(count == 0){
+               dbHelper.addTrainsInDB();
+           }
+            cursor.close();
+           db.close();
+        }).start();
+    }
+
 
 
     private void add_All_Stations_In_DB() {

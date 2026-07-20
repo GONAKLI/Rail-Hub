@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
-import com.gonakli.railradar.DB_MODAL.Station_List_Modal_Class;
+import com.gonakli.railradar.Structure_Class.Station_List_Structure;
 
 import java.util.ArrayList;
 
@@ -47,13 +47,13 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
 
     public void addStationInDB(){
     Make_Array_Of_Trains_And_Stations_List stationService = new Make_Array_Of_Trains_And_Stations_List();
-    ArrayList<Station_List_Modal_Class> arrStationList = stationService.addStations(applicationContext);
+    ArrayList<Station_List_Structure> arrStationList = stationService.addStations(applicationContext);
 
         SQLiteDatabase db = this.getWritableDatabase();
     try{
 
         db.beginTransaction();
-        for (Station_List_Modal_Class station : arrStationList){
+        for (Station_List_Structure station : arrStationList){
             ContentValues values =new ContentValues();
             values.put(TABLE_STATION_CODE_COLUMN, station.getStation_Code());
             values.put(TABLE_STATION_NAME_COLUMN, station.getStation_Name());
@@ -69,14 +69,14 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<Station_List_Modal_Class> getStationList(){
+    public ArrayList<Station_List_Structure> getStationList(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s", TABLE_NAME), null);
-        ArrayList<Station_List_Modal_Class> arrStationList = new ArrayList<>();
+        ArrayList<Station_List_Structure> arrStationList = new ArrayList<>();
         while (cursor.moveToNext()){
             String code = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_CODE_COLUMN));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
-            arrStationList.add(new Station_List_Modal_Class(code, name));
+            arrStationList.add(new Station_List_Structure(code, name));
         }
         db.close();
         cursor.close();

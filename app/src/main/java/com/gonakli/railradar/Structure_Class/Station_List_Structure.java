@@ -1,12 +1,12 @@
-package com.gonakli.railradar.DB_MODAL;
+package com.gonakli.railradar.Structure_Class;
 
 import androidx.annotation.NonNull;
 
-public class Station_List_Modal_Class {
+public class Station_List_Structure {
     private final String station_Code;
     private final String station_Name;
 
-    public Station_List_Modal_Class(String station_Code, String station_Name ){
+    public Station_List_Structure(String station_Code, String station_Name ){
         this.station_Code = station_Code;
         this.station_Name = station_Name;
     }

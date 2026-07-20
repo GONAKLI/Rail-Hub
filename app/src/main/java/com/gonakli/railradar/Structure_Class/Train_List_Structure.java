@@ -1,10 +1,12 @@
-package com.gonakli.railradar.DB_MODAL;
+package com.gonakli.railradar.Structure_Class;
 
-public class Train_List_Modal_Class {
+import androidx.annotation.NonNull;
+
+public class Train_List_Structure {
     private final String trainNumber;
     private final String trainName;
 
-    public Train_List_Modal_Class(String trainNumber, String trainName){
+    public Train_List_Structure(String trainNumber, String trainName){
         this.trainNumber = trainNumber;
                 this.trainName = trainName;
     }
@@ -17,4 +19,9 @@ public class Train_List_Modal_Class {
         return trainNumber;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return getTrainNumber() + getTrainName();
+    }
 }

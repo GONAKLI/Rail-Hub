@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="15dp"
+    android:elevation="15dp"
+    app:strokeWidth="5dp"
+    app:strokeColor="#090808"
+    android:background="#626EBA"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+        android:background="#FA4646"
+            android:id="@+id/trainNumber"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="57124"
+        />
+    <TextView
+        android:id="@+id/trainName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Shatabadi express"
+        android:textSize="20sp"
+        android:textStyle="italic|bold"
+        android:paddingStart="15sp"
+        />
+
+    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>

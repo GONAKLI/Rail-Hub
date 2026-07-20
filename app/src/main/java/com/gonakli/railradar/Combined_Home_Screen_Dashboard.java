@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.gonakli.railradar.ADAPTERS.Stations_Dropdown_Adapter;
-import com.gonakli.railradar.DB_MODAL.Station_List_Modal_Class;
+import com.gonakli.railradar.Structure_Class.Station_List_Structure;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
@@ -69,7 +67,7 @@ public class Combined_Home_Screen_Dashboard extends Fragment {
 
     private void add_Predictive_Text() {
         // custom adapter needed for proper functioning
-        ArrayList<Station_List_Modal_Class> arrStationList = new Station_List_DB_Helper(getContext()).getStationList();
+        ArrayList<Station_List_Structure> arrStationList = new Station_List_DB_Helper(getContext()).getStationList();
         Stations_Dropdown_Adapter customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
 
         fromStation.setAdapter(customStationAdapter);
@@ -82,7 +80,7 @@ public class Combined_Home_Screen_Dashboard extends Fragment {
 
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Station_List_Modal_Class selected = (Station_List_Modal_Class) parent.getItemAtPosition(position);
+               Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
                 fromStationCodeBadge.setText(selected.getStation_Code());
                 fromStationCodeBadge.setVisibility(View.VISIBLE);
 
@@ -94,7 +92,7 @@ public class Combined_Home_Screen_Dashboard extends Fragment {
        toStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Station_List_Modal_Class selected = (Station_List_Modal_Class) parent.getItemAtPosition(position);
+               Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
                toStationCodeBadge.setText(selected.getStation_Code());
                toStationCodeBadge.setVisibility(View.VISIBLE);
 
