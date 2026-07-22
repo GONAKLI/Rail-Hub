@@ -1,0 +1,7 @@
+<resources>
+    <color name="card_background">#1E1E2A</color>
+    <color name="card_text_primary">#F2F2F5</color>
+    <color name="card_text_secondary">#A8A8B8</color>
+    <color name="chip_background">#2D2D40</color>
+    <color name="chip_accent">#9AA3E8</color>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+<include layout="@layout/custom_toolbar" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp">
+<androidx.appcompat.widget.AppCompatEditText
+    android:layout_width="wrap_content"
+    android:ems="12"
+    android:layout_height="50dp"
+    android:padding="15dp"
+    android:maxLength="15"
+    android:hint="Enter your pnr number"
+    android:id="@+id/pnr_search_field"
+    android:inputType="number"
+    />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_find_pnr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="submit"
+        android:layout_toRightOf="@+id/pnr_search_field"
+        android:layout_alignParentEnd="true"
+        />
+
+
+
+</RelativeLayout>
+</LinearLayout>

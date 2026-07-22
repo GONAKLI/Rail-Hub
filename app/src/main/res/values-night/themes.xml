@@ -1,29 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.RailRadar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
+
+    <!-- Same style name as values/themes.xml — Android auto-picks this
+         version when system is in dark mode. Do NOT put android:textColor*
+         or hintTextColor overrides here; Material DayNight base already
+         handles those correctly via colorOnSurface/colorOnBackground. -->
+    <style name="Theme.RailRadar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
+
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:background">#CDDC39</item>
     </style>
-    <style name="Theme.application_custom_theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-    </style>
+
 </resources>

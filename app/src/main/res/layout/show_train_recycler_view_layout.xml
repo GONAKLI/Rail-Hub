@@ -1,43 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<com.google.android.material.card.MaterialCardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="15dp"
-    app:cardElevation="15dp"
-    android:elevation="15dp"
-    app:strokeWidth="5dp"
-    app:strokeColor="#090808"
-    android:background="#626EBA"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/card_background"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-    >
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:padding="16dp">
 
+        <!-- Round icon circle -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/iconHolder"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardBackgroundColor="@color/chip_background"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@android:drawable/ic_menu_directions"
+                app:tint="@color/chip_accent" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Train number badge -->
         <TextView
-        android:background="#FA4646"
             android:id="@+id/trainNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_train_number_chip"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:text="57124"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iconHolder"
+            app:layout_constraintTop_toTopOf="@id/iconHolder" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="57124"
-        />
-    <TextView
-        android:id="@+id/trainName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Shatabadi express"
-        android:textSize="20sp"
-        android:textStyle="italic|bold"
-        android:paddingStart="15sp"
-        />
+        <!-- Train name -->
+        <TextView
+            android:id="@+id/trainName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Shatabdi Express"
+            android:textColor="@color/card_text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iconHolder"
+            app:layout_constraintTop_toBottomOf="@id/trainNumber"
+            app:layout_constraintEnd_toStartOf="@id/arrowIcon" />
 
-    </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <!-- Trailing chevron for affordance -->
+        <ImageView
+            android:id="@+id/arrowIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@null"
+            android:src="@android:drawable/ic_media_play"
+            app:tint="#B5B8D6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

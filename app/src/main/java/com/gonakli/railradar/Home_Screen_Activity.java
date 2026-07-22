@@ -2,10 +2,17 @@ package com.gonakli.railradar;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +27,7 @@ import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
 import com.google.android.material.navigation.NavigationView;
 
 public class Home_Screen_Activity extends AppCompatActivity {
+    private long prevTime = 0;
 Toolbar toolbar;
 DrawerLayout drawerLayout;
 NavigationView navigationView;
@@ -34,8 +42,12 @@ FrameLayout frameLayout;
         findAllID();
         setUpApplicationToolBar();
         frameLayoutSetUp();
+        setActionOnNavigationItems();
+
 
     }
+
+
 
     private void add_All_Trains_In_DB() {
         new Thread(() ->{
@@ -100,4 +112,33 @@ FrameLayout frameLayout;
         navigationView = findViewById(R.id.home_navigation_view);
         frameLayout = findViewById(R.id.home_frame_layout);
     }
+
+    private void setActionOnNavigationItems(){
+        navigationView.setNavigationItemSelectedListener(item ->{
+            Toast.makeText(getApplicationContext(), ""+item.getItemId(), Toast.LENGTH_SHORT).show();
+            return true;
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+       
+        long currentTime = System.currentTimeMillis();
+
+        if(drawerLayout.isOpen()){
+        drawerLayout.close();
+    }else{
+            if(currentTime - prevTime < 2000)
+            {
+                super.onBackPressed();
+            }else{
+                Toast.makeText(this, "Tap back button again to exit", Toast.LENGTH_SHORT).show();
+                prevTime = currentTime;
+            }
+
+    }
+
+    }
+
 }

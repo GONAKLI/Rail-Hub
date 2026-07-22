@@ -16,23 +16,24 @@ import com.gonakli.railradar.R;
 import java.util.ArrayList;
 
 public class Show_Trains extends AppCompatActivity {
-SearchView showTrainSearchView;
-RecyclerView showTrainRecyclerView;
-ArrayList<Train_List_Structure> arrTrains;
+    SearchView showTrainSearchView;
+    RecyclerView showTrainRecyclerView;
+    Recycler_Adapter recyclerAdapter;
+    ArrayList<Train_List_Structure> arrTrains;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_trains_list);
         find_all_by_id();
+        focusOnSearchView();
         setRecyclerView();
-        
 
         showTrainSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                return false;
+                recyclerAdapter.filterSearchResult(newText); // ✅ filter call
+                return true;
             }
 
             @Override
@@ -42,12 +43,15 @@ ArrayList<Train_List_Structure> arrTrains;
         });
     }
 
+    private void focusOnSearchView() {
+        showTrainSearchView.requestFocus();
+    }
+
     private void setRecyclerView() {
         Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
         arrTrains = dbHelper.getTrainList();
 
-        Recycler_Adapter recyclerAdapter = new Recycler_Adapter(getApplicationContext(), arrTrains);
-
+        recyclerAdapter = new Recycler_Adapter(getApplicationContext(), arrTrains);
         showTrainRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         showTrainRecyclerView.setAdapter(recyclerAdapter);
     }
@@ -56,8 +60,6 @@ ArrayList<Train_List_Structure> arrTrains;
         showTrainSearchView = findViewById(R.id.showTrainSearchView);
         showTrainRecyclerView = findViewById(R.id.showTrainsRecyclerView);
     }
-
-
 
 
 }

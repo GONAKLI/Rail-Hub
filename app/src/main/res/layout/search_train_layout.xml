@@ -1,44 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="15dp"
-    android:background="@drawable/train_search_container_border"
-android:layout_margin="10dp"
-    android:backgroundTint="#BABF82"
-    >
+    android:layout_margin="12dp"
+    app:cardBackgroundColor="@color/card_background"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
 
-    <!-- Left Icon -->
-    <ImageView
-        android:id="@+id/icon_left"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/home_screen_train_icon"
-        android:contentDescription="Icon" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
-    <!-- Middle Text -->
-    <TextView
-        android:id="@+id/search_input_area"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginStart="12dp"
-        android:hint="Train No./ Train Name"
-        android:textSize="16sp"
-        android:paddingLeft="25dp"
-        android:gravity="center_vertical" />
+        <!-- Left Icon -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:cardBackgroundColor="@color/chip_background"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp">
 
-    <!-- Right Search Icon -->
-    <ImageButton
-        android:id="@+id/btn_icon_search"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/search_icon"
-        android:background="@android:color/transparent"
-        android:contentDescription="Search" />
+            <ImageView
+                android:id="@+id/icon_left"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/home_screen_train_icon"
+                app:tint="@color/chip_accent"
+                android:contentDescription="Train icon" />
 
-</LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Middle Text -->
+        <TextView
+            android:id="@+id/search_input_area"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="Train No. / Train Name"
+            android:textColor="@color/card_text_secondary"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <!-- Right Search Icon -->
+        <ImageButton
+            android:id="@+id/btn_icon_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="9dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/search_icon"
+            app:tint="@color/chip_accent"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

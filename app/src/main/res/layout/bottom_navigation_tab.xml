@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+            android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:id="@+id/pnr_search_container"
+        android:clickable="true"
+        android:focusable="true"
+        >
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/pnr_search_icon"
+        android:contentDescription="search Pnr status"
+        android:id="@+id/pnr_search_icon"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Search PNR"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:layout_toEndOf="@+id/pnr_search_icon"
+        />
+    </RelativeLayout>
+ <RelativeLayout
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_weight="1"
+    android:layout_toEndOf="@+id/pnr_search_container"
+     android:id="@+id/book_ticket_container"
+     android:clickable="true"
+     android:focusable="true"
+     >
+     <ImageButton
+         android:layout_width="50dp"
+         android:layout_height="50dp"
+         android:scaleType="fitXY"
+         android:src="@drawable/ticket_icon"
+         android:contentDescription="Book Ticket"
+         android:id="@+id/ticket_icon"
+         />
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="50dp"
+         android:text="Book Ticket"
+         android:textSize="20sp"
+         android:textStyle="bold"
+         android:gravity="center_vertical"
+         android:layout_toEndOf="@+id/ticket_icon"
+         />
+ </RelativeLayout>
+    </LinearLayout>
+</com.google.android.material.bottomnavigation.BottomNavigationView>
+</RelativeLayout>

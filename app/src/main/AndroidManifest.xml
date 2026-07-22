@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.application_custom_theme" >
+        android:theme="@style/Theme.RailRadar" >
 
         <activity android:name=".Home_Screen_Activity"
             android:exported="true">
@@ -19,9 +19,12 @@
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
-<activity android:name=".User_Route_Train_List"
-    android:exported="false"/>
-       <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
+
+
+        <activity android:name=".User_Route_Train_List" />
+        <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
+        <activity android:name=".PNR_Work.PNR_Check"
+            android:theme="@style/Theme.RailRadar"/>
     </application>
 
 </manifest>
