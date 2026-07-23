@@ -21,10 +21,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Train_Schedule;
 import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
+import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
 
 public class Home_Screen_Activity extends AppCompatActivity {
     private long prevTime = 0;
@@ -43,6 +47,7 @@ FrameLayout frameLayout;
         setUpApplicationToolBar();
         frameLayoutSetUp();
         setActionOnNavigationItems();
+
 
 
     }
