@@ -21,6 +21,7 @@
         android:id="@+id/pnr_search_container"
         android:clickable="true"
         android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         >
     <ImageButton
         android:layout_width="50dp"
@@ -48,6 +49,7 @@
      android:id="@+id/book_ticket_container"
      android:clickable="true"
      android:focusable="true"
+     android:background="?attr/selectableItemBackground"
      >
      <ImageButton
          android:layout_width="50dp"

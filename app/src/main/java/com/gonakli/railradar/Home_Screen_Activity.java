@@ -25,6 +25,7 @@ import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Train_Schedule;
 import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
+import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,6 +44,7 @@ FrameLayout frameLayout;
         setContentView(R.layout.home_screen);
         add_All_Stations_In_DB();
         add_All_Trains_In_DB();
+        add_All_Schedule_In_DB();
         findAllID();
         setUpApplicationToolBar();
         frameLayoutSetUp();
@@ -52,6 +54,20 @@ FrameLayout frameLayout;
 
     }
 
+    private void add_All_Schedule_In_DB() {
+        new Thread(() ->{
+            Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_Schedule_DB_Helper.TABLE_NAME, null);
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            if(count == 0){
+                dbHelper.addScheduleInDB();
+            }
+            cursor.close();
+            db.close();
+        }).start();
+    }
 
 
     private void add_All_Trains_In_DB() {
