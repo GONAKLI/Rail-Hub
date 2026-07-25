@@ -1,6 +1,7 @@
-package com.gonakli.railradar;
+package com.gonakli.railradar.ADAPTERS;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railradar.TrainTracking.Train_Tracking;
 
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class User_Route_Train_Recycler_View extends RecyclerView.Adapter<User_Route_Train_Recycler_View.viewHolder> {
+public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter<User_Route_Train_Recycler_View_Adapter.viewHolder> {
     Context context;
     String fromStationCode, toStationCode;
     ArrayList<Train_Schedule_Structure> arrScheduleList;
-    User_Route_Train_Recycler_View(Context context, ArrayList<Train_Schedule_Structure> arrScheduleList, String fromStationCode, String toStationCode){
+   public User_Route_Train_Recycler_View_Adapter(Context context, ArrayList<Train_Schedule_Structure> arrScheduleList, String fromStationCode, String toStationCode){
         this.context = context;
         this.arrScheduleList = new ArrayList<>(arrScheduleList);
         this.fromStationCode = fromStationCode;
@@ -48,6 +49,9 @@ public class User_Route_Train_Recycler_View extends RecyclerView.Adapter<User_Ro
         for(Train_Schedule_Station_Structure stationData : arrStation){
             if(stationData.getStationCode().equals(fromStationCode)){
                 arrivalTime = stationData.getArrivalTime();
+                if(arrivalTime.equalsIgnoreCase("--")){
+                    arrivalTime = stationData.getDepartureTime();
+                }
             }
             if(stationData.getStationCode().equals(toStationCode)){
                 finalDestinationReachTime = stationData.getArrivalTime();
@@ -83,7 +87,28 @@ public class User_Route_Train_Recycler_View extends RecyclerView.Adapter<User_Ro
            runningDays = runningDaysBuilder.toString().trim();
         }
 
-        String journeyDuration ="2 hours";
+
+
+        String[] splitArrival = arrivalTime.split(":", 2);
+        String[] splitDepart = finalDestinationReachTime.split(":", 2);
+
+        int arrivalHour = Integer.parseInt(splitArrival[0]);
+        int arrivalMinutes = Integer.parseInt(splitArrival[1]);
+        int deptHour = Integer.parseInt(splitDepart[0]);
+        int deptMinutes = Integer.parseInt(splitDepart[1]);
+        int arrivalTotalMinutes = arrivalHour * 60 + arrivalMinutes;
+        int departTotalMinutes = deptHour * 60 + deptMinutes;
+        if(departTotalMinutes < arrivalTotalMinutes){
+            departTotalMinutes += 24*60;
+        }
+
+        int difference = Math.abs(departTotalMinutes - arrivalTotalMinutes);
+        int hours = difference/60;
+        int minutes = difference%60;
+
+
+        String journeyDuration = hours + " Hours " + minutes + " Minutes";
+
 
 
 
@@ -100,6 +125,15 @@ public class User_Route_Train_Recycler_View extends RecyclerView.Adapter<User_Ro
         holder.trainScheduleJourneyDuration.setText(journeyDuration);
         holder.trainScheduleFinalDestinationReachTime.setText(finalDestinationReachTime);
         holder.trainScheduleRunningDays.setText(runningDays);
+
+        holder.itemView.setOnClickListener(v->{
+            String trNumber = holder.trainScheduleTrainNumber.getText().toString();
+            String trName = holder.trainScheduleTrainName.getText().toString();
+            Intent trainTracking = new Intent(context.getApplicationContext(), Train_Tracking.class);
+            trainTracking.putExtra("trainNumber", trNumber);
+            trainTracking.putExtra("trainName", trName);
+            context.startActivity(trainTracking);
+        });
 
 
     }
@@ -124,7 +158,4 @@ public class User_Route_Train_Recycler_View extends RecyclerView.Adapter<User_Ro
 
     }
 
-    private void runningDaysFormatter(){
-
-    }
 }

@@ -9,10 +9,16 @@
     <color name="white">#FFFFFFFF</color>
 
 
-        <color name="card_background">#FFFFFF</color>
-        <color name="card_text_primary">#1A1A2E</color>
-        <color name="card_text_secondary">#8A8A9A</color>
-        <color name="chip_background">#EEF0FB</color>
-        <color name="chip_accent">#626EBA</color>
+    //user route train colors
+
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_text_primary">#1A1A2E</color>
+    <color name="card_text_secondary">#8A8A9A</color>
+    <color name="chip_background">#EEF0FB</color>
+    <color name="chip_accent">#626EBA</color>
+    <color name="screen_background">#F4F4FA</color>
+    <color name="gradient_start">#7C4DFF</color>
+    <color name="gradient_end">#00BFA5</color>
+
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <com.gonakli.railradar.Input_From_To_Station
+    <com.gonakli.railradar.HomeActivity.Input_From_To_Station
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <com.gonakli.railradar.Home_Screen_Bottom_Navigation
+    <com.gonakli.railradar.HomeActivity.Home_Screen_Bottom_Navigation
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

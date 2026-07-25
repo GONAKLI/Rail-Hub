@@ -1,14 +1,14 @@
-package com.gonakli.railradar;
+package com.gonakli.railradar.HomeActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.gonakli.railradar.PNR_Work.PNR_Check;
+import com.gonakli.railradar.R;
 
 public class Home_Screen_Bottom_Navigation extends RelativeLayout {
     Context context;

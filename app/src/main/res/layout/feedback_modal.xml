@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="24dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_feedback_card"
+    android:elevation="8dp"
+    android:padding="22dp">
+
+    <TextView
+        android:id="@+id/feedbackModalTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share your Feedback"
+        android:textColor="@color/card_text_primary"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="We would love to know your thoughts"
+        android:textColor="@color/card_text_secondary"
+        android:textSize="13sp" />
+
+    <!-- Name field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Your Name"
+        android:textColor="@color/card_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/feedbackNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_comment_input"
+        android:hint="Enter your name"
+        android:textColorHint="@color/card_text_secondary"
+        android:textColor="@color/card_text_primary"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp"
+        android:inputType="textPersonName"
+        android:maxLines="1" />
+
+    <!-- Feedback field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Your Feedback"
+        android:textColor="@color/card_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/feedbackMessageInput"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_comment_input"
+        android:gravity="top|start"
+        android:hint="Type your feedback here"
+        android:textColorHint="@color/card_text_secondary"
+        android:textColor="@color/card_text_primary"
+        android:textSize="14sp"
+        android:padding="14dp"
+        android:inputType="textMultiLine" />
+
+    <!-- Submit -->
+    <TextView
+        android:id="@+id/feedbackSubmitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_submit_button_solid"
+        android:paddingVertical="13dp"
+        android:text="Submit"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true" />
+
+</LinearLayout>

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gonakli.railradar.ADAPTERS.Recycler_Adapter;
+import com.gonakli.railradar.ADAPTERS.Train_List_Recycler_Adapter;
 import com.gonakli.railradar.Structure_Class.Train_List_Structure;
 import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
 import com.gonakli.railradar.R;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class Show_Trains extends AppCompatActivity {
     SearchView showTrainSearchView;
     RecyclerView showTrainRecyclerView;
-    Recycler_Adapter recyclerAdapter;
+    Train_List_Recycler_Adapter recyclerAdapter;
     ArrayList<Train_List_Structure> arrTrains;
 
     @Override
@@ -51,7 +51,7 @@ public class Show_Trains extends AppCompatActivity {
         Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
         arrTrains = dbHelper.getTrainList();
 
-        recyclerAdapter = new Recycler_Adapter(getApplicationContext(), arrTrains);
+        recyclerAdapter = new Train_List_Recycler_Adapter(getApplicationContext(), arrTrains);
         showTrainRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         showTrainRecyclerView.setAdapter(recyclerAdapter);
     }

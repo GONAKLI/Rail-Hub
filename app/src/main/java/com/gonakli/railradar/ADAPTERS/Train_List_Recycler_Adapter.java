@@ -1,31 +1,27 @@
 package com.gonakli.railradar.ADAPTERS;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railradar.Structure_Class.Train_List_Structure;
 import com.gonakli.railradar.R;
-import com.gonakli.railradar.TrainNumber_NameSearch.Show_Trains;
-import com.gonakli.railradar.Train_Tracking;
+import com.gonakli.railradar.TrainTracking.Train_Tracking;
 
 import java.util.ArrayList;
 
-public class Recycler_Adapter extends RecyclerView.Adapter<Recycler_Adapter.viewHolder>{
+public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List_Recycler_Adapter.viewHolder>{
     Context context;
     ArrayList<Train_List_Structure> arrTrainList;       // current list
     ArrayList<Train_List_Structure> arrTrainListFull;   // backup list
 
-    public Recycler_Adapter(Context context, ArrayList<Train_List_Structure> arrTrainList){
+    public Train_List_Recycler_Adapter(Context context, ArrayList<Train_List_Structure> arrTrainList){
         this.context = context;
         this.arrTrainList = new ArrayList<>(arrTrainList);
         this.arrTrainListFull = new ArrayList<>(arrTrainList); // backup copy
