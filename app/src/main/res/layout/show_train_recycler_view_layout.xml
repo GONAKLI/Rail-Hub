@@ -12,9 +12,11 @@
     app:cardBackgroundColor="@color/card_background"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:id="@+id/card">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -28,8 +30,7 @@
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="24dp"
@@ -74,6 +75,52 @@
             app:layout_constraintStart_toEndOf="@id/iconHolder"
             app:layout_constraintTop_toBottomOf="@id/trainNumber"
             app:layout_constraintEnd_toStartOf="@id/arrowIcon" />
+
+<!--        &lt;!&ndash; Route row: From -> To &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/routeRow"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="6dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center_vertical"-->
+<!--            app:layout_constraintStart_toStartOf="@id/trainName"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/trainName"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/arrowIcon">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/trainRouteFrom"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:ellipsize="end"-->
+<!--                android:maxLines="1"-->
+<!--                android:text="Hyderabad"-->
+<!--                android:textColor="@color/card_text_secondary"-->
+<!--                android:textSize="13sp" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="6dp"-->
+<!--                android:text="→"-->
+<!--                android:textColor="@color/chip_accent"-->
+<!--                android:textSize="13sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/trainRouteTo"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:ellipsize="end"-->
+<!--                android:maxLines="1"-->
+<!--                android:gravity="end"-->
+<!--                android:text="Mumbai"-->
+<!--                android:textColor="@color/card_text_secondary"-->
+<!--                android:textSize="13sp" />-->
+
+<!--        </LinearLayout>-->
 
         <!-- Trailing chevron for affordance -->
         <ImageView

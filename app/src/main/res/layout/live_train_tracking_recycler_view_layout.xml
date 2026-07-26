@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp">
+
+    <!-- Timeline: line above dot -->
+    <View
+        android:id="@+id/timelineTopLine"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/chip_accent"
+        app:layout_constraintStart_toStartOf="@id/timelineDot"
+        app:layout_constraintEnd_toEndOf="@id/timelineDot"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/timelineDot" />
+
+    <!-- Timeline dot (adapter can swap this drawable to bg_timeline_dot_current for the live position) -->
+    <View
+        android:id="@+id/timelineDot"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_timeline_dot"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/trainStationName"
+        app:layout_constraintBottom_toBottomOf="@id/trainStationName" />
+
+    <!-- Timeline: line below dot, continues into next item -->
+    <View
+        android:id="@+id/timelineBottomLine"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/chip_accent"
+        app:layout_constraintStart_toStartOf="@id/timelineDot"
+        app:layout_constraintEnd_toEndOf="@id/timelineDot"
+        app:layout_constraintTop_toBottomOf="@id/timelineDot"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Station name -->
+    <TextView
+        android:id="@+id/trainStationName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Fatuhi"
+        android:textColor="@color/card_text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/timelineDot"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/timeColumns" />
+
+    <!-- Distance | Platform -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/trainStationName"
+        app:layout_constraintTop_toBottomOf="@id/trainStationName"
+        app:layout_constraintEnd_toStartOf="@id/timeColumns">
+
+        <TextView
+            android:id="@+id/trainDistanceTravelled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="77 km"
+            android:textColor="@color/card_text_secondary"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:text="|"
+            android:textColor="@color/card_text_secondary"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/trainPlatformNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Platform 1"
+            android:textColor="@color/card_text_secondary"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!-- Two stacked time columns: Arrival, Departure -->
+    <LinearLayout
+        android:id="@+id/timeColumns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Arrival column -->
+        <LinearLayout
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/trainArrivalAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1:56 AM"
+                android:textColor="@color/card_text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/trainActualArrivalAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="1:57 AM"
+                android:textColor="@color/card_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Departure column -->
+        <LinearLayout
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/trainDepartureAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1:57 AM"
+                android:textColor="@color/card_text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/trainActualDepartureAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="2:02 AM"
+                android:textColor="@color/card_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Get Directions - small icon-only button next to the current/live station.
+         Adapter should set visibility GONE for every row except the live one. -->
+    <ImageButton
+        android:id="@+id/trainStationLocatedAt"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/transparent"
+        android:padding="2dp"
+        android:src="@android:drawable/ic_menu_mylocation"
+        app:tint="@color/chip_accent"
+        android:contentDescription="Get directions"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/timelineDot"
+        app:layout_constraintTop_toBottomOf="@id/timelineBottomLine" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

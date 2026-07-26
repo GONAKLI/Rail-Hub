@@ -2,6 +2,8 @@ package com.gonakli.railradar.HomeActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,7 @@ public class Input_From_To_Station extends LinearLayout {
         add_Predictive_Text();
         from_station_to_station_fields();
         Action_On_Swap_Button();
+        clearBadge();
 
     }
     private void Action_On_Swap_Button() {
@@ -51,15 +54,26 @@ public class Input_From_To_Station extends LinearLayout {
             toStation.clearFocus();
             Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.swap_button_rotation);
             btn_swap_stations.startAnimation(rotation);
+
+
             String fromStationValue = fromStation.getText().toString();
             String fromStationCodeBadgeValue =   fromStationCodeBadge.getText().toString();
             String toStationValue =  toStation.getText().toString();
             String toStationCodeBadgeValue =  toStationCodeBadge.getText().toString();
 
-            toStation.setText(fromStationValue);
-            toStationCodeBadge.setText(fromStationCodeBadgeValue);
-            fromStation.setText(toStationValue);
-            fromStationCodeBadge.setText(toStationCodeBadgeValue);
+
+            if(!fromStationCodeBadgeValue.isBlank()){
+                toStation.setText(fromStationValue);
+                toStationCodeBadge.setText(fromStationCodeBadgeValue);
+                toStationCodeBadge.setVisibility(VISIBLE);
+            }
+            if(!toStationCodeBadgeValue.isBlank()){
+                fromStation.setText(toStationValue);
+                fromStationCodeBadge.setText(toStationCodeBadgeValue);
+                fromStationCodeBadge.setVisibility(VISIBLE);
+            }
+
+
         });
     }
 
@@ -133,6 +147,48 @@ public class Input_From_To_Station extends LinearLayout {
         });
 
 
+    }
+
+    private void clearBadge(){
+        fromStation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().isBlank()){
+                    fromStationCodeBadge.setText("");
+                    fromStationCodeBadge.setVisibility(INVISIBLE);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
+
+        toStation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().isBlank()){
+                    toStationCodeBadge.setText("");
+                    toStationCodeBadge.setVisibility(INVISIBLE);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
     }
 
 

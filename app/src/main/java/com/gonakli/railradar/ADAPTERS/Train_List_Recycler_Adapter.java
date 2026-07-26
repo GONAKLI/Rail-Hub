@@ -38,6 +38,7 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         holder.trainNumber.setText(arrTrainList.get(position).getTrainNumber());
         holder.trainName.setText(arrTrainList.get(position).getTrainName());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,11 +60,13 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
     }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-        TextView trainNumber, trainName;
+        TextView trainNumber, trainName, trainRouteFrom, trainRouteTo;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             trainNumber = itemView.findViewById(R.id.trainNumber);
             trainName = itemView.findViewById(R.id.trainName);
+//            trainRouteFrom = itemView.findViewById(R.id.trainRouteFrom);
+//            trainRouteTo = itemView.findViewById(R.id.trainRouteTo);
         }
     }
 
