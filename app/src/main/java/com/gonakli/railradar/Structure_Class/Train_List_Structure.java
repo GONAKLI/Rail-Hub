@@ -5,10 +5,12 @@ import androidx.annotation.NonNull;
 public class Train_List_Structure {
     private final String trainNumber;
     private final String trainName;
+    private final String trainType;
 
-    public Train_List_Structure(String trainNumber, String trainName){
+    public Train_List_Structure(String trainNumber, String trainName, String trainType){
         this.trainNumber = trainNumber;
                 this.trainName = trainName;
+                this.trainType = trainType;
     }
 
     public String getTrainName() {
@@ -19,9 +21,11 @@ public class Train_List_Structure {
         return trainNumber;
     }
 
+    public String getTrainType(){ return  trainType;}
+
     @NonNull
     @Override
     public String toString() {
-        return getTrainNumber() + getTrainName();
+        return getTrainNumber() + getTrainName() + getTrainType();
     }
 }

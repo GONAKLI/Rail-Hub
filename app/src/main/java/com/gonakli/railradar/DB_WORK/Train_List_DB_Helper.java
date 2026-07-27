@@ -20,6 +20,7 @@ public class Train_List_DB_Helper extends SQLiteOpenHelper {
 
     private static final String TABLE_TRAIN_NUMBER_COLUMN = "TRAIN_NUMBER";
     private static final String TABLE_TRAIN_NAME_COLUMN = "TRAIN_NAME";
+    private static final String TABLE_TRAIN_TYPE_COLUMN = "TRAIN_TYPE";
 
     private final Context applicationContext;
     public Train_List_DB_Helper(@Nullable Context context) {
@@ -29,10 +30,12 @@ public class Train_List_DB_Helper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(String.format("CREATE TABLE %s ( %s TEXT PRIMARY KEY, %s TEXT )",
+        db.execSQL(String.format(
+                "CREATE TABLE %s ( %s TEXT PRIMARY KEY, %s TEXT, %s TEXT )",
                 TABLE_NAME,
                 TABLE_TRAIN_NUMBER_COLUMN,
-                TABLE_TRAIN_NAME_COLUMN));
+                TABLE_TRAIN_NAME_COLUMN,
+                TABLE_TRAIN_TYPE_COLUMN));
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -51,6 +54,7 @@ public class Train_List_DB_Helper extends SQLiteOpenHelper {
                ContentValues values = new ContentValues();
                values.put(TABLE_TRAIN_NUMBER_COLUMN, data.getTrainNumber());
                values.put(TABLE_TRAIN_NAME_COLUMN, data.getTrainName());
+               values.put(TABLE_TRAIN_TYPE_COLUMN, data.getTrainType());
                db.insert(TABLE_NAME, null, values);
            }
            db.setTransactionSuccessful();
@@ -67,7 +71,8 @@ public class Train_List_DB_Helper extends SQLiteOpenHelper {
         while(cursor.moveToNext()){
             String trainNumber = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_TRAIN_NUMBER_COLUMN));
             String trainName = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_TRAIN_NAME_COLUMN));
-            arrTrainList.add(new Train_List_Structure(trainNumber, trainName));
+            String trainType = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_TRAIN_TYPE_COLUMN));
+            arrTrainList.add(new Train_List_Structure(trainNumber, trainName, trainType));
         }
         cursor.close();
         db.close();

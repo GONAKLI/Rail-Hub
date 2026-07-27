@@ -37,7 +37,7 @@ public class User_Route_Train_List extends AppCompatActivity {
         Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
         ArrayList<Train_Schedule_Structure> arrSchedule = dbHelper.getTrainsBetweenStations(from_Station_Value,to_Station_Value);
         Log.d("schedule", "recyclerViewSetup: " + arrSchedule);
-        User_Route_Train_Recycler_View_Adapter recycler_adapter = new User_Route_Train_Recycler_View_Adapter(getApplicationContext(), arrSchedule, from_Station_Value, to_Station_Value);
+        User_Route_Train_Recycler_View_Adapter recycler_adapter = new User_Route_Train_Recycler_View_Adapter(User_Route_Train_List.this, arrSchedule, from_Station_Value, to_Station_Value);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(recycler_adapter);
     }

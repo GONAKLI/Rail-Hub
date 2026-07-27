@@ -30,7 +30,9 @@ public class Make_Array_Of_Trains_And_Stations_List {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String code = jsonObject.getString("code");
                 String name = jsonObject.getString("name");
-                arrStationList.add(new Station_List_Structure(code, name));
+                String lat = jsonObject.getString("lat");
+                String lng = jsonObject.getString("lng");
+                arrStationList.add(new Station_List_Structure(code, name, lat, lng));
 
             }
         } catch (Exception e) {
@@ -51,11 +53,12 @@ public class Make_Array_Of_Trains_And_Stations_List {
             String trainList = new String(buffer, "UTF-8");
             JSONArray arrTrains = new JSONArray(trainList);
             for (int i=0; i<arrTrains.length(); i++){
-                String trainData = arrTrains.getString(i);
-               String[] splitTrainData =  trainData.split("-", 2);
-               String trainNumber = splitTrainData[0].trim();
-               String trainName = splitTrainData[1].trim();
-                arrTrainList.add(new Train_List_Structure(trainNumber, trainName));
+                JSONObject jsonObject = arrTrains.getJSONObject(i);
+
+               String trainNumber = jsonObject.getString("trainNumber").trim();
+               String trainName = jsonObject.getString("trainName").trim();
+                String trainType = jsonObject.getString("trainType");
+                arrTrainList.add(new Train_List_Structure(trainNumber, trainName, trainType));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

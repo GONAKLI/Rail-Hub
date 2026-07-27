@@ -22,6 +22,9 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
     private static final String TABLE_STATION_CODE_COLUMN = "STATION_CODE";
     private static final String TABLE_STATION_NAME_COLUMN = "STATION_NAME";
 
+    private static final String TABLE_STATION_LAT_COLUMN = "STATION_LAT";
+    private static final String TABLE_STATION_LNG_COLUMN = "STATION_LNG";
+
     private final Context applicationContext;
 
     public Station_List_DB_Helper(@Nullable Context context) {
@@ -32,10 +35,13 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(String.format("CREATE TABLE %s ( %s TEXT PRIMARY KEY, %s TEXT )",
+        db.execSQL(String.format(
+                "CREATE TABLE %s ( %s TEXT PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT )",
                 TABLE_NAME,
                 TABLE_STATION_CODE_COLUMN,
-                TABLE_STATION_NAME_COLUMN));
+                TABLE_STATION_NAME_COLUMN,
+                TABLE_STATION_LAT_COLUMN,
+                TABLE_STATION_LNG_COLUMN));
     }
 
     @Override
@@ -57,6 +63,10 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
             ContentValues values =new ContentValues();
             values.put(TABLE_STATION_CODE_COLUMN, station.getStation_Code());
             values.put(TABLE_STATION_NAME_COLUMN, station.getStation_Name());
+
+            values.put(TABLE_STATION_LAT_COLUMN, station.getStation_Lat());
+            values.put(TABLE_STATION_LNG_COLUMN, station.getStation_Lng());
+
             db.insert(TABLE_NAME, null, values);
         }
         db.setTransactionSuccessful();
@@ -76,7 +86,10 @@ public class Station_List_DB_Helper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             String code = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_CODE_COLUMN));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
-            arrStationList.add(new Station_List_Structure(code, name));
+
+            String lat = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_LAT_COLUMN));
+            String lng = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_LNG_COLUMN));
+            arrStationList.add(new Station_List_Structure(code, name, lat, lng));
         }
         db.close();
         cursor.close();
