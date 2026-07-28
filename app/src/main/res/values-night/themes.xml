@@ -13,8 +13,8 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
 
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="android:background">#CDDC39</item>
+        <item name="android:statusBarColor">@color/card_text_secondary</item>
+        <item name="android:background">#1A1108</item>
     </style>
 
 </resources>

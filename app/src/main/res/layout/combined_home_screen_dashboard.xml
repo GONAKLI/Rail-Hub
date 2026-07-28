@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
     <com.gonakli.railradar.HomeActivity.Input_From_To_Station
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,9 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <com.gonakli.railradar.HomeActivity.Home_Screen_Bottom_Navigation
+    <com.gonakli.railradar.ExtraOptions.Home_Screen_Extras
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+    </LinearLayout>
+    <com.gonakli.railradar.HomeActivity.Home_Screen_Bottom_Navigation
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
 
-</LinearLayout>
+</RelativeLayout>

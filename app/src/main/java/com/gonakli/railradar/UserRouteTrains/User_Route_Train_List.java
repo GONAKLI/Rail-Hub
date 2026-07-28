@@ -3,8 +3,10 @@ package com.gonakli.railradar.UserRouteTrains;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -62,5 +64,13 @@ public class User_Route_Train_List extends AppCompatActivity {
     toStation = findViewById(R.id.user_route_to_station_textView);
     recyclerView = findViewById(R.id.trainScheduleRecyclerView);
     toolbar = findViewById(R.id.application_custom_toolbar);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return true;
     }
 }

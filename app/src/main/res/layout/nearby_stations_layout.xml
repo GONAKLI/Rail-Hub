@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp">
+    <include layout="@layout/custom_toolbar" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Near By Stations"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:layout_below="@+id/customAppBarLayout"
+        android:textStyle="bold"
+        android:id="@+id/nearbyListTitle"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nearbyListTitle"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/nearbyListHeadingContainer">
+        <TextView
+            style="@style/nearbyStationHeadingColumnName"
+            android:text="Name"
+            />
+        <TextView
+            style="@style/nearbyStationHeading"
+            android:text="Code"
+            />
+        <TextView
+            style="@style/nearbyStationHeading"
+            android:text="Distance"
+            />
+        <TextView
+            style="@style/nearbyStationHeading"
+            android:text="Location"
+            />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/nearbyListHeadingContainer"
+        android:id="@+id/nearbyStationListView"
+        />
+</RelativeLayout>

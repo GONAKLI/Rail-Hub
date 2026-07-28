@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="nearbyStationHeading">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="nearbyStationHeadingColumnName">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:padding">10sp</item>
+    </style>
+
+    <style name="nearbyStationDataValuesStationName">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="nearbyStationDataValues">
+     <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="nearbyStationDataImageValues">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+
+
+</resources>

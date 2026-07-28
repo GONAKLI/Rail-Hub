@@ -5,7 +5,7 @@
     <style name="Theme.RailRadar" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Primary brand color -->
-        <item name="colorPrimary">@color/purple_700</item>
+        <item name="colorPrimary">#4C6133</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/purple_200</item>
         <item name="colorOnPrimaryContainer">@color/black</item>
