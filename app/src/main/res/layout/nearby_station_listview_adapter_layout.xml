@@ -24,7 +24,7 @@
     <ImageView
         style="@style/nearbyStationDataImageValues"
         android:src="@drawable/nearby_station_location_icon"
-
+        android:id="@+id/nearbyStationMapIcon"
         />
 
 

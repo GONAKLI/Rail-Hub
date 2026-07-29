@@ -5,9 +5,9 @@ public class NearBy_Station_Structure {
     private final String stationCode;
     private final String stationLat;
     private final String stationLng;
-    private final int stationDistance;
+    private final double stationDistance;
 
-    public NearBy_Station_Structure(String stationName, String stationCode, String stationLat, String stationLng, int stationDistance) {
+    public NearBy_Station_Structure(String stationName, String stationCode, String stationLat, String stationLng, double stationDistance) {
         this.stationName = stationName;
         this.stationCode = stationCode;
         this.stationLat = stationLat;
@@ -31,7 +31,7 @@ public class NearBy_Station_Structure {
         return stationLng;
     }
 
-    public int getStationDistance() {
+    public double getStationDistance() {
         return stationDistance;
     }
 }

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".Application.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -30,6 +31,7 @@
         <activity android:name=".PNR_Work.PNR_Check"
             android:theme="@style/Theme.RailRadar"/>
         <activity android:name=".ExtraOptions.NearBy_Station_Activity" />
+        <activity android:name=".TrainTracking.Train_Tracking" />
     </application>
 
 </manifest>

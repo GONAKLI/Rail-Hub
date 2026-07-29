@@ -3,6 +3,7 @@ package com.gonakli.railradar.DrawerItemsWork;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
@@ -44,6 +45,7 @@ public class Drawer_Item {
     }
 
     private void Work_On_Nav_Item_Click(MenuItem item) {
+
         if(item.getItemId() == R.id.applicationTheme){
             Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.change_theme_modal);
@@ -58,16 +60,27 @@ public class Drawer_Item {
 
             // application theme change work Start here
             modalThemeApplyBtn.setOnClickListener(v -> {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("applicationTheme", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 int selectedRadio = modalThemeRadioGroup.getCheckedRadioButtonId();
 
                 if(selectedRadio == R.id.modalThemeLightRadio){
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putBoolean("isLight", true);
+                    editor.putBoolean("isDark", false);
                 } else if (selectedRadio == R.id.modalThemeDarkRadio) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putBoolean("isDark", true);
+                    editor.putBoolean("isLight", false);
                 } else if (selectedRadio == R.id.modalThemeSystemRadio) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    editor.putBoolean("isDark", false);
+                    editor.putBoolean("isLight", false);
                 }
+                editor.apply();
+                dialog.dismiss();
             });
+
             // application theme change work End here
 
         } //application theme If statement ends here

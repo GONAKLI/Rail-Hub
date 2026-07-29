@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10sp">
+    android:paddingStart="7sp"
+    android:paddingEnd="7sp"
+    >
     <include layout="@layout/custom_toolbar" />
 
     <TextView
@@ -47,5 +49,29 @@
         android:layout_height="match_parent"
         android:layout_below="@id/nearbyListHeadingContainer"
         android:id="@+id/nearbyStationListView"
+        android:layout_above="@id/nearbyListRefreshBtn"
+        />
+    <ProgressBar
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminateTint="#FF5722"
+        android:id="@+id/nearbyStationProgressBar"
+        />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh Stations"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/nearbyListRefreshBtn"
         />
 </RelativeLayout>

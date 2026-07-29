@@ -6,16 +6,18 @@
     android:orientation="vertical"
     >
 <include layout="@layout/custom_toolbar" />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 <androidx.appcompat.widget.AppCompatEditText
-    android:layout_width="wrap_content"
-    android:ems="12"
+    android:layout_width="0dp"
+    android:layout_weight="1"
     android:layout_height="50dp"
     android:padding="15dp"
-    android:maxLength="15"
+    android:textStyle="bold"
+    android:maxLength="10"
     android:hint="Enter your pnr number"
     android:id="@+id/pnr_search_field"
     android:inputType="number"
@@ -25,11 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="submit"
-        android:layout_toRightOf="@+id/pnr_search_field"
-        android:layout_alignParentEnd="true"
         />
 
 
-
-</RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

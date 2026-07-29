@@ -25,6 +25,7 @@ import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.DrawerItemsWork.Drawer_Item;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.ThemePreference.ThemeSelectionOnStartUp;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
@@ -39,6 +40,7 @@ FrameLayout frameLayout;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
+        get_application_theme();
         add_All_Stations_In_DB();
         add_All_Trains_In_DB();
         add_All_Schedule_In_DB();
@@ -49,6 +51,11 @@ FrameLayout frameLayout;
 
 
 
+    }
+
+    private void get_application_theme() {
+        ThemeSelectionOnStartUp themeSelector = new ThemeSelectionOnStartUp(Home_Screen_Activity.this);
+        themeSelector.show_theme_chooser_dialogue();
     }
 
     private void add_All_Schedule_In_DB() {
