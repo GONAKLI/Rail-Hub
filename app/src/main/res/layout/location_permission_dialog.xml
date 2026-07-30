@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    <ImageView
+        android:background="#93ADA0"
+        android:layout_width="match_parent"
+        android:layout_height="170sp"
+        android:src="@drawable/location_permission"
+        android:contentDescription="Location Permission Image"
+        />
+        <ImageButton
+            android:id="@+id/locationPermissionDialogueCross"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:scaleType="fitXY"
+            android:src="@drawable/cancel_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8sp"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_marginTop="15sp"
+        android:lineHeight="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="5sp"
+        android:paddingEnd="5sp"
+        android:text="Location permission needed to show nearby stations correctly"
+        android:textSize="18sp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15sp"
+        android:text="ENABLE LOCATION"
+        android:layout_gravity="end"
+        android:id="@+id/locationPermissionDialogueEnableLocation"
+        />
+</LinearLayout>

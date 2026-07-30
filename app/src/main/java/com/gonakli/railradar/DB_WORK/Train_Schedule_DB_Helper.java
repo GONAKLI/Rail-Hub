@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -292,5 +293,39 @@ public class Train_Schedule_DB_Helper extends SQLiteOpenHelper {
         }
 
         return trainList;
+    }
+
+    public Train_Schedule_Structure getTrainDataByTrainNumber(String trainNumber){
+        ArrayList<Train_Schedule_Station_Structure> arrStationsList;
+        Train_Schedule_Structure myTrainData;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sqlQuery = String.format("SELECT * FROM %s WHERE %s = '%s' ",
+                TABLE_NAME,COLUMN_trainNumber,trainNumber);
+        Cursor cursor = db.rawQuery(sqlQuery,null);
+        cursor.moveToFirst();
+            String trainName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainName));
+            String trNumber = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainNumber));
+
+            String stationFrom = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_stationFrom));
+            String stationTo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_stationTo));
+            String trainRunsOnMon = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnMon));
+            String    trainRunsOnTue = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnTue));
+            String     trainRunsOnWed = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnWed));
+            String      trainRunsOnThu = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnThu));
+            String  trainRunsOnFri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnFri));
+            String  trainRunsOnSat = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnSat));
+            String  trainRunsOnSun = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnSun));
+            String trainDuration = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_duration));
+            arrStationsList =(getStationsForTrain(db, trainNumber));
+
+            myTrainData = new Train_Schedule_Structure(trNumber,trainName,stationFrom,stationTo,
+                    trainRunsOnMon,trainRunsOnTue,trainRunsOnWed,trainRunsOnThu,trainRunsOnFri,trainRunsOnSat,trainRunsOnSun,
+                    trainDuration, arrStationsList);
+
+            cursor.close();
+            db.close();
+
+
+        return  myTrainData;
     }
 }

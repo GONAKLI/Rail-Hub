@@ -17,15 +17,19 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -56,24 +60,65 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     NearBy_Station_ListView_Adapter adapter;
     Button nearbyListRefreshBtn;
     ProgressBar nearbyStationProgressBar;
+    Dialog dialog, gpsDialog ;
     double latitude, longitude;
     boolean isGpsEnabled;
+    private ActivityResultLauncher<Intent> gpsSettingsLauncher;
+    private ActivityResultLauncher<Intent> locationPermissionChecker;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nearby_stations_layout);
         find_all_id();
         set_toolbar();
-        get_Location();
         action_on_refresh_btn();
+
+
+
+        gpsSettingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result ->{
+                    if(gpsDialog !=null && gpsDialog.isShowing()){
+                        gpsDialog.dismiss();
+                    }
+                    if(isGPS_Enabled()){
+
+                        if(get_Location()){
+                            final_location_fetch();
+                        }
+
+                    }else{
+                        Toast.makeText(NearBy_Station_Activity.this, "GPS not enabled yet", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        locationPermissionChecker = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                res ->{
+                    if(get_Location()){
+                        if(dialog !=null && dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                        isGPS_Enabled();
+                    }else {
+                        Toast.makeText(NearBy_Station_Activity.this, "Location Permission not Given", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+        if(get_Location()){
+                isGPS_Enabled();
+        }
 
     }
 
     private void action_on_refresh_btn() {
         nearbyListRefreshBtn.setOnClickListener(v -> {
             arrNearByStations.clear();
-            adapter.notifyDataSetChanged();
-            get_Location();
+            if(adapter != null){
+                adapter.notifyDataSetChanged();
+            }
+
+            if(get_Location()){
+                isGPS_Enabled();
+            }
 
         });
     }
@@ -91,6 +136,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     }
 
     private void findNearByStations() {
+        arrNearByStations.clear();
         Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(NearBy_Station_Activity.this);
         ArrayList<Station_List_Structure> arrStations = dbHelper.getStationList();
         dbHelper.close();
@@ -127,89 +173,48 @@ public class NearBy_Station_Activity extends AppCompatActivity {
 
     }
 
-    private void get_Location() {
-        AlertDialog alertDialog = new AlertDialog.Builder(NearBy_Station_Activity.this)
-                    .setTitle("Location Permission Required")
-                    .setMessage("To find Nearby Station, app require your current Location to provide this functionality")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(NearBy_Station_Activity.this,"Turn on Location permission", Toast.LENGTH_LONG).show();
-                        Intent iSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        iSettings.setData(Uri.fromParts("package", getPackageName(), null));
-                        startActivity(iSettings);
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(NearBy_Station_Activity.this, "Location Permission denied !!", Toast.LENGTH_SHORT).show();
-//                        Intent iHome = new Intent(NearBy_Station_Activity.this, Home_Screen_Activity.class);
-//                        startActivity(iHome);
-                        finish();
-
-                    }
-                }).create();
+    private boolean get_Location() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    || !ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)){
-                alertDialog.show();
-                return;
-            }else{
-                ActivityCompat.requestPermissions(
-                        this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION},50);
-            }
-
-        }
-        isGpsEnabled = isGPS_Enabled();
-        if(isGpsEnabled){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            nearbyStationProgressBar.setVisibility(View.VISIBLE);
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-             locationManager.getCurrentLocation(
-                    LocationManager.GPS_PROVIDER,
-                    null,
-                    getMainExecutor(),
-                    location -> {
-                       if(location != null){
-                           latitude = location.getLatitude();
-                           longitude = location.getLongitude();
-                           findNearByStations();
-                       }else{
-                           Toast.makeText(this, "GPS signals Weak, Please Wait", Toast.LENGTH_SHORT).show();
-                           FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-                           fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,  null)
-                                   .addOnSuccessListener(location1 -> {
-                                       latitude = location1.getLatitude();
-                                       longitude = location1.getLongitude();
-                                       findNearByStations();
-                                   });
-
-                       }
-
-                    }
-            );
-            }
-        }else{
-            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if(location != null){
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                        findNearByStations();
-
-                    }
-
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    || !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                //dialog work starts here:
+                dialog = new Dialog(this);
+                dialog.setContentView(R.layout.location_permission_dialog);
+                dialog.setCanceledOnTouchOutside(false);
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setLayout(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    );
                 }
-            });
+                ImageButton crossIcon = dialog.findViewById(R.id.locationPermissionDialogueCross);
+                Button enablePermissionBtn = dialog.findViewById(R.id.locationPermissionDialogueEnableLocation);
+                crossIcon.setOnClickListener(v -> {
+                    Toast.makeText(NearBy_Station_Activity.this, "Location Permission denied !!", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+                enablePermissionBtn.setOnClickListener(v -> {
+                    Intent iSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    iSettings.setData(Uri.fromParts("package", getPackageName(), null));
+                    locationPermissionChecker.launch(iSettings);
+                });
+                dialog.show();
+
+                //dialog work end here;
+                return false;
+            } else {
+                ActivityCompat.requestPermissions(
+                        this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION}, 50);
+                return false;
+            }
         }
-        }
+//        else{
+//            isGPS_Enabled();
+//        }
+        return true;
     }
 
     private void set_toolbar() {
@@ -237,8 +242,14 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                 toast.setText("Location Permission Required ");
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.show();
+                finish();
 
             }else{
+
+                if(isGPS_Enabled()){
+                    final_location_fetch();
+                }
+
 
             }
         }
@@ -247,28 +258,32 @@ public class NearBy_Station_Activity extends AppCompatActivity {
 
     public boolean isGPS_Enabled(){
         LocationManager locationManager =(LocationManager) getSystemService(NearBy_Station_Activity.LOCATION_SERVICE);
-        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGpsEnabled){
-            AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setTitle("GPS is disabled")
-                    .setMessage("Please enable GPS service to use this feature")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent iLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                           startActivity(iLocation);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(NearBy_Station_Activity.this, "Enable GPS to use this feature", Toast.LENGTH_SHORT).show();
-//                            Intent iHome = new Intent(NearBy_Station_Activity.this, Home_Screen_Activity.class);
-//                            startActivity(iHome);
-                            finish();
-                        }
-                    }).create();
-            alertDialog.show();
+            gpsDialog = new Dialog(this);
+            gpsDialog.setContentView(R.layout.gps_permission_dialog);
+            gpsDialog.setCanceledOnTouchOutside(false);
+            if (gpsDialog.getWindow() != null) {
+                gpsDialog.getWindow().setLayout(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+            }
+            ImageButton crossIcon = gpsDialog.findViewById(R.id.locationPermissionDialogueCross);
+            Button enableGpsBtn = gpsDialog.findViewById(R.id.locationPermissionDialogueEnableGPS);
+            crossIcon.setOnClickListener(v -> {
+                Toast.makeText(NearBy_Station_Activity.this, "Enable GPS to use this feature", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+            enableGpsBtn.setOnClickListener(v -> {
+                Intent iLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                 gpsSettingsLauncher.launch(iLocation);
+            });
+            gpsDialog.show();
+
+        }else{
+            isGpsEnabled = true;
+            final_location_fetch();
         }
         return isGpsEnabled;
 
@@ -282,6 +297,58 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         }
         return true;
     }
+
+    public void final_location_fetch(){
+
+        if(isGpsEnabled){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                nearbyStationProgressBar.setVisibility(View.VISIBLE);
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    locationManager.getCurrentLocation(
+                            LocationManager.GPS_PROVIDER,
+                            null,
+                            getMainExecutor(),
+                            location -> {
+                                if(location != null){
+                                    latitude = location.getLatitude();
+                                    longitude = location.getLongitude();
+                                    findNearByStations();
+                                }else{
+                                    Toast.makeText(this, "GPS signals Weak, Please Wait", Toast.LENGTH_SHORT).show();
+                                    FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                                    fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,  null)
+                                            .addOnSuccessListener(location1 -> {
+                                                latitude = location1.getLatitude();
+                                                longitude = location1.getLongitude();
+                                                findNearByStations();
+                                            });
+
+                                }
+
+                            }
+                    );
+                }
+            }else{
+                FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if(location != null){
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            findNearByStations();
+
+                        }
+
+                    }
+                });
+            }
+        }
+    }
+
+
 
 
 }

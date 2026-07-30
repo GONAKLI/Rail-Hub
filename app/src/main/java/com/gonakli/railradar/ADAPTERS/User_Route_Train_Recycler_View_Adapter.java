@@ -137,6 +137,8 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             Intent trainTracking = new Intent(context.getApplicationContext(), Train_Tracking.class);
             trainTracking.putExtra("trainNumber", trNumber);
             trainTracking.putExtra("trainName", trName);
+            trainTracking.putExtra("fromStationCode", fromStationCode);
+            trainTracking.putExtra("toStationCode", toStationCode);
             context.startActivity(trainTracking);
         });
             final String serviceDays = runningDays;
