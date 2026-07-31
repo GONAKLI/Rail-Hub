@@ -20,5 +20,6 @@
     <color name="gradient_start">#7C4DFF</color>
     <color name="gradient_end">#00BFA5</color>
 
+    <color name="selected_option_bg">#1976D2</color>
 
 </resources>

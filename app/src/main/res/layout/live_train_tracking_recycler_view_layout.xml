@@ -69,7 +69,8 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@id/trainStationName"
         app:layout_constraintTop_toBottomOf="@id/trainStationName"
-        app:layout_constraintEnd_toStartOf="@id/timeColumns">
+        app:layout_constraintEnd_toStartOf="@id/timeColumns"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/trainDistanceTravelled"
@@ -94,6 +95,21 @@
             android:text="Platform 1"
             android:textColor="@color/card_text_secondary"
             android:textSize="13sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:text="|"
+            android:textColor="@color/card_text_secondary"
+            android:textSize="13sp" />
+        <ImageButton
+            android:layout_width="50sp"
+            android:layout_height="40sp"
+            android:scaleType="fitXY"
+            android:src="@drawable/nearby_station_location_icon"
+            android:contentDescription="map icon"
+            android:id="@+id/stationOnMap"
+            />
 
     </LinearLayout>
 

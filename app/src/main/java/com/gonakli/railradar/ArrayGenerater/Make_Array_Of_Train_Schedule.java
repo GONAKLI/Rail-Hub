@@ -64,9 +64,12 @@ public class Make_Array_Of_Train_Schedule {
                     String distance = stationJSONObj.optString("distance");
                     String dayCount = stationJSONObj.optString("dayCount");
                     String stnSerialNumber = stationJSONObj.optString("stnSerialNumber");
+                    String stnLat = stationJSONObj.optString("lat");
+                    String stnLng = stationJSONObj.optString("lng");
 
                     stationList.add(new Train_Schedule_Station_Structure(
-                            stationCode, stationName, arrivalTime, departureTime, haltTime, distance, dayCount, stnSerialNumber));
+                            stationCode, stationName, arrivalTime, departureTime, haltTime, distance, dayCount, stnSerialNumber,
+                            stnLat,stnLng));
 
                 }
                 arrTrainSchedule.add(

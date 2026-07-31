@@ -1,9 +1,8 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <include layout="@layout/custom_toolbar" />
     <include layout="@layout/live_train_tracking_header_route_columns" />
     <androidx.recyclerview.widget.RecyclerView
@@ -12,4 +11,14 @@
         android:id="@+id/live_train_tracking_recycler_view"
         android:layout_weight="1"
         />
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/insideTrainBtn"
+       app:icon="@drawable/nearby_station_icon"
+         android:text="Inside Train ?"
+      android:layout_gravity="bottom|end"
+      android:layout_marginBottom="20dp"
+      />
+
 </LinearLayout>

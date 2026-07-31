@@ -1,11 +1,15 @@
 package com.gonakli.railradar.ADAPTERS;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,12 +60,26 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
         String actualDepAt;
         String distanceTrav = arrTrainStations.get(position).getDistance();
         String platformAt;
+        String stLat = arrTrainStations.get(position).getStnLat();
+        String stLng = arrTrainStations.get(position).getStnLng();
 
-        Log.d("testingRecycler", "onBindViewHolder: "+ stName + " " + arrAt + " " + depAt + " " + distanceTrav);
+        Log.d("testingRecycler", "onBindViewHolder: "+ stName + " " + stLat + " " + stLng + " " + distanceTrav);
         holder.trainStationName.setText(stName);
         holder.trainArrivalAt.setText(arrAt);
         holder.trainDepartureAt.setText(depAt);
         holder.trainDistanceTravelled.setText(distanceTrav);
+        holder.stationOnMap.setOnClickListener(v ->{
+            try{
+                String uri = "geo:" + stLat + "," + stLng + "?q=" + stLat + "," + stLng;
+                Intent iMaps = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                iMaps.setPackage("com.google.android.apps.maps");
+                context.startActivity(iMaps);
+            }catch (ActivityNotFoundException e){
+                String uri = "https://www.google.com/maps/search/?api=1&query=" + stLat + "," + stLng;
+                Intent iBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                context.startActivity(iBrowser);
+            }
+        });
 
     }
 
@@ -73,7 +91,7 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
     class myViewHolder extends RecyclerView.ViewHolder{
 TextView trainStationName,trainArrivalAt,trainDepartureAt;
 TextView trainActualArrivalAt,trainActualDepartureAt, trainDistanceTravelled, trainPlatformNo;
-
+ImageButton stationOnMap;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -84,6 +102,7 @@ TextView trainActualArrivalAt,trainActualDepartureAt, trainDistanceTravelled, tr
             trainActualDepartureAt = itemView.findViewById(R.id.trainActualDepartureAt);
             trainDistanceTravelled = itemView.findViewById(R.id.trainDistanceTravelled);
             trainPlatformNo = itemView.findViewById(R.id.trainPlatformNo);
+            stationOnMap = itemView.findViewById(R.id.stationOnMap);
         }
     }
 

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telecom.QueryLocationException;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,7 +64,6 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     ProgressBar nearbyStationProgressBar;
     Dialog dialog, gpsDialog ;
     double latitude, longitude;
-    boolean isGpsEnabled;
     private ActivityResultLauncher<Intent> gpsSettingsLauncher;
     private ActivityResultLauncher<Intent> locationPermissionChecker;
     @Override
@@ -72,6 +73,9 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         find_all_id();
         set_toolbar();
         action_on_refresh_btn();
+        if(is_Permission_Enabled()){
+            isGPS_Enabled();
+        }
 
 
 
@@ -80,22 +84,18 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                     if(gpsDialog !=null && gpsDialog.isShowing()){
                         gpsDialog.dismiss();
                     }
-                    if(isGPS_Enabled()){
-
-                        if(get_Location()){
-                            final_location_fetch();
-                        }
-
+                    if(is_Permission_Enabled()){
+                        isGPS_Enabled();
                     }else{
                         Toast.makeText(NearBy_Station_Activity.this, "GPS not enabled yet", Toast.LENGTH_SHORT).show();
                     }
                 });
         locationPermissionChecker = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 res ->{
-                    if(get_Location()){
-                        if(dialog !=null && dialog.isShowing()){
-                            dialog.dismiss();
-                        }
+                    if(dialog !=null && dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    if(is_Permission_Enabled()){
                         isGPS_Enabled();
                     }else {
                         Toast.makeText(NearBy_Station_Activity.this, "Location Permission not Given", Toast.LENGTH_SHORT).show();
@@ -103,9 +103,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                     }
                 });
 
-        if(get_Location()){
-                isGPS_Enabled();
-        }
+
 
     }
 
@@ -116,7 +114,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
 
-            if(get_Location()){
+            if(is_Permission_Enabled()){
                 isGPS_Enabled();
             }
 
@@ -132,6 +130,10 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         }
         nearbyStationProgressBar.setVisibility(View.GONE);
 
+        nearbyListRefreshBtn.setEnabled(true);
+        nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+        nearbyListRefreshBtn.setText("Refresh Stations");
+
 
     }
 
@@ -141,7 +143,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         ArrayList<Station_List_Structure> arrStations = dbHelper.getStationList();
         dbHelper.close();
         if(latitude == 0.0d && longitude == 0.0d){
-            get_Location();
+            is_Permission_Enabled();
             return;
         }
         Location startPoint = new Location("startPoint");
@@ -173,7 +175,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
 
     }
 
-    private boolean get_Location() {
+    private boolean is_Permission_Enabled() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -211,9 +213,6 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                 return false;
             }
         }
-//        else{
-//            isGPS_Enabled();
-//        }
         return true;
     }
 
@@ -243,22 +242,17 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.show();
                 finish();
-
-            }else{
-
-                if(isGPS_Enabled()){
-                    final_location_fetch();
-                }
-
+                return;
 
             }
+            isGPS_Enabled();
         }
 
     }
 
-    public boolean isGPS_Enabled(){
+    public void isGPS_Enabled(){
         LocationManager locationManager =(LocationManager) getSystemService(NearBy_Station_Activity.LOCATION_SERVICE);
-        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGpsEnabled){
             gpsDialog = new Dialog(this);
             gpsDialog.setContentView(R.layout.gps_permission_dialog);
@@ -280,14 +274,9 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                  gpsSettingsLauncher.launch(iLocation);
             });
             gpsDialog.show();
-
-        }else{
-            isGpsEnabled = true;
-            final_location_fetch();
+            return;
         }
-        return isGpsEnabled;
-
-
+            final_location_fetch();
     }
 
     @Override
@@ -299,13 +288,16 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     }
 
     public void final_location_fetch(){
+        nearbyListRefreshBtn.setEnabled(false);
+        nearbyListRefreshBtn.setBackgroundColor(Color.RED);
+        nearbyListRefreshBtn.setText("Loading ...");
 
-        if(isGpsEnabled){
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 nearbyStationProgressBar.setVisibility(View.VISIBLE);
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                 if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    try{
                     locationManager.getCurrentLocation(
                             LocationManager.GPS_PROVIDER,
                             null,
@@ -318,34 +310,72 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                                 }else{
                                     Toast.makeText(this, "GPS signals Weak, Please Wait", Toast.LENGTH_SHORT).show();
                                     FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-                                    fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,  null)
+                                    fusedLocationProviderClient.getLastLocation()
                                             .addOnSuccessListener(location1 -> {
-                                                latitude = location1.getLatitude();
-                                                longitude = location1.getLongitude();
-                                                findNearByStations();
+                                                if(location1 != null){
+                                                    latitude = location1.getLatitude();
+                                                    longitude = location1.getLongitude();
+                                                    findNearByStations();
+                                                }else{
+                                                    nearbyStationProgressBar.setVisibility(View.GONE);
+                                                    nearbyListRefreshBtn.setEnabled(true);
+                                                    nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+                                                    nearbyListRefreshBtn.setText("Refresh Stations");
+                                                }
+
                                             });
 
                                 }
 
                             }
                     );
+                    }catch (Exception e){
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "! Unexpected error, try again !!", Snackbar.ANIMATION_MODE_SLIDE);
+                        snackbar.setDuration(Snackbar.LENGTH_LONG);
+                        snackbar.setBackgroundTint(Color.RED);
+                        snackbar.setTextColor(Color.BLUE);
+                        snackbar.show();
+                        nearbyStationProgressBar.setVisibility(View.GONE);
+                        nearbyListRefreshBtn.setEnabled(true);
+                        nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+                        nearbyListRefreshBtn.setText("Refresh Stations");
+                    }
+
                 }
-            }else{
-                FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if(location != null){
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                            findNearByStations();
+            }else {
+                try {
+
+
+                    FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                                findNearByStations();
+
+                            }else{
+                                nearbyStationProgressBar.setVisibility(View.GONE);
+                                nearbyListRefreshBtn.setEnabled(true);
+                                nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+                                nearbyListRefreshBtn.setText("Refresh Stations");
+                            }
 
                         }
+                    });
+                } catch (Exception e) {
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "! Unexpected error, try again !!", Snackbar.ANIMATION_MODE_SLIDE);
+                    snackbar.setBackgroundTint(Color.RED);
+                    snackbar.setTextColor(Color.BLUE);
+                    snackbar.show();
+                    nearbyStationProgressBar.setVisibility(View.GONE);
+                    nearbyListRefreshBtn.setEnabled(true);
+                    nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+                    nearbyListRefreshBtn.setText("Refresh Stations");
+                }
+                }
 
-                    }
-                });
-            }
-        }
     }
 
 

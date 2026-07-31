@@ -9,10 +9,12 @@ public class Train_Schedule_Station_Structure {
     private final String distance;
     private final String dayCount;
     private final String stnSerialNumber;
+    private final String stnLat;
+    private final String stnLng;
 
     public Train_Schedule_Station_Structure(String stationCode, String stationName, String arrivalTime,
                                 String departureTime, String haltTime, String distance,
-                                String dayCount, String stnSerialNumber) {
+                                String dayCount, String stnSerialNumber, String stnLat, String stnLng) {
         this.stationCode = stationCode;
         this.stationName = stationName;
         this.arrivalTime = arrivalTime;
@@ -21,6 +23,9 @@ public class Train_Schedule_Station_Structure {
         this.distance = distance;
         this.dayCount = dayCount;
         this.stnSerialNumber = stnSerialNumber;
+        this.stnLat = stnLat;
+        this.stnLng = stnLng;
+
     }
 
     @Override
@@ -44,5 +49,13 @@ public class Train_Schedule_Station_Structure {
     public String getHaltTime() { return haltTime; }
     public String getDistance() { return distance; }
     public String getDayCount() { return dayCount; }
+
     public String getStnSerialNumber() { return stnSerialNumber; }
+    public String getStnLat() {
+        return stnLat;
+    }
+
+    public String getStnLng() {
+        return stnLng;
+    }
 }

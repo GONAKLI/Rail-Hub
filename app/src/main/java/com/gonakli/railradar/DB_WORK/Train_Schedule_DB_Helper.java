@@ -45,6 +45,8 @@ public class Train_Schedule_DB_Helper extends SQLiteOpenHelper {
     private static final String  COLUMN_distance = "distance";
     private static final String  COLUMN_dayCount = "dayCount";
     private static final String  COLUMN_stnSerialNumber = "stnSerialNumber";
+    private static final String  COLUMN_stnLat = "lat";
+    private static final String  COLUMN_stnLng = "lng";
 
     private final Context applicationContext;
 
@@ -86,9 +88,11 @@ public class Train_Schedule_DB_Helper extends SQLiteOpenHelper {
                         "%s text, " +
                         "%s text, " +
                         "%s text, " +
+                                "%s text, " +
+                                "%s text, " +
                                 "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ) ",STATION_TABLE_FOR_SCHEDULE,COLUMN_trainNumber, COLUMN_stationCode, COLUMN_stationName, COLUMN_arrivalTime,
                         COLUMN_departureTime,COLUMN_haltTime, COLUMN_distance, COLUMN_dayCount,
-                        COLUMN_stnSerialNumber,COLUMN_trainNumber, TABLE_NAME, COLUMN_trainNumber);
+                        COLUMN_stnSerialNumber, COLUMN_stnLat, COLUMN_stnLng,COLUMN_trainNumber, TABLE_NAME, COLUMN_trainNumber);
 
         db.execSQL(CREATE_TRAIN_TABLE);
         db.execSQL(CREATE_STATION_TABLE);
@@ -146,6 +150,9 @@ public class Train_Schedule_DB_Helper extends SQLiteOpenHelper {
                         stationValues.put(COLUMN_distance, stationData.getDistance());
                         stationValues.put(COLUMN_dayCount, stationData.getDayCount());
                         stationValues.put(COLUMN_stnSerialNumber, stationData.getStnSerialNumber());
+
+                        stationValues.put(COLUMN_stnLat, stationData.getStnLat());
+                        stationValues.put(COLUMN_stnLng, stationData.getStnLng());
 
                         db.insert(STATION_TABLE_FOR_SCHEDULE,null, stationValues);
                     }
@@ -226,10 +233,12 @@ public class Train_Schedule_DB_Helper extends SQLiteOpenHelper {
                 String distance = stnCursor.getString(stnCursor.getColumnIndexOrThrow(COLUMN_distance));
                 String dayCount = stnCursor.getString(stnCursor.getColumnIndexOrThrow(COLUMN_dayCount));
                 String stnSerialNumber = stnCursor.getString(stnCursor.getColumnIndexOrThrow(COLUMN_stnSerialNumber));
+                String stnLat = stnCursor.getString(stnCursor.getColumnIndexOrThrow(COLUMN_stnLat));
+                String stnLng = stnCursor.getString(stnCursor.getColumnIndexOrThrow(COLUMN_stnLng));
 
                 Train_Schedule_Station_Structure stationObj = new Train_Schedule_Station_Structure(
                         stationCode, stationName, arrivalTime, departureTime,
-                        haltTime, distance, dayCount, stnSerialNumber
+                        haltTime, distance, dayCount, stnSerialNumber, stnLat, stnLng
                 );
 
                 stationList.add(stationObj);

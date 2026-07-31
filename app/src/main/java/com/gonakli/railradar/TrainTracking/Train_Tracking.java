@@ -1,8 +1,14 @@
 package com.gonakli.railradar.TrainTracking;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,14 +23,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gonakli.railradar.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
+import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Train_Tracking extends AppCompatActivity {
     String trainNumber, trainName, fromStationCode, toStationCode;
+    ExtendedFloatingActionButton insideTrainBtn;
     Toolbar toolbar;
+
+    double lat, lng;
     Train_Schedule_Structure myTrainData;
     RecyclerView live_train_tracking_recycler_view;
     @Override
@@ -37,9 +49,31 @@ public class Train_Tracking extends AppCompatActivity {
         set_custom_toolbar();
         train_finder();
         set_recycler_view();
+        set_insideTrainBtn_action();
+
 
 
        
+    }
+
+    private void track_user() {
+        ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
+        for(Train_Schedule_Station_Structure stData : arrTrainStations){
+            float[] resu = new float[1];
+            double stLat = Double.parseDouble(stData.getStnLat());
+            double stLng = Double.parseDouble(stData.getStnLng());
+            Location.distanceBetween(stLat, stLng, lat, lng, resu );
+            Log.d("checkingLocat", "track_user: " + resu[0]/1000 + " KM" + " from " + stData.getStationName());
+        }
+    }
+
+    private void set_insideTrainBtn_action() {
+        insideTrainBtn.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(Train_Tracking.this, myLocationServiceClass.class);
+            startService(intent);
+        });
+
     }
 
     private void set_custom_toolbar() {
@@ -76,6 +110,7 @@ public class Train_Tracking extends AppCompatActivity {
     private void find_all_id() {
         live_train_tracking_recycler_view = findViewById(R.id.live_train_tracking_recycler_view);
         toolbar = findViewById(R.id.application_custom_toolbar);
+        insideTrainBtn = findViewById(R.id.insideTrainBtn);
     }
 
     @Override
@@ -84,5 +119,34 @@ public class Train_Tracking extends AppCompatActivity {
             finish();
         }
         return  true;
+    }
+
+
+    // broadcast receiver
+
+    private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           lat = intent.getDoubleExtra("lat", 0);
+           lng = intent.getDoubleExtra("lng", 0);
+            Log.d("Serviceclass", "onReceive: receiver h" + lat);
+            Toast.makeText(Train_Tracking.this, "Lat: " + lat + "\nLng: " + lng, Toast.LENGTH_SHORT).show();
+            track_user();
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(locationReceiver, new IntentFilter(myLocationServiceClass.ACTION_LOCATION_UPDATE),  Context.RECEIVER_NOT_EXPORTED );
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(locationReceiver);
     }
 }
