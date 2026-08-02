@@ -29,6 +29,16 @@
     <TextView
         android:layout_marginTop="15sp"
         android:lineHeight="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Grant Location Access"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        />
+    <TextView
+        android:layout_marginTop="15sp"
+        android:lineHeight="30sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="5sp"

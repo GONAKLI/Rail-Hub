@@ -56,6 +56,9 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
 
     @Override
     public int getItemCount() {
+        if(arrTrainList.size() >=15){
+            return 15;
+        }
         return arrTrainList.size();
     }
 

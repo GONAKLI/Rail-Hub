@@ -87,7 +87,13 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void set_recycler_view() {
-        Train_Tracking_Recycler_View_Adapter adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData, fromStationCode, toStationCode);
+        Train_Tracking_Recycler_View_Adapter adapter;
+        if(fromStationCode != null && toStationCode != null){
+            adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData, fromStationCode, toStationCode);
+        }else{
+            adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData);
+        }
+
        live_train_tracking_recycler_view.setLayoutManager(new LinearLayoutManager(Train_Tracking.this));
         live_train_tracking_recycler_view.setAdapter(adapter);
 

@@ -41,9 +41,9 @@ FrameLayout frameLayout;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
         get_application_theme();
-        add_All_Stations_In_DB();
-        add_All_Trains_In_DB();
-        add_All_Schedule_In_DB();
+//        add_All_Stations_In_DB();
+//        add_All_Trains_In_DB();
+//        add_All_Schedule_In_DB();
         findAllID();
         setUpApplicationToolBar();
         frameLayoutSetUp();
@@ -58,57 +58,57 @@ FrameLayout frameLayout;
         themeSelector.show_theme_chooser_dialogue();
     }
 
-    private void add_All_Schedule_In_DB() {
-        new Thread(() ->{
-            Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_Schedule_DB_Helper.TABLE_NAME, null);
-            cursor.moveToFirst();
-            int count = cursor.getInt(0);
-            if(count == 0){
-                dbHelper.addScheduleInDB();
-            }
-            cursor.close();
-            db.close();
-        }).start();
-    }
-
-
-    private void add_All_Trains_In_DB() {
-        new Thread(() ->{
-        Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
-
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-           Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_List_DB_Helper.TABLE_NAME, null);
-           cursor.moveToFirst();
-
-           int count = cursor.getInt(0);
-           if(count == 0){
-               dbHelper.addTrainsInDB();
-           }
-            cursor.close();
-           db.close();
-        }).start();
-    }
-
-
-
-    private void add_All_Stations_In_DB() {
-        new Thread(()-> {
-            Station_List_DB_Helper DB_Helper = new Station_List_DB_Helper(getApplicationContext());
-            SQLiteDatabase db = DB_Helper.getReadableDatabase();
-           Cursor cursor = db.rawQuery(
-                    "select count(*) from STATION_LIST_TABLE " , null );
-           cursor.moveToFirst();
-           int count = cursor.getInt(0);
-           cursor.close();
-           if(count == 0){
-               DB_Helper.addStationInDB();
-           }
-
-        }).start();
-
-    }
+//    private void add_All_Schedule_In_DB() {
+//        new Thread(() ->{
+//            Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//            Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_Schedule_DB_Helper.TABLE_NAME, null);
+//            cursor.moveToFirst();
+//            int count = cursor.getInt(0);
+//            if(count == 0){
+//                dbHelper.addScheduleInDB();
+//            }
+//            cursor.close();
+//            db.close();
+//        }).start();
+//    }
+//
+//
+//    private void add_All_Trains_In_DB() {
+//        new Thread(() ->{
+//        Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
+//
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//           Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Train_List_DB_Helper.TABLE_NAME, null);
+//           cursor.moveToFirst();
+//
+//           int count = cursor.getInt(0);
+//           if(count == 0){
+//               dbHelper.addTrainsInDB();
+//           }
+//            cursor.close();
+//           db.close();
+//        }).start();
+//    }
+//
+//
+//
+//    private void add_All_Stations_In_DB() {
+//        new Thread(()-> {
+//            Station_List_DB_Helper DB_Helper = new Station_List_DB_Helper(getApplicationContext());
+//            SQLiteDatabase db = DB_Helper.getReadableDatabase();
+//           Cursor cursor = db.rawQuery(
+//                    "select count(*) from STATION_LIST_TABLE " , null );
+//           cursor.moveToFirst();
+//           int count = cursor.getInt(0);
+//           cursor.close();
+//           if(count == 0){
+//               DB_Helper.addStationInDB();
+//           }
+//
+//        }).start();
+//
+//    }
 
 
     private void frameLayoutSetUp() {

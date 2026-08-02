@@ -19,7 +19,10 @@ import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<Train_Tracking_Recycler_View_Adapter.myViewHolder> {
 
@@ -34,6 +37,11 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
         arrTrainStations = trainData.getStationList();
         this.fromStationCode = fromStationCode;
         this.toStationCode = toStationCode;
+    }
+    public Train_Tracking_Recycler_View_Adapter(Context context, Train_Schedule_Structure trainData){
+        this.context = context;
+        this.trainData = trainData;
+        arrTrainStations = trainData.getStationList();
     }
     @NonNull
     @Override
@@ -54,8 +62,35 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
             holder.trainStationName.setTextColor(Color.RED);
         }
         String stName = arrTrainStations.get(position).getStationName();
+
         String arrAt = arrTrainStations.get(position).getArrivalTime();
         String depAt = arrTrainStations.get(position).getDepartureTime();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
+        if(!arrAt.equals("--")){
+            Date date = null;
+            try {
+                date = inputFormat.parse(arrAt);
+            } catch (ParseException e) {
+
+            }
+            if(date != null){
+                arrAt = outputFormat.format(date);
+            }
+
+        }
+        if(!depAt.equals("--")){
+            Date date = null;
+            try{
+                date = inputFormat.parse(depAt);
+            }catch(ParseException e){
+
+            }
+            if(date != null){
+                depAt = outputFormat.format(date);
+            }
+
+        }
         String actualArrAt;
         String actualDepAt;
         String distanceTrav = arrTrainStations.get(position).getDistance();

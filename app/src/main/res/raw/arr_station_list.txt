@@ -10081,5 +10081,27 @@
 {"code":"YY-RKSO","name":"Rajkharsawan Outer Cabin","lat":22.72402,"lng":85.79496},
 {"code":"YY-SDLB","name":"Sadulpur Bypass Cabin","lat":28.633027,"lng":75.404494},
 {"code":"YY-WADB","name":"Wadi B Cabin","lat":17.04028,"lng":76.98981},
-{"code":"YYNGPI","name":"Itwari Bypass Cabin","lat":21.16257,"lng":79.10083}
+{"code":"YYNGPI","name":"Itwari Bypass Cabin","lat":21.16257,"lng":79.10083},
+
+{"code":"BLYC","name":"BALLY CHORD","lat":22.595800,"lng":88.263600},
+{"code":"STMM","name":"ST THOMAS MOUNT(MRTS)","lat":12.995066,"lng":80.199552},
+{"code":"SFMU","name":"SUNAM UDHAM SINGH WALA","lat":30.130064,"lng":75.808427},
+{"code":"JHDC","name":"JAHANBAD COURT","lat":25.197300, "lng":84.984200},
+
+{"code":"MSKT","name":"MARTYR CPTN SUNIL KR CHOUDHARY KATHUA","lat":32.397537,"lng":75.551562},
+{"code":"CP","name":"CHITPUR","lat":22.566563,"lng":88.374968},
+{"code":"MFL","name":"MISRAULI","lat":26.122100,"lng":81.838300},
+{"code":"AKJ","name":"AKBARGANJ","lat":26.531900,"lng":81.502100},
+{"code":"NHH","name":"NIHALGARH","lat":26.460400,"lng":81.632800},
+{"code":"WGJ","name":"WARIS GANJ (HALT)","lat":26.450441,"lng":81.660004},
+{"code":"FTG","name":"FURSATGANJ","lat":26.244700,"lng":81.415900},
+{"code":"JAIS","name":"JAIS","lat":26.262000,"lng":81.519000},
+{"code":"KCJ","name":"KASIMPUR","lat":26.257089,"lng":81.539841},
+{"code":"BANI","name":"BANI","lat":26.226900,"lng":81.620400},
+
+{"code":"TKV","name":"TEKANWAS","lat":25.807689,"lng":84.689324},
+{"code":"BYCH","name":"BELLARYCANT HALT","lat":15.150639,"lng":76.894972},
+{"code":"KIPK","name":"KOMURAVELLI PUNYAKSHETRAM","lat":17.949286,"lng":78.876506},
+{"code":"NCTP","name":"NCTP","lat":23.793684,"lng":91.278089}
+
 ]

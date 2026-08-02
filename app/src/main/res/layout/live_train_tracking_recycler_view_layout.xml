@@ -92,7 +92,7 @@
             android:id="@+id/trainPlatformNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Platform 1"
+            android:text="--"
             android:textColor="@color/card_text_secondary"
             android:textSize="13sp" />
         <TextView
@@ -133,7 +133,7 @@
                 android:id="@+id/trainArrivalAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1:56 AM"
+                android:text="__"
                 android:textColor="@color/card_text_secondary"
                 android:textSize="13sp" />
 
@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="1:57 AM"
+                android:text="--"
                 android:textColor="@color/card_text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -161,7 +161,7 @@
                 android:id="@+id/trainDepartureAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1:57 AM"
+                android:text="__"
                 android:textColor="@color/card_text_secondary"
                 android:textSize="13sp" />
 
@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="2:02 AM"
+                android:text="--"
                 android:textColor="@color/card_text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

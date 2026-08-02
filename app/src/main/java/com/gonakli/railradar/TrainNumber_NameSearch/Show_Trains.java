@@ -14,6 +14,7 @@ import com.gonakli.railradar.DB_WORK.Train_List_DB_Helper;
 import com.gonakli.railradar.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Show_Trains extends AppCompatActivity {
     SearchView showTrainSearchView;
@@ -50,10 +51,12 @@ public class Show_Trains extends AppCompatActivity {
     private void setRecyclerView() {
         Train_List_DB_Helper dbHelper = new Train_List_DB_Helper(getApplicationContext());
         arrTrains = dbHelper.getTrainList();
+        Collections.shuffle(arrTrains);
 
-        recyclerAdapter = new Train_List_Recycler_Adapter(getApplicationContext(), arrTrains);
+        recyclerAdapter = new Train_List_Recycler_Adapter(Show_Trains.this, arrTrains);
         showTrainRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         showTrainRecyclerView.setAdapter(recyclerAdapter);
+        dbHelper.close();
     }
 
     private void find_all_by_id() {
