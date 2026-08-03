@@ -24,11 +24,14 @@ import com.gonakli.railradar.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
+import com.gonakli.railradar.Structure_Class.NearBy_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railradar.Structure_Class.Train_Tracking_Live_Structure_Class;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class Train_Tracking extends AppCompatActivity {
@@ -58,13 +61,9 @@ public class Train_Tracking extends AppCompatActivity {
 
     private void track_user() {
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
-        for(Train_Schedule_Station_Structure stData : arrTrainStations){
-            float[] resu = new float[1];
-            double stLat = Double.parseDouble(stData.getStnLat());
-            double stLng = Double.parseDouble(stData.getStnLng());
-            Location.distanceBetween(stLat, stLng, lat, lng, resu );
-            Log.d("checkingLocat", "track_user: " + resu[0]/1000 + " KM" + " from " + stData.getStationName());
-        }
+        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations);
+        st.trackUser();
+
     }
 
     private void set_insideTrainBtn_action() {

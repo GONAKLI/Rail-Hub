@@ -27,6 +27,17 @@ public class NearBy_Station_Structure {
         return stationLat;
     }
 
+    @Override
+    public String toString() {
+        return "NearBy_Station_Structure{" +
+                "stationName='" + stationName + '\'' +
+                ", stationCode='" + stationCode + '\'' +
+                ", stationLat='" + stationLat + '\'' +
+                ", stationLng='" + stationLng + '\'' +
+                ", stationDistance=" + stationDistance +
+                '}';
+    }
+
     public String getStationLng() {
         return stationLng;
     }
