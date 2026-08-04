@@ -62,7 +62,16 @@ public class Train_Tracking extends AppCompatActivity {
     private void track_user() {
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
         Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations);
-        st.trackUser();
+        st.trackMyUserTrain();
+        String statusMessage = st.getStatusMessage();
+        int stationCoveredPercentage = st.getStationCoveredPercentage();
+        int totalJourneyCovered = st.getTotalJourneyCovered();
+        Train_Schedule_Station_Structure currentStation = st.getCurrentStation();
+        Train_Schedule_Station_Structure nextStation = st.getNextStation();
+        String message = String.format("status Message: %s\nstation coverd percentage: %d\ntotal Journey coveres: %d\n" +
+                "current station: %s\nnext station: %s\n",statusMessage,stationCoveredPercentage,totalJourneyCovered
+        ,currentStation != null ?currentStation.getStationName() : "null",nextStation.getStationName());
+        Log.d("myUserData", "track_user: "+ message);
 
     }
 
@@ -149,9 +158,9 @@ public class Train_Tracking extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(locationReceiver);
-    }
+ //   @Override
+//    protected void onPause() {
+//        super.onPause();
+//        unregisterReceiver(locationReceiver);
+//    }
 }
