@@ -142,7 +142,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             context.startActivity(trainTracking);
         });
             final String serviceDays = runningDays;
-        holder.trainScheduleTrainNumber.setOnClickListener(v ->{
+        holder.itemView.setOnLongClickListener(v ->{
             TextView infoTrainName, infoTrainNumber, infoTrainService, infoTrainJourneyTime;
             TextView infoTrainStops, infoTrainTotalDistance, infoTrainStartingPoint, infoTrainEndingPoint;
             Button btnClose;
@@ -180,7 +180,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
                 dialog.dismiss();
             });
 
-
+            return true;
         });
 
 
