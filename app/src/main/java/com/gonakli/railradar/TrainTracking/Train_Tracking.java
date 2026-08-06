@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 
@@ -25,9 +27,12 @@ import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
 import com.gonakli.railradar.Structure_Class.NearBy_Station_Structure;
+import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Tracking_Live_Structure_Class;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -53,25 +58,45 @@ public class Train_Tracking extends AppCompatActivity {
         train_finder();
         set_recycler_view();
         set_insideTrainBtn_action();
+        set_BottomSheet_Layout();
 
 
 
        
     }
 
+    private void set_BottomSheet_Layout() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Train_Tracking.this);
+        bottomSheetDialog.setContentView(R.layout.train_tracking_bottomsheet);
+        View bottomSheet = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setPeekHeight(200);
+        bottomSheetDialog.setCancelable(false);
+        bottomSheetDialog.setCanceledOnTouchOutside(false);
+        bottomSheetDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        bottomSheetDialog.show();
+    }
+
     private void track_user() {
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
-        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations);
+        ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();
+        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations, arrPolylinePoints);
         st.trackMyUserTrain();
         String statusMessage = st.getStatusMessage();
         int stationCoveredPercentage = st.getStationCoveredPercentage();
         int totalJourneyCovered = st.getTotalJourneyCovered();
-        Train_Schedule_Station_Structure currentStation = st.getCurrentStation();
-        Train_Schedule_Station_Structure nextStation = st.getNextStation();
-        String message = String.format("status Message: %s\nstation coverd percentage: %d\ntotal Journey coveres: %d\n" +
-                "current station: %s\nnext station: %s\n",statusMessage,stationCoveredPercentage,totalJourneyCovered
-        ,currentStation != null ?currentStation.getStationName() : "null",nextStation.getStationName());
-        Log.d("myUserData", "track_user: "+ message);
+        if(st.getPreviousStation() !=null){
+            Train_Schedule_Station_Structure previousStation = st.getPreviousStation();
+        }
+        if(st.getCurrentStation() !=null){
+            Train_Schedule_Station_Structure currentStation = st.getCurrentStation();
+        }
+        if(st.getNextStation() != null){
+            Train_Schedule_Station_Structure nextStation = st.getNextStation();
+        }
+        boolean isAtStation = st.isAtStation();
+        boolean isOnRoute = st.isOnRoute();
+
 
     }
 

@@ -10,6 +10,8 @@ public class Train_Schedule_Structure {
 
     private  final ArrayList<Train_Schedule_Station_Structure> stationList;
 
+    private  ArrayList<Track_Polyline_Point_Structure> polylinePoints;
+
     public Train_Schedule_Structure(String trainNumber, String trainName, String stationFrom, String stationTo, String trainRunsOnMon, String trainRunsOnTue, String trainRunsOnWed, String trainRunsOnThu, String trainRunsOnFri, String trainRunsOnSat, String trainRunsOnSun, String duration, ArrayList<Train_Schedule_Station_Structure> stationList) {
         this.trainNumber = trainNumber;
         this.trainName = trainName;
@@ -25,6 +27,23 @@ public class Train_Schedule_Structure {
         this.duration = duration;
         this.stationList = stationList;
     }
+    public Train_Schedule_Structure(String trainNumber, String trainName, String stationFrom, String stationTo, String trainRunsOnMon, String trainRunsOnTue, String trainRunsOnWed, String trainRunsOnThu, String trainRunsOnFri, String trainRunsOnSat, String trainRunsOnSun, String duration, ArrayList<Train_Schedule_Station_Structure> stationList, ArrayList<Track_Polyline_Point_Structure> polylinePoints) {
+        this.trainNumber = trainNumber;
+        this.trainName = trainName;
+        this.stationFrom = stationFrom;
+        this.stationTo = stationTo;
+        this.trainRunsOnMon = trainRunsOnMon;
+        this.trainRunsOnTue = trainRunsOnTue;
+        this.trainRunsOnWed = trainRunsOnWed;
+        this.trainRunsOnThu = trainRunsOnThu;
+        this.trainRunsOnFri = trainRunsOnFri;
+        this.trainRunsOnSat = trainRunsOnSat;
+        this.trainRunsOnSun = trainRunsOnSun;
+        this.duration = duration;
+        this.stationList = stationList;
+        this.polylinePoints = polylinePoints;
+    }
+
 
     @Override
     public String toString() {
@@ -95,5 +114,8 @@ public class Train_Schedule_Structure {
 
     public ArrayList<Train_Schedule_Station_Structure> getStationList() {
         return stationList;
+    }
+    public ArrayList<Track_Polyline_Point_Structure> getPolylinePoints() {
+        return polylinePoints;
     }
 }

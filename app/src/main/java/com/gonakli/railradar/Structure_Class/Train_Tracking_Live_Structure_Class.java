@@ -7,17 +7,16 @@ import java.util.ArrayList;
 
 public class Train_Tracking_Live_Structure_Class {
 
-    private static final float ARRIVED_THRESHOLD = 200f;
-    private static final float APPROACHING_THRESHOLD = 1000f;
-    private static final float DEPARTED_THRESHOLD = 1000f;
-    private static final float SEGMENT_TOLERANCE = 500f;
-    private static final float OFF_ROUTE_THRESHOLD = 3000f;
+    private static final float ARRIVED_THRESHOLD = 200f;       // Inside station radius (200m)
+    private static final float DEPARTED_THRESHOLD = 1000f;      // Departed window (1 KM)
+    private static final float APPROACHING_THRESHOLD = 1000f;   // Approaching window (1 KM)
+    private static final float OFF_ROUTE_THRESHOLD = 1500f;     // Max tolerance from polyline track (1.5 KM)
     private static final String TAG = "myTrackedUser";
 
     private final double userLat, userLng;
     private final ArrayList<Train_Schedule_Station_Structure> arrStationsList;
+    private final ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints;
 
-    private final ArrayList<NearBy_Station_Structure> arrNearbyStationsList = new ArrayList<>();
     private final ArrayList<Train_Schedule_Station_Structure> arrValidStationsList = new ArrayList<>();
 
     private String statusMessage;
@@ -27,173 +26,228 @@ public class Train_Tracking_Live_Structure_Class {
     private Train_Schedule_Station_Structure previousStation, nextStation, currentStation;
 
     public Train_Tracking_Live_Structure_Class(double userLat, double userLng,
-                                               ArrayList<Train_Schedule_Station_Structure> arrStationsList) {
+                                               ArrayList<Train_Schedule_Station_Structure> arrStationsList,
+                                               ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints) {
         this.userLat = userLat;
         this.userLng = userLng;
         this.arrStationsList = arrStationsList;
+        this.arrPolylinePoints = arrPolylinePoints;
     }
 
     public void trackMyUserTrain() {
+        // Step 0: State Reset
         segmentFound = false;
+        isAtStation = false;
+        isOnRoute = false;
+        previousStation = null;
+        nextStation = null;
+        currentStation = null;
+        stationCoveredPercentage = 0;
+        totalJourneyCovered = 0;
+        statusMessage = "";
 
         if (arrStationsList == null || arrStationsList.isEmpty()) {
             isOnRoute = false;
-            isAtStation = false;
             statusMessage = "No station data available";
             return;
         }
 
-        buildValidAndNearbyStationLists();
-        sortNearbyStationsByDistance();
+        buildValidStationsList();
 
-        if (!hasEnoughStationsToTrack()) {
+        if (arrValidStationsList.size() < 2) {
+            isOnRoute = false;
+            statusMessage = "Insufficient station location data";
             return;
         }
 
-        NearBy_Station_Structure nearestStation = arrNearbyStationsList.get(0);
-
-        if (nearestStation.getStationDistance() <= ARRIVED_THRESHOLD) {
-            for (int i=0; i<arrValidStationsList.size(); i++){
-                if(arrValidStationsList.get(i).getStationCode() == nearestStation.getStationCode()){
-                    currentStation = arrValidStationsList.get(i);
-                    if(i >0 && arrValidStationsList.get(i-1) !=  null){
-                        previousStation = arrValidStationsList.get(i-1);
-                    }
-                    if(i<arrValidStationsList.size() -1 ){
-                        nextStation = arrValidStationsList.get(i+1);
-                    }
-                    break;
-                }
-            }
-            isAtStation = true;
-            isOnRoute = true;
-            statusMessage = "Arrived at: " + nearestStation.getStationName();
+        // STEP 1: POLYLINE PAR CHECK KAREIN KI USER TRACK PAR HAI YA NAHI (On-Route Validation)
+        boolean userOnTrack = checkIsUserOnPolylineRoute();
+        if (!userOnTrack) {
+            isOnRoute = false;
+            isAtStation = false;
+            statusMessage = "User is not in train";
             logCurrentState();
             return;
         }
 
-        isAtStation = false;
-        findCurrentSegmentAndStatus();
+        isOnRoute = true;
+
+        // STEP 2: DIRECT STATION GPS BASED ZERO-LAG TRACKING & STATUS
+        trackUserByDirectStationCoordinates();
+
         logCurrentState();
     }
 
-    private void buildValidAndNearbyStationLists() {
-        arrNearbyStationsList.clear();
+    private void buildValidStationsList() {
         arrValidStationsList.clear();
-        try {
-            for (Train_Schedule_Station_Structure st : arrStationsList) {
-                String stLatStr = st.getStnLat();
-                String stLngStr = st.getStnLng();
-                if (stLatStr == null || stLngStr == null
-                        || stLatStr.trim().isEmpty() || stLngStr.trim().isEmpty()) {
-                    continue;
-                }
-                double stLat = Double.parseDouble(stLatStr);
-                double stLng = Double.parseDouble(stLngStr);
-                if (stLat == 0.0 && stLng == 0.0) {
-                    continue;
-                }
-
-                arrValidStationsList.add(st);
-
-                float[] resultValue = new float[1];
-                Location.distanceBetween(userLat, userLng, stLat, stLng, resultValue);
-                arrNearbyStationsList.add(new NearBy_Station_Structure(
-                        st.getStationName(), st.getStationCode(), stLatStr, stLngStr, resultValue[0]));
+        for (Train_Schedule_Station_Structure st : arrStationsList) {
+            if (st == null) continue;
+            String stLatStr = st.getStnLat();
+            String stLngStr = st.getStnLng();
+            if (stLatStr == null || stLngStr == null || stLatStr.trim().isEmpty() || stLngStr.trim().isEmpty()) {
+                continue;
             }
-        } catch (NumberFormatException e) {
-            Log.w(TAG, "Skipping station with invalid coordinate format", e);
+            double stLat = parseDoubleSafe(stLatStr);
+            double stLng = parseDoubleSafe(stLngStr);
+            if (stLat == 0.0 && stLng == 0.0) continue;
+
+            arrValidStationsList.add(st);
         }
     }
 
-    private void sortNearbyStationsByDistance() {
-        arrNearbyStationsList.sort((s1, s2) -> Double.compare(s1.getStationDistance(), s2.getStationDistance()));
-    }
-
-    private boolean hasEnoughStationsToTrack() {
-        if (arrNearbyStationsList.size() < 2) {
-            isOnRoute = false;
-            statusMessage = "Insufficient station location data";
-            return false;
+    /**
+     * Polyline Track Check: Verifies if user is within 1.5 KM of the curved track polyline.
+     */
+    private boolean checkIsUserOnPolylineRoute() {
+        if (arrPolylinePoints == null || arrPolylinePoints.size() < 2) {
+            // Fallback: Agar Polyline points na ho toh true maan lein
+            return true;
         }
-        return true;
+
+        double minDistanceMeters = Double.MAX_VALUE;
+
+        for (int i = 0; i < arrPolylinePoints.size() - 1; i++) {
+            Track_Polyline_Point_Structure p1 = arrPolylinePoints.get(i);
+            Track_Polyline_Point_Structure p2 = arrPolylinePoints.get(i + 1);
+
+            double[] proj = pointToSegmentProjection(userLat, userLng, p1.getLat(), p1.getLng(), p2.getLat(), p2.getLng());
+            if (proj[0] < minDistanceMeters) {
+                minDistanceMeters = proj[0];
+            }
+        }
+
+        return minDistanceMeters <= OFF_ROUTE_THRESHOLD;
     }
 
-    private void findCurrentSegmentAndStatus() {
-        float minPerpendicularGap = Float.MAX_VALUE;
+    /**
+     * Direct Station GPS Matching: Instant Segment & Status Determination.
+     */
+    private void trackUserByDirectStationCoordinates() {
+        double minPerpendicularDistance = Double.MAX_VALUE;
+        int bestSegmentIdx = -1;
+        double bestFraction = 0;
 
+        // Find best station pair (A -> B) using User GPS Projection
         for (int i = 0; i < arrValidStationsList.size() - 1; i++) {
-            Train_Schedule_Station_Structure stationA = arrValidStationsList.get(i);
-            Train_Schedule_Station_Structure stationB = arrValidStationsList.get(i + 1);
+            Train_Schedule_Station_Structure stA = arrValidStationsList.get(i);
+            Train_Schedule_Station_Structure stB = arrValidStationsList.get(i + 1);
 
-            double aLat = Double.parseDouble(stationA.getStnLat());
-            double aLng = Double.parseDouble(stationA.getStnLng());
-            double bLat = Double.parseDouble(stationB.getStnLat());
-            double bLng = Double.parseDouble(stationB.getStnLng());
+            double aLat = parseDoubleSafe(stA.getStnLat());
+            double aLng = parseDoubleSafe(stA.getStnLng());
+            double bLat = parseDoubleSafe(stB.getStnLat());
+            double bLng = parseDoubleSafe(stB.getStnLng());
 
-            float[] totalDistance = new float[1];
-            Location.distanceBetween(aLat, aLng, bLat, bLng, totalDistance);
+            double[] proj = pointToSegmentProjection(userLat, userLng, aLat, aLng, bLat, bLng);
+            double perpDistMeters = proj[0];
+            double fraction = proj[1];
 
-            float[] userToA = new float[1];
-            Location.distanceBetween(aLat, aLng, userLat, userLng, userToA);
-
-            float[] userToB = new float[1];
-            Location.distanceBetween(userLat, userLng, bLat, bLng, userToB);
-
-            float pathSum = userToA[0] + userToB[0];
-            float approxPerpendicularGap = pathSum - totalDistance[0];
-            if (approxPerpendicularGap < minPerpendicularGap) {
-                minPerpendicularGap = approxPerpendicularGap;
-            }
-
-
-            int actualDistanceInMeteres = (Integer.parseInt(stationB.getDistance()) - Integer.parseInt(stationA.getDistance())) * 1000;
-            float dynamicTolerance = getDynamicTolerance(actualDistanceInMeteres, totalDistance);
-
-
-            if (pathSum <= totalDistance[0] + SEGMENT_TOLERANCE + dynamicTolerance) {
-                previousStation = stationA;
-                nextStation = stationB;
-                segmentFound = true;
-                isOnRoute = true;
-                stationCoveredPercentage = Math.round((pathSum/totalDistance[0]) * 100);
-                totalJourneyCovered = Math.round(Integer.parseInt(previousStation.getDistance())+userToA[0]);
-
-                if (userToA[0] <= DEPARTED_THRESHOLD) {
-                    statusMessage = "Departed from " + previousStation.getStationName();
-                } else if (userToB[0] <= APPROACHING_THRESHOLD) {
-                    statusMessage = Math.round(userToB[0]) + " m away from " + nextStation.getStationName();
-                } else {
-                    statusMessage = "In Transit";
+            // Allow slight boundary overrun (-0.05 to 1.05)
+            if (fraction >= -0.05 && fraction <= 1.05) {
+                if (perpDistMeters < minPerpendicularDistance) {
+                    minPerpendicularDistance = perpDistMeters;
+                    bestSegmentIdx = i;
+                    bestFraction = Math.max(0.0, Math.min(1.0, fraction));
                 }
-                break;
             }
         }
 
-        if (!segmentFound) {
-            isOnRoute = false;
-            statusMessage = "User is not in train";
+        if (bestSegmentIdx == -1) {
+            // Edge fallback
+            bestSegmentIdx = 0;
+            bestFraction = 0.0;
+        }
+
+        Train_Schedule_Station_Structure stationA = arrValidStationsList.get(bestSegmentIdx);
+        Train_Schedule_Station_Structure stationB = arrValidStationsList.get(bestSegmentIdx + 1);
+
+        float[] distToA = new float[1];
+        Location.distanceBetween(userLat, userLng, parseDoubleSafe(stationA.getStnLat()), parseDoubleSafe(stationA.getStnLng()), distToA);
+
+        float[] distToB = new float[1];
+        Location.distanceBetween(userLat, userLng, parseDoubleSafe(stationB.getStnLat()), parseDoubleSafe(stationB.getStnLng()), distToB);
+
+        // Journey Calculations
+        double aKm = parseDoubleSafe(stationA.getDistance());
+        double bKm = parseDoubleSafe(stationB.getDistance());
+        double currentJourneyKm = aKm + bestFraction * (bKm - aKm);
+
+        previousStation = stationA;
+        nextStation = stationB;
+        segmentFound = true;
+
+        stationCoveredPercentage = (int) Math.round(bestFraction * 100);
+        totalJourneyCovered = (int) Math.round(currentJourneyKm);
+
+        // --- STATUS DECISION LOGIC (DIRECT GROUND GPS) ---
+
+        // 1. ARRIVED AT STATION B (Inside 200m)
+        if (distToB[0] <= ARRIVED_THRESHOLD) {
+            isAtStation = true;
+            currentStation = stationB;
+            statusMessage = "Arrived at: " + stationB.getStationName();
+            stationCoveredPercentage = 100;
+            totalJourneyCovered = (int) Math.round(bKm);
+            return;
+        }
+
+        // 2. ARRIVED AT STATION A (Inside 200m)
+        if (distToA[0] <= ARRIVED_THRESHOLD) {
+            isAtStation = true;
+            currentStation = stationA;
+            statusMessage = "Arrived at: " + stationA.getStationName();
+            stationCoveredPercentage = 0;
+            totalJourneyCovered = (int) Math.round(aKm);
+            return;
+        }
+
+        isAtStation = false;
+        currentStation = null;
+
+        // 3. DEPARTED FROM STATION A (Crossed A by > 100m AND within 1 KM of A)
+        if (distToA[0] > 100f && distToA[0] <= DEPARTED_THRESHOLD) {
+            statusMessage = "Departed from " + stationA.getStationName();
+        }
+        // 4. AWAY FROM NEXT STATION B (Within 1 KM of B)
+        else if (distToB[0] <= APPROACHING_THRESHOLD) {
+            statusMessage = Math.round(distToB[0]) + " m away from " + stationB.getStationName();
+        }
+        // 5. IN TRANSIT (Midway)
+        else {
+            statusMessage = "In Transit";
         }
     }
 
-    private static float getDynamicTolerance(int actualDistanceInMeteres, float[] totalDistance) {
-        float dynamicTolerance = Float.MIN_VALUE;
-        if(actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 30000){
-            dynamicTolerance = 25000;
-        }else if(actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 20000){
-            dynamicTolerance = 15000;
-        } else if (actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 10000) {
-            dynamicTolerance =6500;
-        }else if(actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 5000){
-            dynamicTolerance = 3000;
-        } else if (actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 3000) {
-            dynamicTolerance = 1500;
-        } else if (actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 1500) {
-            dynamicTolerance = 700;
-        } else if (actualDistanceInMeteres - (totalDistance[0] + SEGMENT_TOLERANCE) > 700) {
-            dynamicTolerance = 200;
+    private double[] pointToSegmentProjection(double pLat, double pLng, double lat1, double lng1, double lat2, double lng2) {
+        double latMid = Math.toRadians((lat1 + lat2) / 2.0);
+        double metersPerDegreeLat = 111000.0;
+        double metersPerDegreeLng = 111000.0 * Math.cos(latMid);
+
+        double dx = (lng2 - lng1) * metersPerDegreeLng;
+        double dy = (lat2 - lat1) * metersPerDegreeLat;
+
+        double px = (pLng - lng1) * metersPerDegreeLng;
+        double py = (pLat - lat1) * metersPerDegreeLat;
+
+        double lenSq = dx * dx + dy * dy;
+        double fraction = (lenSq != 0) ? (px * dx + py * dy) / lenSq : 0.0;
+
+        double closestLat = lat1 + Math.max(0.0, Math.min(1.0, fraction)) * (lat2 - lat1);
+        double closestLng = lng1 + Math.max(0.0, Math.min(1.0, fraction)) * (lng2 - lng1);
+
+        float[] distResult = new float[1];
+        Location.distanceBetween(pLat, pLng, closestLat, closestLng, distResult);
+
+        return new double[]{distResult[0], fraction};
+    }
+
+    private double parseDoubleSafe(String val) {
+        if (val == null || val.trim().isEmpty()) return 0.0;
+        try {
+            return Double.parseDouble(val.trim());
+        } catch (Exception e) {
+            Log.w(TAG, "Error parsing value: " + val, e);
+            return 0.0;
         }
-        return dynamicTolerance;
     }
 
     private void logCurrentState() {
@@ -202,19 +256,16 @@ public class Train_Tracking_Live_Structure_Class {
                 + "\nstatusMessage: " + statusMessage
                 + "\npreviousStation: " + (previousStation != null ? previousStation.getStationName() : "null")
                 + "\nnextStation: " + (nextStation != null ? nextStation.getStationName() : "null")
-                + "\ncurrentStation: " + (currentStation !=null ? currentStation.getStationName() : "null") );
+                + "\ncurrentStation: " + (currentStation != null ? currentStation.getStationName() : "null")
+                + "\nprogress: " + stationCoveredPercentage + "% | journeyKm: " + totalJourneyCovered);
     }
-
 
     public String getStatusMessage() { return statusMessage; }
     public boolean isAtStation() { return isAtStation; }
     public boolean isOnRoute() { return isOnRoute; }
     public Train_Schedule_Station_Structure getPreviousStation() { return previousStation; }
     public Train_Schedule_Station_Structure getNextStation() { return nextStation; }
-    public Train_Schedule_Station_Structure getCurrentStation(){return currentStation; }
-    public int getStationCoveredPercentage(){ return stationCoveredPercentage; }
-    public int getTotalJourneyCovered(){ return totalJourneyCovered; }
-
-
+    public Train_Schedule_Station_Structure getCurrentStation() { return currentStation; }
+    public int getStationCoveredPercentage() { return stationCoveredPercentage; }
+    public int getTotalJourneyCovered() { return totalJourneyCovered; }
 }
-

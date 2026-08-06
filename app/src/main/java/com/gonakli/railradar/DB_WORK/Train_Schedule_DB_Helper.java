@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 //import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Train_Schedule;
+import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -49,123 +50,16 @@ public class Train_Schedule_DB_Helper extends SQLiteAssetHelper {
     private static final String  COLUMN_stnLat = "lat";
     private static final String  COLUMN_stnLng = "lng";
 
+    // now PolyLine
+    private static final String  POLYLINE_TABLE_NAME ="STATION_POLYLINE_TABLE";
+
+
     private final Context applicationContext;
 
     public Train_Schedule_DB_Helper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.applicationContext = context;
     }
-
-//    @Override
-//    public void onCreate(SQLiteDatabase db) {
-//        String CREATE_TRAIN_TABLE =
-//                String.format("create table %s ( " +
-//                        "%s text primary key, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text )", TABLE_NAME, COLUMN_trainNumber, COLUMN_trainName,
-//                        COLUMN_stationFrom, COLUMN_stationTo,COLUMN_trainRunsOnMon,
-//                        COLUMN_trainRunsOnTue, COLUMN_trainRunsOnWed, COLUMN_trainRunsOnThu,
-//                        COLUMN_trainRunsOnFri, COLUMN_trainRunsOnSat, COLUMN_trainRunsOnSun,
-//                        COLUMN_duration);
-//
-//        String CREATE_STATION_TABLE =
-//                String.format("create table %s ( " +
-//                        "id integer primary key autoincrement, " +
-//                        "%s text not null, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                        "%s text, " +
-//                                "%s text, " +
-//                                "%s text, " +
-//                                "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ) ",STATION_TABLE_FOR_SCHEDULE,COLUMN_trainNumber, COLUMN_stationCode, COLUMN_stationName, COLUMN_arrivalTime,
-//                        COLUMN_departureTime,COLUMN_haltTime, COLUMN_distance, COLUMN_dayCount,
-//                        COLUMN_stnSerialNumber, COLUMN_stnLat, COLUMN_stnLng,COLUMN_trainNumber, TABLE_NAME, COLUMN_trainNumber);
-//
-//        db.execSQL(CREATE_TRAIN_TABLE);
-//        db.execSQL(CREATE_STATION_TABLE);
-
-   // }
-
-//    @Override
-//    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + STATION_TABLE_FOR_SCHEDULE);
-//        onCreate(db);
-//    }
-
-//    @Override
-//    public void onConfigure(SQLiteDatabase db) {
-//        super.onConfigure(db);
-//        db.setForeignKeyConstraintsEnabled(true);
-//    }
-
-//    public void addScheduleInDB(){
-//        Make_Array_Of_Train_Schedule schedule = new Make_Array_Of_Train_Schedule();
-//        ArrayList<Train_Schedule_Structure> arrSchedule = schedule.addTrainSchedule(applicationContext);
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        try{
-//            db.beginTransaction();
-//            for(Train_Schedule_Structure data: arrSchedule){
-//                ContentValues values = new ContentValues();
-//
-//                values.put(COLUMN_trainNumber, data.getTrainNumber());
-//                values.put(COLUMN_trainName, data.getTrainName());
-//                values.put(COLUMN_stationFrom, data.getStationFrom());
-//                values.put(COLUMN_stationTo, data.getStationTo());
-//                values.put(COLUMN_trainRunsOnMon, data.getTrainRunsOnMon());
-//                values.put(COLUMN_trainRunsOnTue, data.getTrainRunsOnTue());
-//                values.put(COLUMN_trainRunsOnWed, data.getTrainRunsOnWed());
-//                values.put(COLUMN_trainRunsOnThu, data.getTrainRunsOnThu());
-//                values.put(COLUMN_trainRunsOnFri, data.getTrainRunsOnFri());
-//                values.put(COLUMN_trainRunsOnSat, data.getTrainRunsOnSat());
-//                values.put(COLUMN_trainRunsOnSun, data.getTrainRunsOnSun());
-//                values.put(COLUMN_duration, data.getDuration());
-//
-//                db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-//
-//                if(data.getStationList() != null){
-//
-//                    for(Train_Schedule_Station_Structure stationData : data.getStationList()){
-//                        ContentValues stationValues = new ContentValues();
-//
-//                        stationValues.put(COLUMN_trainNumber, data.getTrainNumber());
-//                        stationValues.put(COLUMN_stationCode, stationData.getStationCode());
-//                        stationValues.put(COLUMN_stationName, stationData.getStationName());
-//                        stationValues.put(COLUMN_arrivalTime, stationData.getArrivalTime());
-//                        stationValues.put(COLUMN_departureTime, stationData.getDepartureTime());
-//                        stationValues.put(COLUMN_haltTime, stationData.getHaltTime());
-//                        stationValues.put(COLUMN_distance, stationData.getDistance());
-//                        stationValues.put(COLUMN_dayCount, stationData.getDayCount());
-//                        stationValues.put(COLUMN_stnSerialNumber, stationData.getStnSerialNumber());
-//
-//                        stationValues.put(COLUMN_stnLat, stationData.getStnLat());
-//                        stationValues.put(COLUMN_stnLng, stationData.getStnLng());
-//
-//                        db.insert(STATION_TABLE_FOR_SCHEDULE,null, stationValues);
-//                    }
-//                }
-//
-//            }
-//            db.setTransactionSuccessful();
-//        }finally {
-//            db.endTransaction();
-//            db.close();
-//        }
-//        }
 
     public ArrayList<Train_Schedule_Structure> getScheduleList() {
         ArrayList<Train_Schedule_Structure> arrTrainSchedule = new ArrayList<>();
@@ -307,6 +201,7 @@ public class Train_Schedule_DB_Helper extends SQLiteAssetHelper {
 
     public Train_Schedule_Structure getTrainDataByTrainNumber(String trainNumber){
         ArrayList<Train_Schedule_Station_Structure> arrStationsList;
+        ArrayList<Track_Polyline_Point_Structure> arrPolylineList;
         Train_Schedule_Structure myTrainData;
         SQLiteDatabase db = this.getReadableDatabase();
         String sqlQuery = String.format("SELECT * FROM %s WHERE %s = '%s' ",
@@ -327,15 +222,33 @@ public class Train_Schedule_DB_Helper extends SQLiteAssetHelper {
             String  trainRunsOnSun = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainRunsOnSun));
             String trainDuration = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_duration));
             arrStationsList =(getStationsForTrain(db, trainNumber));
+            arrPolylineList = getTrainPolylinePoints(trainNumber);
 
             myTrainData = new Train_Schedule_Structure(trNumber,trainName,stationFrom,stationTo,
                     trainRunsOnMon,trainRunsOnTue,trainRunsOnWed,trainRunsOnThu,trainRunsOnFri,trainRunsOnSat,trainRunsOnSun,
-                    trainDuration, arrStationsList);
+                    trainDuration, arrStationsList, arrPolylineList);
 
             cursor.close();
             db.close();
 
 
         return  myTrainData;
+    }
+
+    public  ArrayList<Track_Polyline_Point_Structure> getTrainPolylinePoints(String trainNumber){
+        ArrayList<Track_Polyline_Point_Structure> arrPolyLineList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sqlQuery = String.format("SELECT * FROM %s WHERE %s = '%s' ",
+                                    POLYLINE_TABLE_NAME, COLUMN_trainNumber, trainNumber);
+        Cursor cursor = db.rawQuery(sqlQuery,null);
+        while(cursor.moveToNext()){
+            double lat = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_stnLat));
+            double lng = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_stnLng));
+            arrPolyLineList.add(new Track_Polyline_Point_Structure(lat,lng));
+
+        }
+        db.close();
+        cursor.close();
+        return arrPolyLineList;
     }
 }
