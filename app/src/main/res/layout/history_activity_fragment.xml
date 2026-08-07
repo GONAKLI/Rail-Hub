@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:src="@drawable/no_history_found"
+        android:contentDescription="no history"
+        android:id="@+id/img_no_history_found"
+        android:visibility="gone"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No search history exists."
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:id="@+id/tv_no_history_found"
+        android:visibility="gone"
+        />
+    <ListView
+        android:dividerHeight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/historyListView"
+        />
+</LinearLayout>

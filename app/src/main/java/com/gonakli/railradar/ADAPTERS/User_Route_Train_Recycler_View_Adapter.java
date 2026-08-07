@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
@@ -139,6 +140,14 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             trainTracking.putExtra("trainName", trName);
             trainTracking.putExtra("fromStationCode", fromStationCode);
             trainTracking.putExtra("toStationCode", toStationCode);
+
+            new Thread(() -> {
+                //save user train inhistory for future access
+                User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
+                helper.addHistoryInDB(trNumber,trName,fromStationCode,toStationCode);
+                helper.close();
+            }).start();
+
             context.startActivity(trainTracking);
         });
             final String serviceDays = runningDays;

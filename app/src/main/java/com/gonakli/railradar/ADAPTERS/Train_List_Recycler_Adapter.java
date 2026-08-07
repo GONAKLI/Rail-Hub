@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.Structure_Class.Train_List_Structure;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
@@ -48,6 +49,14 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
                   Intent trainTrackingLive = new Intent(context, Train_Tracking.class);
                   trainTrackingLive.putExtra("trainNumber", clickedItem.getTrainNumber());
                   trainTrackingLive.putExtra("trainName", clickedItem.getTrainName());
+                  new Thread(() ->{
+                     String trNumber = clickedItem.getTrainNumber();
+                     String trName = clickedItem.getTrainName();
+                      // to save train in history section for future access
+                      User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
+                      helper.addHistoryInDB(trNumber,trName, "", "");
+                      helper.close();
+                  }).start();
                   context.startActivity(trainTrackingLive);
                }
             }

@@ -78,41 +78,47 @@ public class Input_From_To_Station extends LinearLayout {
     }
 
     private void add_Predictive_Text() {
-        // custom adapter needed for proper functioning
-        ArrayList<Station_List_Structure> arrStationList = new Station_List_DB_Helper(getContext()).getStationList();
-        Stations_Dropdown_Adapter customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
+        new Thread(() -> {
+            // custom adapter needed for proper functioning
+            ArrayList<Station_List_Structure> arrStationList = new Station_List_DB_Helper(getContext()).getStationList();
 
-        fromStation.setAdapter(customStationAdapter);
-        fromStation.setThreshold(0);
-        fromStation.setDropDownHeight(900);
-        toStation.setAdapter(customStationAdapter);
-        toStation.setThreshold(0);
+            ((android.app.Activity) context).runOnUiThread(() -> {
+                Stations_Dropdown_Adapter customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
 
-        fromStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
-                fromStationCodeBadge.setText(selected.getStation_Code());
-                fromStationCodeBadge.setVisibility(View.VISIBLE);
+                fromStation.setAdapter(customStationAdapter);
+                fromStation.setThreshold(0);
+                fromStation.setDropDownHeight(900);
+                toStation.setAdapter(customStationAdapter);
+                toStation.setThreshold(0);
 
-                fromStation.setText(selected.getStation_Name());
-                toStation.requestFocus();
-            }
-        });
+                fromStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        toStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
-                toStationCodeBadge.setText(selected.getStation_Code());
-                toStationCodeBadge.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
+                        fromStationCodeBadge.setText(selected.getStation_Code());
+                        fromStationCodeBadge.setVisibility(View.VISIBLE);
 
-                toStation.setText(selected.getStation_Name());
-                InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(toStation.getWindowToken(), 0);
-            }
-        });
+                        fromStation.setText(selected.getStation_Name());
+                        toStation.requestFocus();
+                    }
+                });
+
+                toStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
+                        toStationCodeBadge.setText(selected.getStation_Code());
+                        toStationCodeBadge.setVisibility(View.VISIBLE);
+
+                        toStation.setText(selected.getStation_Name());
+                        InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(toStation.getWindowToken(), 0);
+                    }
+                });
+            });
+        }).start();
 
     }
 
@@ -128,13 +134,11 @@ public class Input_From_To_Station extends LinearLayout {
     private void from_station_to_station_fields() {
 
         btnFindTrain.setOnClickListener(v ->{
-
-            String fromStation_value = fromStation.getText().toString().trim();
             String fromStationCode_value = fromStationCodeBadge.getText().toString().trim();
             String toStationCode_value = toStationCodeBadge.getText().toString().trim();
 
-            if(fromStation_value.isBlank() ){
-                Toast.makeText(context, "Enter a valid source station", Toast.LENGTH_SHORT)
+            if(fromStationCode_value.isBlank() || toStationCode_value.isBlank()){
+                Toast.makeText(context, "Select a valid station", Toast.LENGTH_SHORT)
                         .show();
                 return;
             }else{

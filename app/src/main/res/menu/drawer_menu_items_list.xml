@@ -31,6 +31,10 @@
         android:title="@string/application_bug_report"
         android:icon="@drawable/drawer_icon_bug_report_24px"
         />
+    <item android:id="@+id/clearSearchHistory"
+        android:title="@string/clear_history"
+        android:icon="@drawable/history_svgrepo_com"
+        />
     <item
         android:id="@+id/applicationFeedback"
         android:title="@string/application_feedback"

@@ -22,6 +22,7 @@ public class Train_Tracking_Live_Structure_Class {
     private String statusMessage;
     private boolean isAtStation, isOnRoute, segmentFound;
     private int stationCoveredPercentage, totalJourneyCovered;
+    private String sourceStation, destinationStation;
 
     private Train_Schedule_Station_Structure previousStation, nextStation, currentStation;
 
@@ -32,6 +33,8 @@ public class Train_Tracking_Live_Structure_Class {
         this.userLng = userLng;
         this.arrStationsList = arrStationsList;
         this.arrPolylinePoints = arrPolylinePoints;
+        this.sourceStation = arrStationsList.get(0).getStationName();
+        this.destinationStation = arrStationsList.get(arrStationsList.size()-1).getStationName();
     }
 
     public void trackMyUserTrain() {
@@ -268,4 +271,12 @@ public class Train_Tracking_Live_Structure_Class {
     public Train_Schedule_Station_Structure getCurrentStation() { return currentStation; }
     public int getStationCoveredPercentage() { return stationCoveredPercentage; }
     public int getTotalJourneyCovered() { return totalJourneyCovered; }
+
+    public String getDestinationStation() {
+        return destinationStation;
+    }
+
+    public String getSourceStation() {
+        return sourceStation;
+    }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:padding="10sp"
+    android:gravity="center">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.75"
+        android:id="@+id/historyTrainNumber"
+        style="@style/listViewStyle"
+        android:text="15520"
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Rajdhani express"
+        android:id="@+id/historyTrainName"
+        style="@style/listViewStyle"
+        />
+   <LinearLayout
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_weight="1.25"
+       >
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:text="KKDE"
+           android:id="@+id/historySource"
+           style="@style/listViewStyle"
+           />
+       <TextView
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_weight="0.5"
+       android:text=" - "
+       />
+       <TextView
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:text="SBP"
+       android:id="@+id/historyDestination"
+           style="@style/listViewStyle"
+       />
+   </LinearLayout>
+
+</LinearLayout>

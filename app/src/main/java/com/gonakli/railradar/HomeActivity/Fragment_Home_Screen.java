@@ -11,19 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.gonakli.railradar.R;
 
-public class Combined_Home_Screen_Dashboard extends Fragment {
-    View combined_Home_Screen;
-
-
-
+public class Fragment_Home_Screen extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-    combined_Home_Screen = inflater.inflate(R.layout.combined_home_screen_dashboard, container, false);
-
-   return combined_Home_Screen;
+      View home = inflater.inflate(R.layout.home_activity_fragment, container, false);
+requireActivity().setTitle(R.string.app_name);
+        return home;
     }
-
-
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.gonakli.railradar.ADAPTERS.User_History_ListView_Adapter;
+import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.HomeActivity.Home_Screen_Activity;
 import com.gonakli.railradar.R;
 import com.google.android.material.navigation.NavigationView;
@@ -103,6 +107,18 @@ public class Drawer_Item {
             Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.feedback_modal);
             dialog.show();
+        } else if (item.getItemId() == R.id.clearSearchHistory) {
+            new Thread(() -> {
+                User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
+                helper.deleteHistory();
+                helper.close();
+
+                new Handler(Looper.getMainLooper()).post(() ->{
+                    Toast.makeText(context, "History Deleted Successfully", Toast.LENGTH_SHORT).show();
+
+                });
+
+            }).start();
         }
     }
 

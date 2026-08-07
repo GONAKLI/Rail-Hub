@@ -1,149 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F5F5F5">
+    android:layout_margin="16dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="14dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFFFFF">
+        android:padding="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <!-- From Station Input -->
+        <AutoCompleteTextView
+            android:id="@+id/from_station"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:hint="From Station"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:background="@drawable/bg_edittext_outlined"
+            android:drawableStart="@drawable/ic_station_entry"
+            android:drawablePadding="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- From Station Badge -->
+        <TextView
+            android:id="@+id/from_station_code_badge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toEndOf="@id/from_station"
+            app:layout_constraintTop_toTopOf="@id/from_station"
+            app:layout_constraintBottom_toBottomOf="@id/from_station"
+            android:background="@drawable/bg_station_code_badge"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textAllCaps="true"
+            android:padding="6dp"
+            android:visibility="gone"
+            tools:text="NDLS" />
 
-            <!-- From Station -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/from_station_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:startIconDrawable="@drawable/ic_station_entry"
-                app:endIconMode="clear_text"
-                app:endIconTint="#9E9E9E"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#63B0ED"
-                app:hintTextColor="#63B0ED"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <!-- To Station Input -->
+        <AutoCompleteTextView
+            android:id="@+id/to_station"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:hint="To Station"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:background="@drawable/bg_edittext_outlined"
+            android:drawableStart="@drawable/ic_station_exit"
+            android:drawablePadding="10dp"
+            android:textSize="15sp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/from_station" />
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/from_station"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="From Station"
-                    android:inputType="text"
-                    android:imeOptions="actionNext" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- To Station Badge -->
+        <TextView
+            android:id="@+id/to_station_code_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toEndOf="@id/to_station"
+            app:layout_constraintTop_toTopOf="@id/to_station"
+            app:layout_constraintBottom_toBottomOf="@id/to_station"
+            android:background="@drawable/bg_station_code_badge"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textAllCaps="true"
+            android:padding="6dp"
+            android:visibility="gone"
+            tools:text="CDG" />
 
-            <!-- From Station Badge -->
-            <TextView
-                android:id="@+id/from_station_code_badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/from_station_layout"
-                app:layout_constraintBottom_toBottomOf="@id/from_station_layout"
-                android:background="@drawable/bg_station_code_badge"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textAllCaps="true"
-                android:padding="6dp"
-                android:visibility="gone"
-                tools:text="NDLS" />
+        <!-- Swap Button -->
+        <ImageButton
+            android:id="@+id/btn_swap_stations"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@id/from_station"
+            app:layout_constraintBottom_toBottomOf="@id/to_station"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_swap_button"
+            android:padding="8dp"
+            android:src="@drawable/ic_swap_updown"
+            android:contentDescription="Swap stations" />
 
-            <!-- To Station -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/to_station_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:startIconDrawable="@drawable/ic_station_exit"
-                app:endIconMode="clear_text"
-                app:endIconTint="#9E9E9E"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#63B0ED"
-                app:hintTextColor="#63B0ED"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/from_station_layout"
-                android:layout_marginTop="14dp">
+        <!-- Find Trains Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_find_train"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            app:layout_constraintTop_toBottomOf="@id/to_station"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:text="Find Trains"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:background="@drawable/bg_button_rounded"
+            android:stateListAnimator="@null" />
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/to_station"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="To Station"
-                    android:inputType="text"
-                    android:imeOptions="actionDone" />
-            </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- To Station Badge -->
-            <TextView
-                android:id="@+id/to_station_code_badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/to_station_layout"
-                app:layout_constraintBottom_toBottomOf="@id/to_station_layout"
-                android:background="@drawable/bg_station_code_badge"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textAllCaps="true"
-                android:padding="6dp"
-                android:visibility="gone"
-                tools:text="CDG" />
-
-            <!-- Swap Button -->
-            <ImageButton
-                android:id="@+id/btn_swap_stations"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                app:layout_constraintTop_toTopOf="@id/from_station_layout"
-                app:layout_constraintBottom_toBottomOf="@id/to_station_layout"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_swap_button"
-                android:padding="9dp"
-                android:src="@drawable/ic_swap_updown"
-                android:contentDescription="Swap stations" />
-
-            <!-- Find Trains Button -->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_find_train"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                app:layout_constraintTop_toBottomOf="@id/to_station_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="20dp"
-                android:text="Find Trains"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:background="@drawable/bg_button_rounded"
-                android:stateListAnimator="@null" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

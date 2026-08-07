@@ -5,29 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <LinearLayout
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical"-->
+<!--        >-->
+<!--    <com.gonakli.railradar.HomeActivity.Input_From_To_Station-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
+
+<!--    <com.gonakli.railradar.TrainNumber_NameSearch.Action_Settter_For_Train_Search_by_Number_Or_Name_Layout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
+<!--    <com.gonakli.railradar.ExtraOptions.Home_Screen_Extras-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
+<!--    </LinearLayout>-->
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-    <com.gonakli.railradar.HomeActivity.Input_From_To_Station
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         />
-
-    <com.gonakli.railradar.TrainNumber_NameSearch.Action_Settter_For_Train_Search_by_Number_Or_Name_Layout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <com.gonakli.railradar.ExtraOptions.Home_Screen_Extras
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    </LinearLayout>
-    <com.gonakli.railradar.HomeActivity.Home_Screen_Bottom_Navigation
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        />
-
+<include layout="@layout/bottom_navigation_tab" />
 </RelativeLayout>
