@@ -1,5 +1,6 @@
 package com.gonakli.railradar.Structure_Class;
 
+import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 
@@ -22,7 +23,8 @@ public class Train_Tracking_Live_Structure_Class {
     private String statusMessage;
     private boolean isAtStation, isOnRoute, segmentFound;
     private int stationCoveredPercentage, totalJourneyCovered;
-    private String sourceStation, destinationStation;
+    private final String totalTrainJourney;
+    private final String sourceStation, destinationStation;
 
     private Train_Schedule_Station_Structure previousStation, nextStation, currentStation;
 
@@ -35,6 +37,7 @@ public class Train_Tracking_Live_Structure_Class {
         this.arrPolylinePoints = arrPolylinePoints;
         this.sourceStation = arrStationsList.get(0).getStationName();
         this.destinationStation = arrStationsList.get(arrStationsList.size()-1).getStationName();
+        this.totalTrainJourney = arrStationsList.get(arrStationsList.size()-1).getDistance();
     }
 
     public void trackMyUserTrain() {
@@ -68,7 +71,7 @@ public class Train_Tracking_Live_Structure_Class {
         if (!userOnTrack) {
             isOnRoute = false;
             isAtStation = false;
-            statusMessage = "User is not in train";
+            statusMessage = "We detected, You are not inside train";
             logCurrentState();
             return;
         }
@@ -272,11 +275,22 @@ public class Train_Tracking_Live_Structure_Class {
     public int getStationCoveredPercentage() { return stationCoveredPercentage; }
     public int getTotalJourneyCovered() { return totalJourneyCovered; }
 
+    public int getTotalJourneyCoveredPercentage(){ return ((totalJourneyCovered/ Integer.parseInt(totalTrainJourney)) *100);}
+    public int getTotalTrainJourney() { return Integer.parseInt(totalTrainJourney);}
     public String getDestinationStation() {
         return destinationStation;
     }
 
     public String getSourceStation() {
         return sourceStation;
+    }
+
+    public Train_Tracking_Structure getReport(){
+        return new Train_Tracking_Structure(
+                getPreviousStation(), getCurrentStation(), getNextStation(),
+                getStatusMessage(),isOnRoute(),isAtStation(),getStationCoveredPercentage(),
+                getTotalJourneyCovered(), getTotalJourneyCoveredPercentage(),getTotalTrainJourney(),
+                getSourceStation(),getDestinationStation()
+                );
     }
 }

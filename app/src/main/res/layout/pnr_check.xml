@@ -4,29 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     >
-<include layout="@layout/custom_toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 <androidx.appcompat.widget.AppCompatEditText
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_weight="1"
-    android:layout_height="50dp"
+    android:layout_height="70dp"
     android:padding="15dp"
     android:textStyle="bold"
     android:maxLength="10"
     android:hint="Enter your pnr number"
     android:id="@+id/pnr_search_field"
     android:inputType="number"
+    android:textSize="20sp"
+    android:background="@drawable/pnr_input_field"
     />
     <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="15dp"
         android:id="@+id/btn_find_pnr"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="submit"
+        android:text="Search PNR"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:backgroundTint="#FF6E40"
+        android:background="@drawable/pnr_search_button"
         />
 
 

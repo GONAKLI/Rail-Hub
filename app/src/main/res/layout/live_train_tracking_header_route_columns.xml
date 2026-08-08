@@ -1,60 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="110dp"
     android:orientation="vertical"
-    android:background="@color/card_background"
-    android:paddingTop="14dp"
-    android:paddingBottom="10dp">
-
-    <!-- Live ETA banner -->
-    <TextView
-        android:id="@+id/liveEtaBanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/bg_platform_chip"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="4dp"
-        android:text="New Delhi will arrive in 2hr 27min"
-        android:textColor="@color/chip_accent"
-        android:textSize="12sp"
-        android:textStyle="bold" />
-
-    <!-- Column labels -->
+    >
     <LinearLayout
+        android:background="#EF4545"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:orientation="horizontal">
-
-        <View
+        >
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="Arrival"
-            android:textColor="@color/card_text_secondary"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
+            android:layout_weight="1"
+            android:text="Previous Station:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
         <TextView
-            android:layout_width="72dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="end"
-            android:text="Departure"
-            android:textColor="@color/card_text_secondary"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="--"
+        android:textStyle="italic"
+        android:textSize="18sp"
+            android:id="@+id/trackingHeaderPreviousStation"
+        />
     </LinearLayout>
-
+    <LinearLayout
+        android:background="#67A220"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Current Station:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="--"
+            android:textStyle="italic"
+            android:textSize="18sp"
+            android:id="@+id/trackingHeaderCurrentStation"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:background="#B4B3B4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Next Station:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="--"
+            android:textStyle="italic"
+            android:textSize="18sp"
+            android:id="@+id/trackingHeaderNextStation"
+            />
+    </LinearLayout>
+    <TextView
+        android:paddingTop="10dp"
+        android:background="#D39393"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:textSize="19sp"
+        android:text="- - - - -"
+        android:id="@+id/trackingHeaderStatusInfo"
+        />
 </LinearLayout>

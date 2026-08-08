@@ -4,19 +4,41 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
 
 import com.gonakli.railradar.R;
 
 public class Fragment_Pnr_Screen extends Fragment {
+    View view;
+    AppCompatEditText pnrSearchField;
+    AppCompatButton btnFindPnr;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
       getActivity().setTitle("PNR Status");
-       return LayoutInflater.from(getActivity()).inflate(R.layout.pnr_check, container,false);
+       view = LayoutInflater.from(getActivity()).inflate(R.layout.pnr_check, container,false);
+       find_all_id();
+       onSubmitAction();
+       return view;
+    }
+
+
+    private void find_all_id() {
+        pnrSearchField = view.findViewById(R.id.pnr_search_field);
+        btnFindPnr = view.findViewById(R.id.btn_find_pnr);
+    }
+
+    private void onSubmitAction() {
+        btnFindPnr.setOnClickListener(v ->{
+            String pnrValue = pnrSearchField.getText().toString().trim();
+            Toast.makeText(getContext(), ""+ pnrValue, Toast.LENGTH_SHORT).show();
+        });
     }
 }

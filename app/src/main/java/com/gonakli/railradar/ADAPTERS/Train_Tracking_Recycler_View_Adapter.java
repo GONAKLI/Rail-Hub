@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railradar.Structure_Class.Train_Tracking_Structure;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +30,9 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
 
     Context context;
     String fromStationCode, toStationCode;
+
     Train_Schedule_Structure trainData;
+    Train_Tracking_Structure trainLocationData;
     ArrayList<Train_Schedule_Station_Structure> arrTrainStations;
 
     public Train_Tracking_Recycler_View_Adapter(Context context, Train_Schedule_Structure trainData,String fromStationCode, String toStationCode){
@@ -61,6 +65,8 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
         if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)){
             holder.trainStationName.setTextColor(Color.RED);
         }
+
+        set_Train_Icon(holder, position);
         String stName = arrTrainStations.get(position).getStationName();
 
         String arrAt = arrTrainStations.get(position).getArrivalTime();
@@ -118,6 +124,8 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return arrTrainStations.size();
@@ -127,6 +135,7 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
 TextView trainStationName,trainArrivalAt,trainDepartureAt;
 TextView trainActualArrivalAt,trainActualDepartureAt, trainDistanceTravelled, trainPlatformNo;
 ImageButton stationOnMap;
+ImageView liveTrainIcon;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -138,8 +147,45 @@ ImageButton stationOnMap;
             trainDistanceTravelled = itemView.findViewById(R.id.trainDistanceTravelled);
             trainPlatformNo = itemView.findViewById(R.id.trainPlatformNo);
             stationOnMap = itemView.findViewById(R.id.stationOnMap);
+            liveTrainIcon = itemView.findViewById(R.id.liveTrainIcon);
         }
     }
 
+    private void set_Train_Icon(myViewHolder holder, int position) {
+        if(trainLocationData != null){
 
+            Log.d("bbc", "set_Train_Icon: " + trainLocationData.getStatusMessage());
+            if(trainLocationData.getCurrentStation() != null){
+                Log.d("bbc", "set_Train_Icon: " + trainLocationData.getCurrentStation().getStationName());
+                if(arrTrainStations.get(position).getStationCode().equals(trainLocationData.getCurrentStation().getStationCode())){
+                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
+                }else{
+                    holder.liveTrainIcon.setVisibility(View.GONE);
+                }
+            }else if(trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null){
+                if (arrTrainStations.get(position).getStationCode().equals(trainLocationData.getPreviousStation().getStationCode())){
+                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
+                    int rowHeight = holder.itemView.getHeight();
+                    float fraction =  trainLocationData.getStationCoveredPercentage() /100.0f;
+                    holder.liveTrainIcon.setTranslationY(fraction * rowHeight);
+                }else{
+                    holder.liveTrainIcon.setVisibility(View.GONE);
+                    holder.liveTrainIcon.setTranslationY(0f);
+
+                }
+            }
+        }else {
+            if(arrTrainStations != null && !arrTrainStations.isEmpty() && position == 0){
+                holder.liveTrainIcon.setVisibility(View.VISIBLE);
+                holder.liveTrainIcon.setTranslationY(0f);
+            }else{
+                holder.liveTrainIcon.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void updateAdapter(Train_Tracking_Structure trainLocationData){
+        this.trainLocationData = trainLocationData;
+        notifyDataSetChanged();
+    }
 }

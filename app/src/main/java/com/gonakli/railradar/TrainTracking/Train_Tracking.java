@@ -29,6 +29,7 @@ import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Tracking_Live_Structure_Class;
+import com.gonakli.railradar.Structure_Class.Train_Tracking_Structure;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class Train_Tracking extends AppCompatActivity {
     TextView tvStatusMessage, tvUpdatedTime,tvNextStopName,tvNextStopMeta;
     TextView tvDestinationName,tvDestinationMeta,tvDelayStatus;
     TextView tvFromStation,tvToStation;
+    TextView trackingHeaderPreviousStation, trackingHeaderCurrentStation, trackingHeaderNextStation,trackingHeaderStatusInfo;
     ImageButton refreshButton;
+    Train_Tracking_Recycler_View_Adapter adapter;
 
     double lat, lng;
     Train_Schedule_Structure myTrainData;
@@ -57,11 +60,45 @@ public class Train_Tracking extends AppCompatActivity {
         train_finder();
         set_recycler_view();
         set_insideTrainBtn_action();
+
        // set_BottomSheet_Layout();
 
 
 
        
+    }
+
+    private void tracking_upper_header(Train_Tracking_Structure trainLocationData) {
+        String prSt,crSt,nxSt, infoMsg;
+        if(trainLocationData != null){
+            if(trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null){
+                prSt = trainLocationData.getPreviousStation().getStationName();
+                trackingHeaderPreviousStation.setText(prSt);
+            }else{
+                trackingHeaderPreviousStation.setText("--");
+            }
+
+            if(trainLocationData.isOnRoute() && trainLocationData.isAtStation() && trainLocationData.getCurrentStation() != null){
+                crSt = trainLocationData.getCurrentStation().getStationName();
+                trackingHeaderCurrentStation.setText(crSt);
+            }else{
+                trackingHeaderCurrentStation.setText("--");
+            }
+
+            if(trainLocationData.isOnRoute() && trainLocationData.getNextStation() != null){
+                nxSt = trainLocationData.getNextStation().getStationName();
+                trackingHeaderNextStation.setText(nxSt);
+            }else {
+                trackingHeaderNextStation.setText("--");
+            }
+
+            if(trainLocationData.getStatusMessage() != null){
+                infoMsg = trainLocationData.getStatusMessage().trim();
+                trackingHeaderStatusInfo.setText(infoMsg);
+            }
+
+
+        }
     }
 
 //    private void set_BottomSheet_Layout_Content(Train_Tracking_Live_Structure_Class st) {
@@ -134,37 +171,70 @@ public class Train_Tracking extends AppCompatActivity {
 //    }
 
     private void track_user() {
+        String stData = "";
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
         ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();
         Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations, arrPolylinePoints);
         st.trackMyUserTrain();
-     //   set_BottomSheet_Layout_Content(st);
-//        String statusMessage = st.getStatusMessage();
-//        int stationCoveredPercentage = st.getStationCoveredPercentage();
-//        int totalJourneyCovered = st.getTotalJourneyCovered();
-//        if(st.getPreviousStation() !=null){
-//            Train_Schedule_Station_Structure previousStation = st.getPreviousStation();
-//        }
-//        if(st.getCurrentStation() !=null){
-//            Train_Schedule_Station_Structure currentStation = st.getCurrentStation();
-//        }else
-//        if(st.getNextStation() != null){
-//            Train_Schedule_Station_Structure nextStation = st.getNextStation();
-//        }
-//        boolean isAtStation = st.isAtStation();
-//        boolean isOnRoute = st.isOnRoute();
+        Train_Tracking_Structure trainLocationData = st.getReport();
+        if(adapter != null){
+            adapter.updateAdapter(trainLocationData);
+        }
+
+        if(trainLocationData.getCurrentStation() !=null){
+            stData = trainLocationData.getCurrentStation().getStationCode();
+        } else if (trainLocationData.getPreviousStation() != null) {
+            stData = trainLocationData.getPreviousStation().getStationCode();
+        }else if (trainLocationData.getNextStation() != null){
+            stData = trainLocationData.getNextStation().getStationCode();
+        }
+        for(int i=0; i<arrTrainStations.size(); i++){
+            if(arrTrainStations.get(i).getStationCode().equals(stData)){
+                live_train_tracking_recycler_view.smoothScrollToPosition(i);
+            }
+        }
+        tracking_upper_header(trainLocationData);
 
 
     }
 
-    private void set_insideTrainBtn_action() {
-        insideTrainBtn.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(Train_Tracking.this, myLocationServiceClass.class);
-            startService(intent);
-        });
+    boolean isInsideTrain = false;
+        private void set_insideTrainBtn_action() {
+            insideTrainBtn.setOnClickListener(v -> {
+                // Toggle State (ON -> OFF / OFF -> ON)
+                isInsideTrain = !isInsideTrain;
 
-    }
+                Intent intent = new Intent(Train_Tracking.this, myLocationServiceClass.class);
+
+                if (isInsideTrain) {
+                    // ================= STATE 1: INSIDE TRAIN (ACTIVE / ON) =================
+                    insideTrainBtn.setText("Stop, I'm Outside");
+                    insideTrainBtn.setIconResource(R.drawable.nearby_station_icon); // Ya aapka active icon
+                    insideTrainBtn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#2E7D32"))); // Green Color
+                    insideTrainBtn.setTextColor(Color.WHITE);
+                    insideTrainBtn.setIconTint(android.content.res.ColorStateList.valueOf(Color.WHITE));
+
+                    // Start Foreground Service
+                    intent.putExtra("trainNumber", trainNumber);
+                    startService(intent);
+                    Toast.makeText(Train_Tracking.this, "Live Tracking Started", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // ================= STATE 2: NOT IN TRAIN (INACTIVE / OFF) =================
+                    insideTrainBtn.setText("Inside Train ?");
+                    insideTrainBtn.setIconResource(R.drawable.nearby_station_icon);
+                    insideTrainBtn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#B7AA9D"))); // Default Neutral Color
+                    insideTrainBtn.setTextColor(Color.WHITE);
+                    insideTrainBtn.setIconTint(android.content.res.ColorStateList.valueOf(Color.WHITE));
+
+                    // Stop Service
+                    stopService(intent);
+
+                    Toast.makeText(Train_Tracking.this, "Live Tracking Stopped", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
     private void set_custom_toolbar() {
         setSupportActionBar(toolbar);
@@ -177,7 +247,7 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void set_recycler_view() {
-        Train_Tracking_Recycler_View_Adapter adapter;
+
         if(fromStationCode != null && toStationCode != null){
             adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData, fromStationCode, toStationCode);
         }else{
@@ -218,6 +288,11 @@ public class Train_Tracking extends AppCompatActivity {
         tvFromStation = findViewById(R.id.tvFromStation);
         tvToStation = findViewById(R.id.tvToStation);
         refreshButton = findViewById(R.id.refreshButton);
+
+        trackingHeaderPreviousStation = findViewById(R.id.trackingHeaderPreviousStation);
+        trackingHeaderCurrentStation = findViewById(R.id.trackingHeaderCurrentStation);
+        trackingHeaderNextStation = findViewById(R.id.trackingHeaderNextStation);
+        trackingHeaderStatusInfo = findViewById(R.id.trackingHeaderStatusInfo);
     }
 
     @Override

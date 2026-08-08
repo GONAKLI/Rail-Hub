@@ -10,15 +10,22 @@
         android:layout_height="match_parent"
         android:id="@+id/live_train_tracking_recycler_view"
         android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         />
-  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/insideTrainBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/insideTrainBtn"
-       app:icon="@drawable/nearby_station_icon"
-         android:text="Inside Train ?"
-      android:layout_gravity="bottom|end"
-      android:layout_marginBottom="20dp"
-      />
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:text="Inside Train ?"
+        android:textColor="#FFFFFF"
+        app:icon="@drawable/nearby_station_icon"
+        app:iconTint="#FFFFFF"
+        app:backgroundTint="#B7AA9D"
+        app:cornerRadius="24dp"
+        app:elevation="6dp" />
 
 </LinearLayout>

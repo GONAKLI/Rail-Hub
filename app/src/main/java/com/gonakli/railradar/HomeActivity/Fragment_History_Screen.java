@@ -45,7 +45,10 @@ public class Fragment_History_Screen extends Fragment {
                 noHistoryIMG.setVisibility(View.GONE);
                 noHistoryTXT.setVisibility(View.GONE);
                 User_History_ListView_Adapter adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
-                historyListView.setAdapter(adapter);
+
+                requireActivity().runOnUiThread(() -> {
+                    historyListView.setAdapter(adapter); // ✅ अब main thread पर
+                });
             }
 
         }).start();

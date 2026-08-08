@@ -26,6 +26,8 @@ import com.google.android.gms.location.Priority;
 
 public class myLocationServiceClass extends Service {
     public static final String ACTION_LOCATION_UPDATE = "LOCATION_UPDATE";
+    FusedLocationProviderClient fusedLocationProviderClient;
+    LocationCallback locationCallback;
     private double latitude;
     private  double longitude;
     @Nullable
@@ -38,13 +40,13 @@ public class myLocationServiceClass extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
        fetch_Location();
         Log.d("Serviceclass", "onStartCommand: come in service");
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @SuppressLint("MissingPermission")
     public void fetch_Location(){
         Log.d("Serviceclass", "onStartCommand: come in fetch_location");
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest locationRequest = new LocationRequest.Builder(
                 Priority.PRIORITY_HIGH_ACCURACY,
                 10000
@@ -52,7 +54,7 @@ public class myLocationServiceClass extends Service {
                 .setMinUpdateIntervalMillis(5000)
                 .build();
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                new LocationCallback() {
+               locationCallback = new LocationCallback() {
                     @Override
                     public void onLocationResult(@NonNull LocationResult locationResult) {
                        for(Location location : locationResult.getLocations()){
@@ -81,7 +83,11 @@ public class myLocationServiceClass extends Service {
         sendBroadcast(intent);
     }
 
-
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (fusedLocationProviderClient !=null){
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+    }
 }
