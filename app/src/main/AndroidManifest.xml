@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Application.MyApp"
@@ -17,7 +18,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RailRadar" >
+        android:theme="@style/Theme.RailRadar"
+        android:usesCleartextTraffic="true">
 
         <activity android:name=".HomeActivity.Home_Screen_Activity"
             android:exported="true">
@@ -30,8 +32,8 @@
 
         <activity android:name=".UserRouteTrains.User_Route_Train_List" />
         <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
-        <activity android:name=".PNR_Work.PNR_Check"
-            android:theme="@style/Theme.RailRadar"/>
+<!--        <activity android:name=".PNR_Work.PNR_Check"-->
+<!--            android:theme="@style/Theme.RailRadar"/>-->
         <activity android:name=".ExtraOptions.NearBy_Station_Activity" />
         <activity android:name=".TrainTracking.Train_Tracking" />
 
@@ -39,6 +41,7 @@
             android:exported="false"
             android:foregroundServiceType="location"
             />
+        <service android:name=".Services.API_Call.Train_Tracking_API_Call"/>
     </application>
 
 </manifest>

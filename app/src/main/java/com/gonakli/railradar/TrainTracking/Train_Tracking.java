@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gonakli.railradar.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Services.API_Call.Train_Tracking_API_Call;
 import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
 import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
@@ -61,11 +62,19 @@ public class Train_Tracking extends AppCompatActivity {
         set_recycler_view();
         set_insideTrainBtn_action();
 
+        test_API_Service();
+
        // set_BottomSheet_Layout();
 
 
 
        
+    }
+
+    private void test_API_Service() {
+    Intent intent = new Intent(Train_Tracking.this, Train_Tracking_API_Call.class);
+    intent.putExtra("trainNumber", trainNumber);
+    startService(intent);
     }
 
     private void tracking_upper_header(Train_Tracking_Structure trainLocationData) {
