@@ -1,5 +1,7 @@
 package com.gonakli.railradar.HomeActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
 
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Services.API_Call.PNR_Enquiry_API_CALL;
 
 public class Fragment_Pnr_Screen extends Fragment {
     View view;
@@ -39,6 +42,9 @@ public class Fragment_Pnr_Screen extends Fragment {
         btnFindPnr.setOnClickListener(v ->{
             String pnrValue = pnrSearchField.getText().toString().trim();
             Toast.makeText(getContext(), ""+ pnrValue, Toast.LENGTH_SHORT).show();
+            Intent iPNR = new Intent(getContext(), PNR_Enquiry_API_CALL.class);
+            iPNR.putExtra("pnrNumber", pnrValue);
+            getContext().startService(iPNR);
         });
     }
 }

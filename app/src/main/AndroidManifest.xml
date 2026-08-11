@@ -42,6 +42,7 @@
             android:foregroundServiceType="location"
             />
         <service android:name=".Services.API_Call.Train_Tracking_API_Call"/>
+        <service android:name=".Services.API_Call.PNR_Enquiry_API_CALL" />
     </application>
 
 </manifest>
