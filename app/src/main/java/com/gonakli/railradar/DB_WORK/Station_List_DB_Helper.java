@@ -102,6 +102,18 @@ public class Station_List_DB_Helper extends SQLiteAssetHelper {
         return arrStationList;
     }
 
+    public String getStationNameByCode(String code){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sqlQuery = String.format("SELECT %s FROM %s WHERE %s='%s'",
+                TABLE_STATION_NAME_COLUMN, TABLE_NAME, TABLE_STATION_CODE_COLUMN, code);
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+        cursor.moveToFirst();
+       String stName = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
+        cursor.close();
+        db.close();
+        return stName;
+    }
+
 
 
 

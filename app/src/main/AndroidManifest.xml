@@ -32,8 +32,6 @@
 
         <activity android:name=".UserRouteTrains.User_Route_Train_List" />
         <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
-<!--        <activity android:name=".PNR_Work.PNR_Check"-->
-<!--            android:theme="@style/Theme.RailRadar"/>-->
         <activity android:name=".ExtraOptions.NearBy_Station_Activity" />
         <activity android:name=".TrainTracking.Train_Tracking" />
 

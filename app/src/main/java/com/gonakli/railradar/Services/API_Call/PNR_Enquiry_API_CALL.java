@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.gonakli.railradar.Structure_Class.PassengerList_Structure;
 import com.gonakli.railradar.Structure_Class.Pnr_Api_Response_Structure;
 
 import org.json.JSONArray;
@@ -17,10 +18,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "http://10.182.234.238:5015/pnr-enquiry";
+    private static final String API_URL = "http://10.236.89.135:5015/pnr-enquiry";
 
 
     @Nullable
@@ -64,7 +66,17 @@ public class PNR_Enquiry_API_CALL extends Service {
             Log.d("PNR_Service", "call_pnr_api: " + conn.getResponseCode());
             if (conn.getResponseCode() == 200) {
                 Pnr_Api_Response_Structure resData = PnrHandler(conn);
-                Log.d("PNR_Service", "call_pnr_api: response " + resData.getErrorMessage());
+
+                Log.d("pnrWork", "call_pnr_api: " + resData.isSuccess());
+
+                Log.d("pnrWork", "call_pnr_api: " + resData.getTrainName());
+                // Log.d("pnrWork", "call_pnr_api: " + resData.getErrorMessage());
+                Intent intent = new Intent("PNR_RESPONSE_ACTION");
+                intent.setPackage(getPackageName());
+                intent.putExtra("pnrResponse", resData);
+                sendBroadcast(intent);
+                Log.d("pnrWork", "call_pnr_api: broadcast sent");
+
             }
 
 
@@ -91,7 +103,67 @@ public class PNR_Enquiry_API_CALL extends Service {
                 resStruct = new Pnr_Api_Response_Structure(false,errorMessage);
 
             } else if (jsonObject.has("pnrNumber")) {
-                
+                String dateOfJourney, trainStartDate, trainNumber, trainName,sourceStation, pnrNumber;
+                String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfpassenger;
+                String chartStatus,bookingFare,quota;
+                ArrayList<Object> arrInformationMessage = new ArrayList<>();
+                ArrayList<PassengerList_Structure> arrPassengerList = new ArrayList<>();
+
+                pnrNumber = jsonObject.optString("pnrNumber", null);
+                dateOfJourney = jsonObject.optString("dateOfJourney", null);
+                trainStartDate = jsonObject.optString("trainStartDate", null);
+                trainNumber = jsonObject.optString("trainNumber", null);
+                trainName = jsonObject.optString("trainName", null);
+                sourceStation = jsonObject.optString("sourceStation", null);
+                destinationStation = jsonObject.optString("destinationStation", null);
+                reservationUpto = jsonObject.optString("reservationUpto", null);
+                boardingPoint = jsonObject.optString("boardingPoint", null);
+                journeyClass = jsonObject.optString("journeyClass", null);
+                numberOfpassenger = jsonObject.optString("numberOfpassenger", null);
+                chartStatus = jsonObject.optString("chartStatus", null);
+                bookingFare = jsonObject.optString("bookingFare", null);
+                quota = jsonObject.optString("quota", null);
+
+
+                JSONArray arrPassList = jsonObject.optJSONArray("passengerList");
+                for(int j =0; j < arrPassList.length(); j++){
+                    // passengerList
+                    String currentStatus,currentBerthNo,psgnwlType;
+                    String passengerSerialNumber, passengerAge,passengerBerthChoice,passengerNationality;
+                    String bookingStatus, bookingCoachId,bookingBerthNo,bookingBerthCode,bookingStatusDetails;
+                    JSONObject objPassList = arrPassList.optJSONObject(j);
+                    currentStatus = objPassList.optString("currentStatus");
+                    currentBerthNo = objPassList.optString("currentBerthNo");
+                    psgnwlType = objPassList.optString("psgnwlType");
+                    passengerSerialNumber = objPassList.optString("passengerSerialNumber");
+                    passengerAge = objPassList.optString("passengerAge");
+                    passengerBerthChoice = objPassList.optString("passengerBerthChoice");
+                    passengerNationality = objPassList.optString("passengerNationality");
+                    bookingStatus = objPassList.optString("bookingStatus");
+                    bookingCoachId = objPassList.optString("bookingCoachId");
+                    bookingBerthNo = objPassList.optString("bookingBerthNo");
+                    bookingBerthCode = objPassList.optString("bookingBerthCode");
+                    bookingStatusDetails = objPassList.optString("bookingStatusDetails");
+                    arrPassengerList.add(new PassengerList_Structure(passengerSerialNumber, passengerAge,
+                            passengerBerthChoice,passengerNationality,bookingStatus,bookingCoachId,bookingBerthNo,bookingBerthCode,
+                            bookingStatusDetails,currentStatus,currentBerthNo,psgnwlType));
+                }
+
+
+                JSONArray infoJson = jsonObject.optJSONArray("informationMessage");
+                for(int i=0; i<infoJson.length(); i++){
+                    if(!infoJson.isNull(i)){
+                        Object value = infoJson.opt(i);
+                        arrInformationMessage.add(value);
+                    }
+
+                }
+
+                resStruct = new Pnr_Api_Response_Structure(true,pnrNumber, dateOfJourney,
+                        trainStartDate, trainNumber, trainName, sourceStation, destinationStation,
+                        reservationUpto, boardingPoint, journeyClass,
+                        numberOfpassenger, chartStatus, bookingFare, quota,
+                        arrInformationMessage,arrPassengerList);
             }
 
             return resStruct;
