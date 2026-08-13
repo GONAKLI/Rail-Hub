@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/bg_passenger_pnr_card"
+    android:layout_margin="6dp"
+   >
+
+    <!-- Passenger Header -->
+    <TextView
+        android:id="@+id/passengerSerialNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Passenger 1"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#1E3A8A" />
+
+    <!-- Age & Nationality -->
+    <TextView
+        android:id="@+id/passengerAgeNationality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age: 23 • Nationality: IN"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:paddingTop="4dp" />
+
+    <!-- Berth Choice -->
+    <TextView
+        android:id="@+id/passengerBerthChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Berth Choice: WS"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:paddingTop="2dp" />
+
+    <!-- Booking Details -->
+    <TextView
+        android:id="@+id/bookingDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Booking: CNF • Coach: D1 • Berth: 25 (WS)"
+        android:textSize="14sp"
+        android:textColor="#006400"
+        android:paddingTop="4dp" />
+
+    <!-- Current Status -->
+    <TextView
+        android:id="@+id/currentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Status: CNF"
+        android:textSize="14sp"
+        android:textColor="#FF7F00"
+        android:paddingTop="4dp" />
+
+</LinearLayout>

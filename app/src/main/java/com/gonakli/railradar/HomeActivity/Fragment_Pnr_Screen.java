@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,9 @@ public class Fragment_Pnr_Screen extends Fragment {
             Intent iPNR = new Intent(getContext(), PNR_Enquiry_API_CALL.class);
             iPNR.putExtra("pnrNumber", pnrValue);
             getContext().startService(iPNR);
+            pnrSearchField.clearFocus();
+            InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(pnrSearchField.getWindowToken(), 0);
         });
     }
 }

@@ -8,8 +8,8 @@ public class Pnr_Api_Response_Structure implements Serializable {
    private final boolean isSuccess;
 
     String dateOfJourney, trainStartDate, trainNumber, trainName,sourceStation, pnrNumber;
-    String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfpassenger;
-    String chartStatus,bookingFare,quota;
+    String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfPassenger;
+    String chartStatus,bookingFare,quota, ticketFare;
     ArrayList<Object> arrInformationMessage;
     ArrayList<PassengerList_Structure> arrPassengerList;
 
@@ -19,7 +19,7 @@ public class Pnr_Api_Response_Structure implements Serializable {
         this.isSuccess = isSuccess;
     }
 
-    public Pnr_Api_Response_Structure( boolean isSuccess,String pnrNumber, String dateOfJourney, String trainStartDate, String trainNumber, String trainName, String sourceStation, String destinationStation, String reservationUpto, String boardingPoint, String journeyClass, String numberOfpassenger, String chartStatus, String bookingFare, String quota, ArrayList<Object> arrInformationMessage, ArrayList<PassengerList_Structure> arrPassengerList) {
+    public Pnr_Api_Response_Structure( boolean isSuccess,String pnrNumber, String dateOfJourney, String trainStartDate, String trainNumber, String trainName, String sourceStation, String destinationStation, String reservationUpto, String boardingPoint, String journeyClass, String numberOfPassenger, String chartStatus, String bookingFare, String quota, ArrayList<Object> arrInformationMessage, ArrayList<PassengerList_Structure> arrPassengerList, String ticketFare) {
         this.isSuccess = isSuccess;
         this.errorMessage = "";
        this.pnrNumber = pnrNumber;
@@ -32,12 +32,13 @@ public class Pnr_Api_Response_Structure implements Serializable {
         this.reservationUpto = reservationUpto;
         this.boardingPoint = boardingPoint;
         this.journeyClass = journeyClass;
-        this.numberOfpassenger = numberOfpassenger;
+        this.numberOfPassenger = numberOfPassenger;
         this.chartStatus = chartStatus;
         this.bookingFare = bookingFare;
         this.quota = quota;
         this.arrInformationMessage = arrInformationMessage;
         this.arrPassengerList = arrPassengerList;
+        this.ticketFare = ticketFare;
     }
 
     public String getErrorMessage() {
@@ -84,8 +85,8 @@ public class Pnr_Api_Response_Structure implements Serializable {
         return journeyClass;
     }
 
-    public String getNumberOfpassenger() {
-        return numberOfpassenger;
+    public String getNumberOfPassenger() {
+        return numberOfPassenger;
     }
 
     public String getChartStatus() {
@@ -110,6 +111,10 @@ public class Pnr_Api_Response_Structure implements Serializable {
 
     public String getPnrNumber() {
         return pnrNumber;
+    }
+
+    public String getTicketFare() {
+        return ticketFare;
     }
 }
 

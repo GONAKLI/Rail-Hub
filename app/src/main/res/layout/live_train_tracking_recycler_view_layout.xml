@@ -50,8 +50,8 @@
     <!-- ===== LIVE TRAIN ICON (Floating Engine View) ===== -->
     <ImageView
         android:id="@+id/liveTrainIcon"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:contentDescription="Live train position"
         android:src="@drawable/train_icon_photoroom"
         android:visibility="gone"

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "http://10.236.89.135:5015/pnr-enquiry";
+    private static final String API_URL = "http://10.59.60.99:5015/pnr-enquiry";
 
 
     @Nullable
@@ -105,7 +105,7 @@ public class PNR_Enquiry_API_CALL extends Service {
             } else if (jsonObject.has("pnrNumber")) {
                 String dateOfJourney, trainStartDate, trainNumber, trainName,sourceStation, pnrNumber;
                 String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfpassenger;
-                String chartStatus,bookingFare,quota;
+                String chartStatus,bookingFare,quota,ticketFare;
                 ArrayList<Object> arrInformationMessage = new ArrayList<>();
                 ArrayList<PassengerList_Structure> arrPassengerList = new ArrayList<>();
 
@@ -123,6 +123,7 @@ public class PNR_Enquiry_API_CALL extends Service {
                 chartStatus = jsonObject.optString("chartStatus", null);
                 bookingFare = jsonObject.optString("bookingFare", null);
                 quota = jsonObject.optString("quota", null);
+                ticketFare = jsonObject.optString("ticketFare", null);
 
 
                 JSONArray arrPassList = jsonObject.optJSONArray("passengerList");
@@ -163,7 +164,7 @@ public class PNR_Enquiry_API_CALL extends Service {
                         trainStartDate, trainNumber, trainName, sourceStation, destinationStation,
                         reservationUpto, boardingPoint, journeyClass,
                         numberOfpassenger, chartStatus, bookingFare, quota,
-                        arrInformationMessage,arrPassengerList);
+                        arrInformationMessage,arrPassengerList, ticketFare);
             }
 
             return resStruct;
