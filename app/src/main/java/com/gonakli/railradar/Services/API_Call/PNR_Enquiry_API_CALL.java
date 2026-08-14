@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.gonakli.railradar.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railradar.Structure_Class.PassengerList_Structure;
 import com.gonakli.railradar.Structure_Class.Pnr_Api_Response_Structure;
 
@@ -106,6 +107,7 @@ public class PNR_Enquiry_API_CALL extends Service {
                 String dateOfJourney, trainStartDate, trainNumber, trainName,sourceStation, pnrNumber;
                 String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfpassenger;
                 String chartStatus,bookingFare,quota,ticketFare;
+                String bookingDate, ticketType;
                 ArrayList<Object> arrInformationMessage = new ArrayList<>();
                 ArrayList<PassengerList_Structure> arrPassengerList = new ArrayList<>();
 
@@ -124,6 +126,8 @@ public class PNR_Enquiry_API_CALL extends Service {
                 bookingFare = jsonObject.optString("bookingFare", null);
                 quota = jsonObject.optString("quota", null);
                 ticketFare = jsonObject.optString("ticketFare", null);
+                bookingDate = jsonObject.optString("bookingDate");
+                ticketType = jsonObject.optString("ticketType");
 
 
                 JSONArray arrPassList = jsonObject.optJSONArray("passengerList");
@@ -132,6 +136,7 @@ public class PNR_Enquiry_API_CALL extends Service {
                     String currentStatus,currentBerthNo,psgnwlType;
                     String passengerSerialNumber, passengerAge,passengerBerthChoice,passengerNationality;
                     String bookingStatus, bookingCoachId,bookingBerthNo,bookingBerthCode,bookingStatusDetails;
+                    String currentStatusIndex,currentStatusDetails;
                     JSONObject objPassList = arrPassList.optJSONObject(j);
                     currentStatus = objPassList.optString("currentStatus");
                     currentBerthNo = objPassList.optString("currentBerthNo");
@@ -145,9 +150,13 @@ public class PNR_Enquiry_API_CALL extends Service {
                     bookingBerthNo = objPassList.optString("bookingBerthNo");
                     bookingBerthCode = objPassList.optString("bookingBerthCode");
                     bookingStatusDetails = objPassList.optString("bookingStatusDetails");
+                    currentStatusIndex =  objPassList.optString("currentStatusIndex");
+                    currentStatusDetails =  objPassList.optString("currentStatusDetails");
+
+
                     arrPassengerList.add(new PassengerList_Structure(passengerSerialNumber, passengerAge,
                             passengerBerthChoice,passengerNationality,bookingStatus,bookingCoachId,bookingBerthNo,bookingBerthCode,
-                            bookingStatusDetails,currentStatus,currentBerthNo,psgnwlType));
+                            bookingStatusDetails,currentStatus,currentBerthNo,psgnwlType, currentStatusIndex,currentStatusDetails));
                 }
 
 
@@ -164,7 +173,7 @@ public class PNR_Enquiry_API_CALL extends Service {
                         trainStartDate, trainNumber, trainName, sourceStation, destinationStation,
                         reservationUpto, boardingPoint, journeyClass,
                         numberOfpassenger, chartStatus, bookingFare, quota,
-                        arrInformationMessage,arrPassengerList, ticketFare);
+                        arrInformationMessage,arrPassengerList, ticketFare,bookingDate,ticketType);
             }
 
             return resStruct;

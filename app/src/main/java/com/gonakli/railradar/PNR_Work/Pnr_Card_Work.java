@@ -1,7 +1,9 @@
 package com.gonakli.railradar.PNR_Work;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.gonakli.railradar.ADAPTERS.PNR_Passenger_List_Adapter;
+import com.gonakli.railradar.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.PassengerList_Structure;
@@ -86,6 +89,10 @@ public class Pnr_Card_Work extends LinearLayout {
                 Station_List_DB_Helper db = new Station_List_DB_Helper(getContext());
                 Pnr_Api_Response_Structure resData =(Pnr_Api_Response_Structure) intent.getSerializableExtra("pnrResponse");
                 if(resData.isSuccess()){
+                    new Thread(() ->{
+                        PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
+                        helper.addPnrPassengerInDB(resData);
+                    }).start();
                      trNumber = resData.getTrainNumber();
                      trName = resData.getTrainName();
                      pnrNum = resData.getPnrNumber();
@@ -114,6 +121,22 @@ public class Pnr_Card_Work extends LinearLayout {
                      db.close();
                      set_data();
 
+                }else{
+                    if(!resData.isSuccess()){
+                        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                                .setTitle("Something Wrong")
+                                .setMessage(resData.getErrorMessage())
+                                .setIcon(R.drawable.pnr_alert_error)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                )
+                                .create();
+                        alertDialog.show();
+                    }
                 }
             }
         }
