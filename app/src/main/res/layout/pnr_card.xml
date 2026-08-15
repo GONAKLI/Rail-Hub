@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pnrCardParentContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_passenger_pnr_card"
     android:padding="12dp"
-    android:elevation="4dp"
-    android:visibility="gone"
-    android:id="@+id/pnrCardParentContainer">
+    android:layout_marginBottom="16dp"
+    android:elevation="6dp"
+    android:visibility="visible">
 
     <!-- Header -->
     <LinearLayout
@@ -15,26 +16,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#1E3A8A"
-        android:padding="10dp">
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/pnrStatusTrainNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="0.45"
             android:text="12487"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
         <TextView
             android:id="@+id/pnrStatusTrainName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.25"
+            android:layout_weight="1.2"
             android:text="SEEMANCHAL EXPRESS"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp" />
 
         <TextView
             android:id="@+id/pnrStatusPnrNumber"
@@ -43,33 +53,46 @@
             android:text="PNR: 6543217890"
             android:textColor="#FFD700"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="13sp"
+            android:maxLines="1" />
     </LinearLayout>
 
-    <!-- Journey Date -->
-    <TextView
-        android:id="@+id/pnrStatusJourneyDate"
-        android:layout_width="wrap_content"
+    <!-- Journey Date + Fare -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Journey Date: 15 Aug 2024"
-        android:textColor="#971976"
-        android:padding="6dp"
-        android:textSize="16sp" />
-    <TextView
-        android:id="@+id/pnrStatusTicketFare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ticket Fare: "
-        android:textColor="#971976"
-        android:padding="6dp"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="4dp"
+        android:paddingHorizontal="4dp">
+
+        <TextView
+            android:id="@+id/pnrStatusJourneyDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Journey Date: 15 Aug 2024"
+            android:textColor="#971976"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/pnrStatusTicketFare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ticket Fare: "
+            android:textColor="#971976"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- Boarding & Reservation -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="6dp">
 
         <TextView
             android:id="@+id/pnrStatusBoardingPoint"
@@ -77,9 +100,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Boarding: DELHI (DLI)"
-            android:textColor="#000000"
+            android:textColor="#222222"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/pnrStatusReservationUpto"
@@ -87,9 +112,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Reservation Upto: PATNA (PNBE)"
-            android:textColor="#000000"
+            android:textColor="#222222"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="end" />
     </LinearLayout>
 
     <!-- Journey Details -->
@@ -100,17 +128,35 @@
         android:text="Class: 3A • Quota: GN • Chart Status: CHART PREPARED"
         android:background="#1E3A8A"
         android:textColor="@android:color/white"
-        android:padding="6dp"
-        android:textSize="13sp" />
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="7dp"
+        android:textSize="12sp"
+        android:letterSpacing="0.02" />
 
-    <!-- Passenger List -->
-    <ListView
-        android:id="@+id/pnrStatusPassengerListView"
+    <!-- Passenger ListView -->
+<!--    <ListView-->
+<!--        android:id="@+id/pnrStatusPassengerListView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="210dp"-->
+<!--        android:divider="#E8E8E8"-->
+<!--        android:dividerHeight="1dp"-->
+<!--        android:paddingTop="6dp"-->
+<!--        android:paddingBottom="4dp"-->
+<!--        android:scrollbars="vertical"-->
+<!--        android:nestedScrollingEnabled="true"-->
+<!--        android:isScrollContainer="true"-->
+<!--        android:cacheColorHint="@android:color/transparent"-->
+<!--        android:listSelector="@android:color/transparent"-->
+<!--        android:overScrollMode="never"-->
+<!--        android:fadeScrollbars="true"-->
+<!--        android:fastScrollEnabled="false"-->
+<!--        android:smoothScrollbar="true" />-->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#CCCCCC"
-        android:dividerHeight="1dp"
-        android:padding="8dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/pnrStatusPassengerContainer"
+        android:orientation="vertical"
         />
 
     <!-- Info Message -->
@@ -119,9 +165,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Info message"
-        android:background="#FF7F00"
-        android:textColor="@android:color/white"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:visibility="gone"/>
+        android:background="#FF5252"
+        android:textColor="@color/black"
+        android:padding="10sp"
+        android:textSize="15sp"
+        android:visibility="gone"
+        android:layout_marginTop="6dp" />
+
 </LinearLayout>

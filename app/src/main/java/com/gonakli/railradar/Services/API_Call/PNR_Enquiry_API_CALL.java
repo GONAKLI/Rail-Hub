@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "http://10.59.60.99:5015/pnr-enquiry";
+    private static final String API_URL = "http://10.236.89.68:5015/pnr-enquiry";
 
 
     @Nullable

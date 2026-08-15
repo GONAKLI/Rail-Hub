@@ -59,7 +59,6 @@ public class Train_Tracking extends AppCompatActivity {
         get_intent_data();
         set_custom_toolbar();
         train_finder();
-        set_recycler_view();
         set_insideTrainBtn_action();
 
         test_API_Service();
@@ -269,9 +268,16 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void train_finder() {
-        Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(Train_Tracking.this);
-        myTrainData = dbHelper.getTrainDataByTrainNumber(trainNumber);
-        dbHelper.close();
+            new Thread(() ->{
+                Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(Train_Tracking.this);
+                myTrainData = dbHelper.getTrainDataByTrainNumber(trainNumber);
+                dbHelper.close();
+                this.runOnUiThread(()->{
+                    set_recycler_view();
+                });
+
+            }).start();
+
     }
 
     private void get_intent_data() {
