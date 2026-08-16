@@ -10,9 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.Structure_Class.Train_List_Structure;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
 
 import java.util.ArrayList;
@@ -52,9 +54,17 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
                   new Thread(() ->{
                      String trNumber = clickedItem.getTrainNumber();
                      String trName = clickedItem.getTrainName();
+                     String srStationCode = "";
+                     String destStationCode = "";
+                     try(Train_Schedule_DB_Helper db = new Train_Schedule_DB_Helper(context)){
+                         Train_Schedule_Structure data = db.getTrainDataByTrainNumber(trNumber);
+                         srStationCode = data.getStationFrom();
+                         destStationCode = data.getStationTo();
+                     }
+
                       // to save train in history section for future access
                       User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
-                      helper.addHistoryInDB(trNumber,trName, "", "");
+                      helper.addHistoryInDB(trNumber,trName, srStationCode, destStationCode);
                       helper.close();
                   }).start();
                   context.startActivity(trainTrackingLive);

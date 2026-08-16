@@ -4,57 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F5F7">
+    android:background="@color/screen_background"
+    android:paddingHorizontal="14dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="8dp">
 
+    <!-- Search Card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="8dp">
+        android:background="@color/card_background"
+        android:padding="14dp"
+        android:elevation="2dp">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/pnr_search_field"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            android:layout_height="52dp"
+            android:paddingHorizontal="14dp"
             android:hint="Enter 10-digit PNR"
             android:maxLength="10"
             android:inputType="number"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#1A1A1A"
-            android:textColorHint="#9E9E9E"
+            android:textColor="@color/card_text_primary"
+            android:textColorHint="@color/card_text_secondary"
             android:background="@drawable/pnr_input_field"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:importantForAutofill="no" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_find_pnr"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:text="Search PNR"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:backgroundTint="#FF6E40"
             android:background="@drawable/pnr_search_button"
-            android:elevation="4dp"
+            android:elevation="2dp"
             android:stateListAnimator="@null" />
 
     </LinearLayout>
 
+    <!-- PNR List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allPnrCheckRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:clipToPadding="false"
-        android:paddingBottom="?attr/actionBarSize"
-        android:overScrollMode="never" />
+        android:paddingBottom="12dp"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
 </LinearLayout>

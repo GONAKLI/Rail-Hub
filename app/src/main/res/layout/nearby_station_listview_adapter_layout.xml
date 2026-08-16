@@ -2,30 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10sp"
-    android:layout_marginTop="5dp">
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="12dp"
+    android:background="@drawable/bg_history_items"
+    android:layout_marginHorizontal="2dp"
+    android:elevation="2dp">
 
+    <!-- Station Name -->
     <TextView
-        style="@style/nearbyStationDataValuesStationName"
-        android:text="name"
         android:id="@+id/adapterStationName"
-        />
+        style="@style/nearbyStationDataValuesStationName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.6"
+        android:text="Station Name"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:maxLines="2"
+        android:ellipsize="end" />
+
+    <!-- Code -->
     <TextView
-       style="@style/nearbyStationDataValues"
-        android:text="Code"
         android:id="@+id/adapterStationCode"
-        />
-
-    <TextView
         style="@style/nearbyStationDataValues"
-        android:text="Distance"
-        android:id="@+id/adapterStationDistance"
-        />
-    <ImageView
-        style="@style/nearbyStationDataImageValues"
-        android:src="@drawable/nearby_station_location_icon"
-        android:id="@+id/nearbyStationMapIcon"
-        />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:text="CODE"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#1E3A8A"
+        android:gravity="center" />
 
+    <!-- Distance -->
+    <TextView
+        android:id="@+id/adapterStationDistance"
+        style="@style/nearbyStationDataValues"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:text="2.4 km"
+        android:textSize="13sp"
+        android:textColor="#444444"
+        android:gravity="center" />
+
+    <!-- Map Icon -->
+    <ImageView
+        android:id="@+id/nearbyStationMapIcon"
+        style="@style/nearbyStationDataImageValues"
+        android:layout_width="20dp"
+        android:layout_height="35dp"
+        android:src="@drawable/nearby_station_location_icon"
+        android:padding="6dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Open in Map" />
 
 </LinearLayout>

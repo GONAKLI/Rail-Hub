@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingHorizontal="12dp"
-    android:paddingVertical="10dp"
+    android:paddingVertical="11dp"
     android:background="@drawable/bg_passenger_pnr_card"
     android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="4dp"
     android:elevation="2dp">
 
-    <!-- Top Row: Passenger Number + Current Status -->
+    <!-- Top: Passenger + Status -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_weight="1"
             android:text="Passenger 1"
             android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textColor="#1E3A8A" />
 
         <TextView
@@ -32,43 +32,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CNF"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:background="#787474"
+            android:background="#2E7D32"
             android:paddingHorizontal="10dp"
             android:paddingVertical="3dp" />
     </LinearLayout>
 
-    <!-- Age & Nationality -->
+    <!-- Age + Nationality -->
     <TextView
         android:id="@+id/passengerAgeNationality"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Age: 23 • Nationality: IN"
-        android:textSize="13sp"
-        android:textColor="#555555"
-        android:paddingTop="6dp" />
+        android:layout_marginTop="6dp"
+        android:text="Age: 23  •  Nationality: IN"
+        android:textSize="12sp"
+        android:textColor="#666666" />
 
-    <!-- Berth Choice -->
+    <!-- Berth Preference -->
     <TextView
         android:id="@+id/passengerBerthChoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="Berth Preference: Side Lower"
-        android:textSize="13sp"
-        android:textColor="#555555"
-        android:paddingTop="2dp" />
+        android:textSize="12sp"
+        android:textColor="#666666" />
 
-    <!-- Booking Details (Coach + Berth) -->
+    <!-- Coach + Berth (highlighted) -->
     <TextView
         android:id="@+id/bookingDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:background="#E8F5E9"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
         android:text="Coach: D1  •  Berth: 25 (WS)"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:textStyle="bold"
-        android:textColor="#1B5E20"
-        android:paddingTop="6dp" />
+        android:textColor="#1B5E20" />
 
 </LinearLayout>

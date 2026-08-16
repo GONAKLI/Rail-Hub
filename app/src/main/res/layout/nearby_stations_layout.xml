@@ -1,77 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="7sp"
-    android:paddingEnd="7sp"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/card_background"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
+
     <include layout="@layout/custom_toolbar" />
 
+    <!-- Title -->
     <TextView
+        android:id="@+id/nearbyListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Near By Stations"
-        android:textAlignment="center"
-        android:textSize="22sp"
         android:layout_below="@+id/customAppBarLayout"
+        android:layout_marginTop="12dp"
+        android:text="Nearby Stations"
+        android:textAlignment="center"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:id="@+id/nearbyListTitle"
-        />
+        android:textColor="@color/card_text_primary" />
 
+    <!-- Column Headers -->
     <LinearLayout
+        android:id="@+id/nearbyListHeadingContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/nearbyListTitle"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:id="@+id/nearbyListHeadingContainer">
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:background="#1E3A8A"
+        android:gravity="center_vertical">
+
         <TextView
             style="@style/nearbyStationHeadingColumnName"
             android:text="Name"
-            />
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             style="@style/nearbyStationHeading"
             android:text="Code"
-            />
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             style="@style/nearbyStationHeading"
             android:text="Distance"
-            />
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             style="@style/nearbyStationHeading"
-            android:text="Location"
-            />
+            android:text="Map"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center" />
     </LinearLayout>
 
+    <!-- List -->
     <ListView
+        android:id="@+id/nearbyStationListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/nearbyListHeadingContainer"
-        android:id="@+id/nearbyStationListView"
         android:layout_above="@id/nearbyListRefreshBtn"
-        />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:clipToPadding="false"
+        android:paddingBottom="10dp"
+        android:scrollbars="none"
+        android:overScrollMode="never" />
+
+    <!-- Progress -->
     <ProgressBar
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:indeterminateTint="#FF5722"
         android:id="@+id/nearbyStationProgressBar"
-        />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#FF5722"
+        android:visibility="gone" />
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh Stations"
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+    <!-- Refresh Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/nearbyListRefreshBtn"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:text="Refresh Stations"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:backgroundTint="#FF6E40"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="10dp" />
+
 </RelativeLayout>

@@ -1,57 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingBottom="20dp"
+    android:background="@drawable/bg_passenger_pnr_card">
+
+    <!-- Image + Close -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:background="#93ADA0"
-        android:layout_width="match_parent"
-        android:layout_height="170sp"
-        android:src="@drawable/location_permission"
-        android:contentDescription="Location Permission Image"
-        />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:src="@drawable/location_permission"
+            android:scaleType="centerCrop"
+            android:contentDescription="Location Permission Image" />
+
         <ImageButton
             android:id="@+id/locationPermissionDialogueCross"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:scaleType="fitXY"
-            android:src="@drawable/cancel_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8sp"
-            />
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cancel_icon"
+            android:contentDescription="Close" />
     </RelativeLayout>
+
+    <!-- Title -->
     <TextView
-        android:layout_marginTop="15sp"
-        android:lineHeight="30sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="20dp"
         android:text="Grant Location Access"
         android:textStyle="bold"
         android:textAlignment="center"
         android:textSize="18sp"
-        />
+        android:textColor="#1A1A1A" />
+
+    <!-- Message -->
     <TextView
-        android:layout_marginTop="15sp"
-        android:lineHeight="30sp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="5sp"
-        android:paddingEnd="5sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="24dp"
         android:text="Location permission needed to show nearby stations correctly"
-        android:textSize="18sp"
-        />
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:textColor="#666666"
+        android:lineSpacingExtra="2dp" />
+
+    <!-- Action Button -->
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:text="ENABLE LOCATION"
-        android:layout_gravity="end"
         android:id="@+id/locationPermissionDialogueEnableLocation"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="Enable Location"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FF6E40"
+        android:elevation="2dp" />
+
 </LinearLayout>

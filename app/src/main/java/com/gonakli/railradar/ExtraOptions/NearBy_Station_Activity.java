@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -219,7 +220,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     private void set_toolbar() {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Nearby Stations");
-        toolbar.setBackgroundColor(Color.parseColor("#B7AA9D"));
+        toolbar.setBackgroundColor(Color.GRAY);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/screen_background">
 
     <include layout="@layout/custom_toolbar" />
 
-    <!-- Funky gradient route banner -->
+    <!-- Route Banner -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="14dp"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/bg_route_header_gradient"
-        android:padding="20dp"
-        android:elevation="6dp">
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="18dp"
+        android:elevation="5dp">
 
         <!-- FROM -->
         <TextView
@@ -23,9 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="FROM"
-            android:textColor="#CCFFFFFF"
-            android:textSize="11sp"
-            android:letterSpacing="0.15"
+            android:textColor="#B3FFFFFF"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,10 +38,10 @@
             android:id="@+id/user_route_from_station_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:text="New Delhi"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"
@@ -46,31 +49,12 @@
             app:layout_constraintTop_toBottomOf="@id/fromLabel"
             app:layout_constraintEnd_toStartOf="@id/iconCircle" />
 
-        <!-- Dashed connector -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_dashed_line"
-            app:layout_constraintTop_toTopOf="@id/iconCircle"
-            app:layout_constraintBottom_toBottomOf="@id/iconCircle"
-            app:layout_constraintStart_toEndOf="@id/user_route_from_station_textView"
-            app:layout_constraintEnd_toStartOf="@id/iconCircle" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_dashed_line"
-            app:layout_constraintTop_toTopOf="@id/iconCircle"
-            app:layout_constraintBottom_toBottomOf="@id/iconCircle"
-            app:layout_constraintStart_toEndOf="@id/iconCircle"
-            app:layout_constraintEnd_toStartOf="@id/user_route_to_station_textView" />
-
-        <!-- Center circular train icon -->
+        <!-- Center Icon -->
         <androidx.cardview.widget.CardView
             android:id="@+id/iconCircle"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:cardCornerRadius="21dp"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +69,6 @@
                 android:src="@drawable/home_screen_train_icon"
                 app:tint="@color/gradient_start"
                 android:contentDescription="@null" />
-
         </androidx.cardview.widget.CardView>
 
         <!-- TO -->
@@ -94,9 +77,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="TO"
-            android:textColor="#CCFFFFFF"
-            android:textSize="11sp"
-            android:letterSpacing="0.15"
+            android:textColor="#B3FFFFFF"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
             android:textStyle="bold"
             android:gravity="end"
             app:layout_constraintTop_toTopOf="parent"
@@ -107,10 +90,10 @@
             android:id="@+id/user_route_to_station_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:text="Mumbai Central"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="end"
             android:ellipsize="end"
@@ -121,12 +104,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Train List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trainScheduleRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="12dp" />
+        android:paddingTop="4dp"
+        android:paddingBottom="12dp"
+        android:overScrollMode="never" />
 
 </LinearLayout>

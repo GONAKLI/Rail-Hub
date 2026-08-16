@@ -109,75 +109,6 @@ public class Train_Tracking extends AppCompatActivity {
         }
     }
 
-//    private void set_BottomSheet_Layout_Content(Train_Tracking_Live_Structure_Class st) {
-//        // upper textview status message set
-//        if(st.isAtStation() && st.getCurrentStation() != null){
-//            String msg = "Arrived " + st.getCurrentStation();
-//            tvStatusMessage.setText(msg);
-//        }else if (!st.isAtStation()){
-//            String msg = st.getStatusMessage();
-//            tvStatusMessage.setText(msg);
-//        }else {
-//            tvStatusMessage.setText("--");
-//        }
-//
-//    // next stop container ie name and info
-//        if(st.getNextStation() != null){
-//           String nextStop = st.getNextStation().getStationName();
-//            String nextStopArrival = st.getNextStation().getArrivalTime();
-//            String nextTrainStop = String.valueOf(Integer.parseInt(st.getNextStation().getDistance()) - st.getTotalJourneyCovered());
-//            tvNextStopName.setText(nextStop);
-//            tvNextStopMeta.setText(nextTrainStop);
-//        }
-//
-//        if(st.getSourceStation() != null && st.getDestinationStation() != null){
-//            String srStation = st.getSourceStation();
-//            String destStation = st.getDestinationStation();
-//            tvFromStation.setText(srStation);
-//            tvToStation.setText(destStation);
-//        }
-//
-//    }
-
-//    private void set_BottomSheet_Layout() {
-//        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Train_Tracking.this);
-//        bottomSheetDialog.setContentView(R.layout.train_tracking_bottomsheet);
-//
-//        Window window = bottomSheetDialog.getWindow();
-//        if (window != null) {
-//            // 1. Peeche ka Dark/Dim background hatayein
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-//
-//            // 2. Non-modal flag
-//            window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-//        }
-//
-//        View bottomSheet = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-//        if (bottomSheet != null) {
-//            BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-//
-//            // DP to Pixels conversion (200dp)
-//            int peekHeightPx = (int) (200 * getResources().getDisplayMetrics().density);
-//            bottomSheetBehavior.setPeekHeight(peekHeightPx);
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//        }
-//
-//        bottomSheetDialog.setCancelable(false);
-//        bottomSheetDialog.setCanceledOnTouchOutside(false);
-//
-//// 3. MAIN FIX: Extra touch container ke touches seedhe Activity/Map ko pass karein
-//        View touchOutside = bottomSheetDialog.findViewById(com.google.android.material.R.id.touch_outside);
-//        if (touchOutside != null) {
-//            touchOutside.setOnTouchListener((v, event) -> {
-//                // Touch event ko piche Activity/Map par bhej do
-//                Train_Tracking.this.dispatchTouchEvent(event);
-//                return false;
-//            });
-//        }
-//
-//        bottomSheetDialog.show();
-//    }
-
     private void track_user() {
         String stData = "";
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
@@ -341,9 +272,9 @@ public class Train_Tracking extends AppCompatActivity {
 
     }
 
- //   @Override
-//    protected void onPause() {
-//        super.onPause();
-//        unregisterReceiver(locationReceiver);
-//    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(locationReceiver);
+    }
 }

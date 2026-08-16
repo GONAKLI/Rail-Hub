@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gonakli.railradar.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Services.API_Call.PNR_Enquiry_API_CALL;
 import com.gonakli.railradar.Structure_Class.PassengerList_Structure;
 import com.gonakli.railradar.Structure_Class.Pnr_Api_Response_Structure;
 
@@ -126,9 +132,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         holder.pnrStatusTicketFare.setText(String.format("Ticket Fare: %s", ticketFare));
 
         delete_Pnr(holder, pnrNum);
+        refresh_pnr(holder, pnrNum);
 
 
     }
+
 
 
 
@@ -143,6 +151,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         TextView pnrStatusReservationUpto, pnrStatusDetails, pnrStatusJourneyDate,pnrStatusInfoMessage, pnrStatusTicketFare;
         LinearLayout pnrCardParentContainer;
         LinearLayout pnrStatusPassengerContainer;
+        ImageView btnRefreshPnr;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -157,6 +166,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
             pnrCardParentContainer = itemView.findViewById(R.id.pnrCardParentContainer);
             pnrStatusTicketFare = itemView.findViewById(R.id.pnrStatusTicketFare);
             pnrStatusPassengerContainer = itemView.findViewById(R.id.pnrStatusPassengerContainer);
+            btnRefreshPnr = itemView.findViewById(R.id.btnRefreshPnr);
             Log.d("dbChecker", "onBindViewHolder: " + "come in viewHolder");
 
 
@@ -206,7 +216,18 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
     }
 
-    private void refreshAdapter(){
+    private void refresh_pnr(viewHolder holder, String pnrNum) {
+        holder.btnRefreshPnr.setOnClickListener(v ->{
+            Intent iService = new Intent(context, PNR_Enquiry_API_CALL.class);
+            iService.putExtra("pnrNumber", pnrNum);
+            iService.putExtra("isRefresh", true);
+            context.startService(iService);
+            Animation animation = AnimationUtils.loadAnimation(context,R.anim.pnr_refresh_rotation);
+            holder.btnRefreshPnr.startAnimation(animation);
+
+        });
+    }
+    public void refreshAdapter(){
 
         new Thread(() ->{
             PNR_Data_DB_Helper db = new PNR_Data_DB_Helper(context);

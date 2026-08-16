@@ -1,30 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Single source of truth theme. Extends DayNight so it auto-switches
-         between light/dark based on system setting -->
     <style name="Theme.RailRadar" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <!-- Primary brand color -->
-        <item name="colorPrimary">#4C6133</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/purple_200</item>
-        <item name="colorOnPrimaryContainer">@color/black</item>
+        <!-- Brand -->
+        <item name="colorPrimary">#1E3A8A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#DBE1FF</item>
+        <item name="colorOnPrimaryContainer">#00174B</item>
 
-        <!-- Secondary brand color -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <!-- Secondary -->
+        <item name="colorSecondary">#FF6E40</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#FFDBCF</item>
+        <item name="colorOnSecondaryContainer">#3A0B00</item>
 
-        <!-- Status bar: use theme attr, not a fixed hex, so it also flips with dark mode -->
+        <!-- Surface / Background -->
+        <item name="android:colorBackground">#F5F5F7</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1A1A1A</item>
+        <item name="colorOnSurfaceVariant">#5C5C5C</item>
+
+        <!-- Status bar -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
 
-        <!-- IMPORTANT:
-             Do NOT set android:textColorPrimary / textColorSecondary / hintTextColor
-             here to a fixed color like black. Material3.DayNight already provides
-             correct ?attr/colorOnSurface and ?attr/colorOnSurfaceVariant that
-             automatically flip between dark-on-light and light-on-dark.
-             If you truly need custom text colors, define them as color resources
-             with a values-night/ override (see colors.xml below), never a single
-             hardcoded hex in the theme. -->
     </style>
 
 </resources>

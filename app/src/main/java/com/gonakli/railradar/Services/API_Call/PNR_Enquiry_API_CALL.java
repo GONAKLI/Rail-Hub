@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "http://10.236.89.68:5015/pnr-enquiry";
+    private static final String API_URL = "http://10.236.89.16:5015/pnr-enquiry";
 
 
     @Nullable
@@ -35,18 +35,26 @@ public class PNR_Enquiry_API_CALL extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("PNR_Service", "call_pnr_api: come in onStartCommand");
+        if(intent == null){
+            stopSelf();
+            return START_NOT_STICKY;
+        }
 
         if (intent.hasExtra("pnrNumber")) {
             pnrNumber = intent.getStringExtra("pnrNumber");
-            new Thread(this::call_pnr_api).start();
+            new Thread(() ->{
+                call_pnr_api(intent);
+            }).start();
+        }else{
+            stopSelf();
         }
 
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
 
     }
 
-    private void call_pnr_api() {
+    private void call_pnr_api(Intent intent) {
         Log.d("PNR_Service", "call_pnr_api: in call_pnr_api()");
 
         try {
@@ -72,10 +80,16 @@ public class PNR_Enquiry_API_CALL extends Service {
 
                 Log.d("pnrWork", "call_pnr_api: " + resData.getTrainName());
                 // Log.d("pnrWork", "call_pnr_api: " + resData.getErrorMessage());
-                Intent intent = new Intent("PNR_RESPONSE_ACTION");
-                intent.setPackage(getPackageName());
-                intent.putExtra("pnrResponse", resData);
-                sendBroadcast(intent);
+                Intent iResponse = new Intent("PNR_RESPONSE_ACTION");
+                iResponse.setPackage(getPackageName());
+                iResponse.putExtra("pnrResponse", resData);
+                if(intent.hasExtra("isRefresh")){
+                    boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
+                    if(isRefresh){
+                        iResponse.putExtra("isRefresh", true);
+                    }
+                }
+                sendBroadcast(iResponse);
                 Log.d("pnrWork", "call_pnr_api: broadcast sent");
 
             }

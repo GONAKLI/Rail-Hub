@@ -8,220 +8,218 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:minHeight="90dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:minHeight="92dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="14dp"
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <!-- ===== TIMELINE: Top Connector Line ===== -->
+    <!-- ===== TRACK (double line feel) ===== -->
     <View
         android:id="@+id/timelineTopLine"
-        android:layout_width="3dp"
+        android:layout_width="4dp"
         android:layout_height="0dp"
         android:background="@color/chip_accent"
+        android:alpha="0.85"
         app:layout_constraintStart_toStartOf="@id/timelineDot"
         app:layout_constraintEnd_toEndOf="@id/timelineDot"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/timelineDot" />
 
-    <!-- ===== TIMELINE: Station Dot Ring ===== -->
+    <!-- Station Marker (bigger + stronger) -->
     <View
         android:id="@+id/timelineDot"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="22dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/bg_timeline_dot"
+        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- ===== TIMELINE: Bottom Connector Line ===== -->
     <View
         android:id="@+id/timelineBottomLine"
-        android:layout_width="3dp"
+        android:layout_width="4dp"
         android:layout_height="0dp"
         android:background="@color/chip_accent"
+        android:alpha="0.85"
         app:layout_constraintStart_toStartOf="@id/timelineDot"
         app:layout_constraintEnd_toEndOf="@id/timelineDot"
         app:layout_constraintTop_toBottomOf="@id/timelineDot"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- ===== LIVE TRAIN ICON (Floating Engine View) ===== -->
+    <!-- Live Train Icon -->
     <ImageView
         android:id="@+id/liveTrainIcon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
         android:contentDescription="Live train position"
         android:src="@drawable/train_icon_photoroom"
         android:visibility="gone"
-        android:elevation="6dp"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="@id/timelineDot"
         app:layout_constraintEnd_toEndOf="@id/timelineDot"
         app:layout_constraintTop_toTopOf="@id/timelineDot"
         app:layout_constraintBottom_toBottomOf="@id/timelineDot"
         tools:visibility="visible" />
 
-    <!-- ===== STATION NAME ===== -->
-    <TextView
-        android:id="@+id/trainStationName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Fatuhi"
-        android:textColor="#1A1C1E"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:letterSpacing="-0.01"
-        app:layout_constraintStart_toEndOf="@id/timelineDot"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/timeColumns" />
-
-    <!-- ===== DETAILS SUB-ROW: Distance | Platform | Map Icon ===== -->
+    <!-- ===== CONTENT AREA ===== -->
     <LinearLayout
-        android:id="@+id/detailsContainer"
+        android:id="@+id/contentArea"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="14dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        app:layout_constraintStart_toStartOf="@id/trainStationName"
-        app:layout_constraintTop_toBottomOf="@id/trainStationName"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/timelineDot"
         app:layout_constraintEnd_toStartOf="@id/timeColumns"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Distance Tag -->
+        <!-- Station Name -->
         <TextView
-            android:id="@+id/trainDistanceTravelled"
-            android:layout_width="wrap_content"
+            android:id="@+id/trainStationName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="77 km"
-            android:textColor="#6F797A"
-            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Fatuhi"
+            android:textColor="@color/card_text_primary"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
-        <View
-            android:layout_width="4dp"
-            android:layout_height="4dp"
-            android:layout_marginHorizontal="8dp"
-            android:background="@drawable/bg_timeline_dot"
-            android:alpha="0.4" />
-
-        <!-- Platform Pill Badge -->
-        <TextView
-            android:id="@+id/trainPlatformNo"
-            android:layout_width="wrap_content"
+        <!-- Details Row -->
+        <LinearLayout
+            android:id="@+id/detailsContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Platform --"
-            android:textColor="#3D494A"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="2dp"
-            android:background="@drawable/bg_platform_chip" />
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <!-- Map Button -->
-        <ImageButton
-            android:id="@+id/stationOnMap"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/nearby_station_location_icon"
-            android:contentDescription="View on map"
-            app:tint="@color/chip_accent" />
+            <TextView
+                android:id="@+id/trainDistanceTravelled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="77 km"
+                android:textColor="@color/card_text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
+            <View
+                android:layout_width="3dp"
+                android:layout_height="3dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/bg_timeline_dot"
+                android:alpha="0.5" />
+
+            <TextView
+                android:id="@+id/trainPlatformNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PF --"
+                android:textColor="@color/card_text_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:background="@drawable/bg_platform_chip" />
+
+            <ImageButton
+                android:id="@+id/stationOnMap"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="6dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/nearby_station_location_icon"
+                android:contentDescription="View on map"
+                app:tint="@color/chip_accent" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- ===== TIME COLUMNS: Modern Surface Cards ===== -->
+    <!-- ===== TIME COLUMNS (chip style) ===== -->
     <LinearLayout
         android:id="@+id/timeColumns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Arrival Card -->
+        <!-- ARR -->
         <LinearLayout
-            android:layout_width="58dp"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingVertical="4dp"
+            android:paddingVertical="5dp"
             android:paddingHorizontal="4dp"
-            >
+            android:background="@drawable/bg_platform_chip">
 
             <TextView
                 android:id="@+id/trainArrivalAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ARR"
-                android:textColor="#74777F"
-                android:textSize="15sp"
+                android:textColor="#6B7280"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.05" />
+                android:letterSpacing="0.06" />
 
             <TextView
                 android:id="@+id/trainActualArrivalAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:text="--"
-                android:textColor="#1A1C1E"
-                android:textSize="12sp"
+                android:textColor="#111827"
+                android:textSize="13sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
-        <!-- Departure Card -->
+        <!-- DEP -->
         <LinearLayout
-            android:layout_width="58dp"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingVertical="4dp"
+            android:paddingVertical="5dp"
             android:paddingHorizontal="4dp"
-            >
+            android:background="@drawable/bg_platform_chip">
 
             <TextView
                 android:id="@+id/trainDepartureAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DEP"
-                android:textColor="#74777F"
-                android:textSize="15sp"
+                android:textColor="#6B7280"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.05" />
+                android:letterSpacing="0.06" />
 
             <TextView
                 android:id="@+id/trainActualDepartureAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:text="--"
-                android:textColor="#1A1C1E"
-                android:textSize="12sp"
+                android:textColor="#111827"
+                android:textSize="13sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-    <!-- ===== Location Directions Button ===== -->
+    <!-- Directions (hidden) -->
     <ImageButton
         android:id="@+id/trainStationLocatedAt"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:padding="2dp"
         android:src="@android:drawable/ic_menu_mylocation"

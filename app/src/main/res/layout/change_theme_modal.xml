@@ -6,93 +6,105 @@
     android:layout_gravity="center"
     android:background="@color/card_background"
     android:paddingHorizontal="20dp"
-    android:paddingTop="24dp"
-    android:paddingBottom="20dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
 
-    <!-- Small drag handle for that bottom-sheet feel -->
+    <!-- Drag Handle -->
     <View
         android:id="@+id/dragHandle"
-        android:layout_width="40dp"
+        android:layout_width="36dp"
         android:layout_height="4dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/chip_background" />
+        android:background="@color/chip_background"
+        android:alpha="0.7" />
 
+    <!-- Title -->
     <TextView
         android:id="@+id/modalThemeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dragHandle"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:text="Change Mode"
         android:textColor="@color/card_text_primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:letterSpacing="0.01" />
 
+    <!-- Radio Group -->
     <RadioGroup
         android:id="@+id/modalThemeRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/modalThemeTitle"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/modalThemeLightRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="12dp"
+            android:paddingVertical="14dp"
+            android:paddingStart="4dp"
             android:text="Light Theme"
             android:textColor="@color/card_text_primary"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:buttonTint="@color/chip_accent"
             app:buttonTint="@color/chip_accent" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/chip_background" />
+            android:background="@color/chip_background"
+            android:alpha="0.6" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/modalThemeDarkRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="12dp"
+            android:paddingVertical="14dp"
+            android:paddingStart="4dp"
             android:text="Dark Theme"
             android:textColor="@color/card_text_primary"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:buttonTint="@color/chip_accent"
             app:buttonTint="@color/chip_accent" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/chip_background" />
+            android:background="@color/chip_background"
+            android:alpha="0.6" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/modalThemeSystemRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="12dp"
+            android:paddingVertical="14dp"
+            android:paddingStart="4dp"
             android:text="System Default"
             android:textColor="@color/card_text_primary"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:buttonTint="@color/chip_accent"
             app:buttonTint="@color/chip_accent" />
-
     </RadioGroup>
 
-    <!-- Action row -->
+    <!-- Action Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/modalThemeRadioGroup"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical|end">
+        android:gravity="end|center_vertical">
 
         <TextView
             android:id="@+id/modalThemeCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
             android:text="Cancel"
             android:textColor="@color/card_text_secondary"
             android:textSize="15sp"
@@ -105,17 +117,17 @@
             android:id="@+id/modalThemeApplyBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:background="@drawable/bg_apply_button"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="10dp"
+            android:paddingHorizontal="28dp"
+            android:paddingVertical="11dp"
             android:text="Apply"
             android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold"
             android:clickable="true"
-            android:focusable="true" />
-
+            android:focusable="true"
+            android:elevation="2dp" />
     </LinearLayout>
 
 </RelativeLayout>

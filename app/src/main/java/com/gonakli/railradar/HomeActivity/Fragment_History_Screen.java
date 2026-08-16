@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,9 +22,10 @@ import java.util.ArrayList;
 
 public class Fragment_History_Screen extends Fragment {
     ListView historyListView;
-    ImageView noHistoryIMG;
-    TextView noHistoryTXT;
+    LinearLayout emptyStateContainer;
     View history;
+    ArrayList<User_History_Structure> arrHistoryData;
+    User_History_ListView_Adapter adapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,15 +38,13 @@ public class Fragment_History_Screen extends Fragment {
 
     private void list_view_setUp() {
         new Thread(() -> {
-            User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());
-            ArrayList<User_History_Structure> arrHistoryData = helper.getHistory();
+            arrHistoryData = fetchHistory();
+
             if(arrHistoryData.isEmpty()){
-                    noHistoryIMG.setVisibility(View.VISIBLE);
-                    noHistoryTXT.setVisibility(View.VISIBLE);
+                emptyStateContainer.setVisibility(View.VISIBLE);
             }else {
-                noHistoryIMG.setVisibility(View.GONE);
-                noHistoryTXT.setVisibility(View.GONE);
-                User_History_ListView_Adapter adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
+                emptyStateContainer.setVisibility(View.GONE);
+               adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
 
                 requireActivity().runOnUiThread(() -> {
                     historyListView.setAdapter(adapter); // ✅ अब main thread पर
@@ -57,8 +57,19 @@ public class Fragment_History_Screen extends Fragment {
     }
     private void find_all_id() {
         historyListView = history.findViewById(R.id.historyListView);
-         noHistoryIMG = history.findViewById(R.id.img_no_history_found);
-         noHistoryTXT = history.findViewById(R.id.tv_no_history_found);
+        emptyStateContainer = history.findViewById(R.id.emptyStateContainer);
+    }
+
+    public void refreshData(){
+        arrHistoryData.clear();
+        adapter.notifyDataSetChanged();
+        list_view_setUp();
+
+    }
+
+    private ArrayList<User_History_Structure> fetchHistory(){
+        User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());
+        return helper.getHistory();
     }
 
 }

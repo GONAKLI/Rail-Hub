@@ -2,31 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/card_background"
+    android:padding="12dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:src="@drawable/no_history_found"
-        android:contentDescription="no history"
-        android:id="@+id/img_no_history_found"
-        android:visibility="gone"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No search history exists."
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:id="@+id/tv_no_history_found"
-        android:visibility="gone"
-        />
-    <ListView
-        android:dividerHeight="10dp"
-        android:layout_marginTop="15dp"
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyStateContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_no_history_found"
+            android:layout_width="220dp"
+            android:layout_height="160dp"
+            android:src="@drawable/first_history"
+            android:contentDescription="no history"
+            android:alpha="0.85" />
+
+        <TextView
+            android:id="@+id/tv_no_history_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No Search History"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#444444" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Your recent train searches will appear here"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+    </LinearLayout>
+
+    <!-- History List -->
+    <ListView
         android:id="@+id/historyListView"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp"
+        android:scrollbars="none"
+        android:overScrollMode="never" />
+
 </LinearLayout>

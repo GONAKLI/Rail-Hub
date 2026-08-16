@@ -84,7 +84,7 @@ public class Fragment_Pnr_Screen extends Fragment {
         allPnrCheckRecyclerView = view.findViewById(R.id.allPnrCheckRecyclerView);
     }
 
-    private void onSubmitAction() {
+    protected void onSubmitAction() {
         btnFindPnr.setOnClickListener(v ->{
             String pnrValue = pnrSearchField.getText().toString().trim();
             if(pnrValue.length() <10){
@@ -109,10 +109,16 @@ public class Fragment_Pnr_Screen extends Fragment {
             if("PNR_RESPONSE_ACTION".equals(intent.getAction())){
                 Station_List_DB_Helper db = new Station_List_DB_Helper(getContext());
                 Pnr_Api_Response_Structure resData =(Pnr_Api_Response_Structure) intent.getSerializableExtra("pnrResponse");
+                boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
                 if(resData.isSuccess()){
                     new Thread(() ->{
                         PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
-                        helper.addPnrPassengerInDB(resData);
+                        if(isRefresh){
+                            helper.updatePnrDataInDB(resData);
+                        }else{
+                            helper.addPnrPassengerInDB(resData);
+                        }
+
                         helper.close();
 
                         ArrayList<Pnr_Api_Response_Structure> latestData = new PNR_Data_DB_Helper(getContext()).getPnrDataFromDB();
@@ -122,8 +128,11 @@ public class Fragment_Pnr_Screen extends Fragment {
                                 allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                 allPnrCheckRecyclerView.setAdapter(adapter);
                             } else {
-                                adapter = new All_Pnr_Data_Recycler_View_Adapter(getContext(), latestData);
-                                allPnrCheckRecyclerView.setAdapter(adapter);
+                                adapter.refreshAdapter();
+                            }
+
+                            if(isRefresh){
+                                Toast.makeText(getContext(), "Pnr refreshed", Toast.LENGTH_SHORT).show();
                             }
 
                         });

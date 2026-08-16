@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railradar.R;
@@ -58,7 +59,7 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         String fromStCode = arrTrainStations.get(position).getStationCode();
         String toStCode = arrTrainStations.get(position).getStationCode();
-        holder.trainStationName.setTextColor(Color.BLACK);
+        holder.trainStationName.setTextColor(ContextCompat.getColor(context,R.color.card_text_primary));
         if(fromStationCode != null && fromStationCode.equalsIgnoreCase(fromStCode)){
                 holder.trainStationName.setTextColor(Color.GREEN);
         }

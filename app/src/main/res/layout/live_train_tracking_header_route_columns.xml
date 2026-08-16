@@ -1,86 +1,126 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    >
+    android:background="@drawable/bg_passenger_pnr_card"
+    android:padding="12dp"
+    android:elevation="3dp">
+
+    <!-- Previous Station -->
     <LinearLayout
-        android:background="#EF4545"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="10dp"
+        android:background="#FFF0F0"
+        android:gravity="center_vertical">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Previous Station:"
+            android:text="Previous"
             android:textStyle="bold"
-            android:textSize="18sp"
-            />
+            android:textSize="13sp"
+            android:textColor="#B71C1C" />
+
         <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="--"
-        android:textStyle="italic"
-        android:textSize="18sp"
             android:id="@+id/trackingHeaderPreviousStation"
-        />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:text="--"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:gravity="end"
+            android:maxLines="1"
+            android:ellipsize="end" />
     </LinearLayout>
+
+    <!-- Current Station -->
     <LinearLayout
-        android:background="#67A220"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="10dp"
+        android:background="#E8F5E9"
+        android:gravity="center_vertical">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Current Station:"
+            android:text="Current"
             android:textStyle="bold"
-            android:textSize="18sp"
-            />
+            android:textSize="13sp"
+            android:textColor="#2E7D32" />
+
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="--"
-            android:textStyle="italic"
-            android:textSize="18sp"
             android:id="@+id/trackingHeaderCurrentStation"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:text="--"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#1B5E20"
+            android:gravity="end"
+            android:maxLines="1"
+            android:ellipsize="end" />
     </LinearLayout>
+
+    <!-- Next Station -->
     <LinearLayout
-        android:background="#B4B3B4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="10dp"
+        android:background="#F5F5F5"
+        android:gravity="center_vertical">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Next Station:"
+            android:text="Next"
             android:textStyle="bold"
-            android:textSize="18sp"
-            />
+            android:textSize="13sp"
+            android:textColor="#555555" />
+
         <TextView
+            android:id="@+id/trackingHeaderNextStation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.6"
             android:text="--"
-            android:textStyle="italic"
-            android:textSize="18sp"
-            android:id="@+id/trackingHeaderNextStation"
-            />
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:gravity="end"
+            android:maxLines="1"
+            android:ellipsize="end" />
     </LinearLayout>
+
+    <!-- Status Info -->
     <TextView
-        android:paddingTop="10dp"
-        android:background="#D39393"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textAlignment="center"
-        android:textSize="19sp"
-        android:text="- - - - -"
         android:id="@+id/trackingHeaderStatusInfo"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="12dp"
+        android:background="#FFF3E0"
+        android:text="- - - - -"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#E65100" />
+
 </LinearLayout>

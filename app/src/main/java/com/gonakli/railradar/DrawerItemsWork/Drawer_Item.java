@@ -7,16 +7,24 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.gonakli.railradar.ADAPTERS.User_History_ListView_Adapter;
 import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
+import com.gonakli.railradar.HomeActivity.Fragment_History_Screen;
 import com.gonakli.railradar.HomeActivity.Home_Screen_Activity;
 import com.gonakli.railradar.R;
 import com.google.android.material.navigation.NavigationView;
@@ -114,6 +122,11 @@ public class Drawer_Item {
                 helper.close();
 
                 new Handler(Looper.getMainLooper()).post(() ->{
+                    Fragment currentFragment = ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.frameLayout1);
+                    if(currentFragment instanceof Fragment_History_Screen){
+                        ((Fragment_History_Screen) currentFragment).refreshData();
+                    }
+
                     Toast.makeText(context, "History Deleted Successfully", Toast.LENGTH_SHORT).show();
 
                 });
