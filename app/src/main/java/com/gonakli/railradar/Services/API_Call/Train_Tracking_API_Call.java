@@ -8,16 +8,23 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.gonakli.railradar.Structure_Class.API_Response_Train_Tracking;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class Train_Tracking_API_Call extends Service{
 
-    private static final String API_URL = "http://10.236.89.225:5015/find-my-train";
+    private static final String API_URL = "http://10.236.89.95:5015/find-my-train";
+    public static String API_TRAIN_DATA = "API_TRAIN_DATA";
     String trainNumber;
     @Nullable
     @Override
@@ -59,8 +66,31 @@ public class Train_Tracking_API_Call extends Service{
             while((line = bufferedReader.readLine()) != null){
                 sb.append(line.trim());
             }
-            System.out.println(sb);
-            System.out.println(statusCode);
+            JSONObject trainTracking = new JSONObject(sb.toString());
+            Log.d("trackmyAPI", "fetch_Train_Location: lat  " + trainTracking.optString("trainLat"));
+
+            Log.d("trackmyAPI", "fetch_Train_Location: lng " + trainTracking.optString("trainLng"));
+            String lat = trainTracking.optString("trainLat");
+            String lng = trainTracking.optString("trainLng");
+            JSONArray jsonArray = trainTracking.optJSONArray("stationData");
+
+            ArrayList<API_Response_Train_Tracking> arrTrainApi = new ArrayList<>();
+            for(int i=0; i< jsonArray.length(); i++){
+                JSONObject objData = jsonArray.getJSONObject(i);
+                String stationCode = objData.optString("stationCode", "");
+                String platform = objData.optString("platform", "");
+                String actualArrival = objData.optString("actualArrival", "");
+                String actualDeparture = objData.optString("actualDeparture", "");
+                arrTrainApi.add(new API_Response_Train_Tracking(stationCode,platform, actualArrival,actualDeparture));
+            }
+
+            Intent iApiData = new Intent(API_TRAIN_DATA);
+            iApiData.putExtra("trainLat", Double.parseDouble(lat));
+            iApiData.putExtra("trainLng", Double.parseDouble(lng));
+            iApiData.putExtra("stationData", arrTrainApi);
+
+            iApiData.setPackage(getPackageName());
+            sendBroadcast(iApiData);
 
         }catch (Exception e){
 

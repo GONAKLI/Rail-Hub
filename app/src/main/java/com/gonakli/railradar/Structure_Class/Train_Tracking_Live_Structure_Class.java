@@ -219,7 +219,9 @@ public class Train_Tracking_Live_Structure_Class {
         }
         // 5. IN TRANSIT (Midway)
         else {
-            statusMessage = "In Transit";
+            // statusMessage = "In Transit";
+            double diff = Double.parseDouble(nextStation.getDistance()) - totalJourneyCovered;
+            statusMessage = diff + " Km away from " + nextStation.getStationName();
         }
     }
 

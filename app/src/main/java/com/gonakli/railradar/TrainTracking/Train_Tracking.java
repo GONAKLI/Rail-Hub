@@ -26,6 +26,7 @@ import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Services.API_Call.Train_Tracking_API_Call;
 import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
+import com.gonakli.railradar.Structure_Class.API_Response_Train_Tracking;
 import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
@@ -263,11 +264,23 @@ public class Train_Tracking extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver apiTrainLocation = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            lat = intent.getDoubleExtra("trainLat", 0);
+            lng = intent.getDoubleExtra("trainLng", 0);
+            ArrayList<API_Response_Train_Tracking> stationData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
+            track_user();
+
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             registerReceiver(locationReceiver, new IntentFilter(myLocationServiceClass.ACTION_LOCATION_UPDATE),  Context.RECEIVER_NOT_EXPORTED );
+            registerReceiver(apiTrainLocation,new IntentFilter(Train_Tracking_API_Call.API_TRAIN_DATA), Context.RECEIVER_NOT_EXPORTED);
         }
 
     }
@@ -276,5 +289,10 @@ public class Train_Tracking extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(locationReceiver);
+        unregisterReceiver(apiTrainLocation);
     }
+
+
+
+
 }
