@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "http://10.236.89.95:5015/pnr-enquiry";
+    private static final String API_URL = "https://railhub.gonakli.com/pnr-enquiry";
 
 
     @Nullable

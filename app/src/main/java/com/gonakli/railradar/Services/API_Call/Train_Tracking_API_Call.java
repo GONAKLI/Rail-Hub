@@ -23,7 +23,8 @@ import java.util.ArrayList;
 
 public class Train_Tracking_API_Call extends Service{
 
-    private static final String API_URL = "http://10.236.89.95:5015/find-my-train";
+//    private static final String API_URL = "http://10.236.89.39:5015/find-my-train";
+private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
     String trainNumber;
     @Nullable
@@ -35,12 +36,17 @@ public class Train_Tracking_API_Call extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("apiTest", "onStartCommand: enter here");
+        if(intent == null){
+            stopSelf();
+            return START_NOT_STICKY;
+        }
         if(intent != null && intent.hasExtra("trainNumber")){
             trainNumber = intent.getStringExtra("trainNumber");
             new Thread(this::fetch_Train_Location).start();
-
+        }else {
+            stopSelf();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     private void fetch_Train_Location(){

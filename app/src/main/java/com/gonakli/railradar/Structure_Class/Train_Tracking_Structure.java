@@ -78,4 +78,5 @@ public class Train_Tracking_Structure {
     public String getFinalStation() {
         return finalStation;
     }
+
 }

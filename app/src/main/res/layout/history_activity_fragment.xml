@@ -50,7 +50,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
         android:clipToPadding="false"
-        android:paddingBottom="12dp"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:scrollbars="none"
         android:overScrollMode="never" />
 

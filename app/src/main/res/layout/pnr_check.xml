@@ -57,6 +57,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="14dp"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:clipToPadding="false"
         android:paddingBottom="12dp"
         android:overScrollMode="never"

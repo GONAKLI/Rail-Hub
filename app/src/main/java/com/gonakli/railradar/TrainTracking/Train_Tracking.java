@@ -45,7 +45,8 @@ public class Train_Tracking extends AppCompatActivity {
     TextView tvDestinationName,tvDestinationMeta,tvDelayStatus;
     TextView tvFromStation,tvToStation;
     TextView trackingHeaderPreviousStation, trackingHeaderCurrentStation, trackingHeaderNextStation,trackingHeaderStatusInfo;
-    ImageButton refreshButton;
+    ImageButton refreshButton, btnRefreshLiveTracking;
+
     Train_Tracking_Recycler_View_Adapter adapter;
 
     double lat, lng;
@@ -61,14 +62,16 @@ public class Train_Tracking extends AppCompatActivity {
         set_custom_toolbar();
         train_finder();
         set_insideTrainBtn_action();
-
         test_API_Service();
-
-       // set_BottomSheet_Layout();
-
-
-
+        Refresh_Live_Tracking();
        
+    }
+
+    private void Refresh_Live_Tracking() {
+        btnRefreshLiveTracking.setOnClickListener(v -> {
+            Toast.makeText(this, "Refreshing ...", Toast.LENGTH_SHORT).show();
+            test_API_Service();
+        });
     }
 
     private void test_API_Service() {
@@ -128,11 +131,18 @@ public class Train_Tracking extends AppCompatActivity {
         }else if (trainLocationData.getNextStation() != null){
             stData = trainLocationData.getNextStation().getStationCode();
         }
+
+        Log.d("scroll_testing", "track_user: " + stData);
         for(int i=0; i<arrTrainStations.size(); i++){
             if(arrTrainStations.get(i).getStationCode().equals(stData)){
                 live_train_tracking_recycler_view.smoothScrollToPosition(i);
+                break;
             }
+            Log.d("scroll_testing", "track_user: arrTrainStations.get(i).getStationCode(): " + arrTrainStations.get(i).getStationCode());
+            Log.d("scroll_testing", "track_user: val of stData: " + stData);
+            Log.d("scroll_testing", "track_user: val of i: " + i);
         }
+
         tracking_upper_header(trainLocationData);
 
 
@@ -235,6 +245,7 @@ public class Train_Tracking extends AppCompatActivity {
         tvFromStation = findViewById(R.id.tvFromStation);
         tvToStation = findViewById(R.id.tvToStation);
         refreshButton = findViewById(R.id.refreshButton);
+        btnRefreshLiveTracking = findViewById(R.id.btnRefreshLiveTracking);
 
         trackingHeaderPreviousStation = findViewById(R.id.trackingHeaderPreviousStation);
         trackingHeaderCurrentStation = findViewById(R.id.trackingHeaderCurrentStation);
@@ -269,11 +280,44 @@ public class Train_Tracking extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             lat = intent.getDoubleExtra("trainLat", 0);
             lng = intent.getDoubleExtra("trainLng", 0);
-            ArrayList<API_Response_Train_Tracking> stationData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
-            track_user();
+            ArrayList<API_Response_Train_Tracking> apiData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
+            API_Train_Location(apiData);
 
         }
     };
+
+    private void API_Train_Location( ArrayList<API_Response_Train_Tracking> apiData) {
+        String stData = "";
+        ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
+        ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();
+        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat,lng,arrTrainStations, arrPolylinePoints);
+        st.trackMyUserTrain();
+        Train_Tracking_Structure trainLocationData = st.getReport();
+        if(adapter != null){
+            adapter.APi_Adapter_Update(trainLocationData, apiData);
+        }
+
+        if(trainLocationData.getCurrentStation() !=null){
+            stData = trainLocationData.getCurrentStation().getStationCode();
+        } else if (trainLocationData.getPreviousStation() != null) {
+            stData = trainLocationData.getPreviousStation().getStationCode();
+        }else if (trainLocationData.getNextStation() != null){
+            stData = trainLocationData.getNextStation().getStationCode();
+        }
+        Log.d("scroll_testing", "track_user: " + stData);
+        for(int i=0; i<arrTrainStations.size(); i++){
+            if(arrTrainStations.get(i).getStationCode().trim().equalsIgnoreCase(stData.trim())){
+                live_train_tracking_recycler_view.smoothScrollToPosition(i);
+                break;
+            }
+            Log.d("scroll_testing", "track_user: arrTrainStations.get(i).getStationCode(): " + arrTrainStations.get(i).getStationCode());
+            Log.d("scroll_testing", "track_user: val of stData: " + stData);
+            Log.d("scroll_testing", "track_user: val of i: " + i);
+        }
+        tracking_upper_header(trainLocationData);
+
+
+    }
 
     @Override
     protected void onResume() {
@@ -291,6 +335,11 @@ public class Train_Tracking extends AppCompatActivity {
         unregisterReceiver(locationReceiver);
         unregisterReceiver(apiTrainLocation);
     }
+
+
+
+
+
 
 
 

@@ -14,9 +14,10 @@ import com.gonakli.railradar.R;
 public class Fragment_Home_Screen extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-      View home = inflater.inflate(R.layout.home_activity_fragment, container, false);
-requireActivity().setTitle(R.string.app_name);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View home = inflater.inflate(R.layout.home_activity_fragment, container, false);
+        requireActivity().setTitle(R.string.app_name);
         return home;
     }
 }

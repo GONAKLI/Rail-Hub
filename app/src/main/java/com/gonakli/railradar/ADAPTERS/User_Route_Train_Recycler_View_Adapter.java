@@ -3,6 +3,8 @@ package com.gonakli.railradar.ADAPTERS;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter<User_Route_Train_Recycler_View_Adapter.viewHolder> {
     Context context;
@@ -63,6 +67,10 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
                 finalDestinationReachTime = stationData.getArrivalTime();
             }
         }
+
+        Log.d("timeTesting", "onBindViewHolder: arr " + arrivalTime);
+
+        Log.d("timeTesting", "onBindViewHolder: dest " + finalDestinationReachTime);
         String runOnMon = arrScheduleList.get(position).getTrainRunsOnMon();
         String runOnTue = arrScheduleList.get(position).getTrainRunsOnTue();
         String runOnWed = arrScheduleList.get(position).getTrainRunsOnWed();
@@ -95,6 +103,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
 
 
 
+
         String[] splitArrival = arrivalTime.split(":", 2);
         String[] splitDepart = finalDestinationReachTime.split(":", 2);
 
@@ -116,7 +125,9 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         String journeyDuration = hours + " Hours " + minutes + " Minutes";
 
 
-
+        String[] obj = convert_Time_In_12_Hours(arrivalTime, finalDestinationReachTime);
+        arrivalTime = obj[0];
+        finalDestinationReachTime = obj[1];
 
 
 
@@ -193,6 +204,22 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         });
 
 
+    }
+
+    private String[] convert_Time_In_12_Hours(String arrivalTime, String finalDestinationReachTime) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
+        try{
+            Date arr = inputFormat.parse(arrivalTime);
+            arrivalTime = outputFormat.format(arr);
+            Date dest = inputFormat.parse(finalDestinationReachTime);
+            finalDestinationReachTime = outputFormat.format(dest);
+            String[] obj = {arrivalTime, finalDestinationReachTime};
+            return obj;
+        }catch (ParseException e){
+            Log.d("parseException", "convert_Time_In_12_Hours: " + e.getMessage());
+        }
+        return null;
     }
 
     @Override

@@ -1,31 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
+
     <include layout="@layout/custom_toolbar" />
+
     <include layout="@layout/live_train_tracking_header_route_columns" />
-    <androidx.recyclerview.widget.RecyclerView
+
+    <!-- Content area -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/live_train_tracking_recycler_view"
-        android:layout_weight="1"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        />
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/insideTrainBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="Inside Train ?"
-        android:textColor="#FFFFFF"
-        app:icon="@drawable/nearby_station_icon"
-        app:iconTint="#FFFFFF"
-        app:backgroundTint="#B7AA9D"
-        app:cornerRadius="24dp"
-        app:elevation="6dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/live_train_tracking_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp" />
+
+        <!-- Refresh FAB (top-right feel, above list) -->
+        <ImageButton
+            android:id="@+id/btnRefreshLiveTracking"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/bg_swap_button"
+            android:padding="10dp"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="@color/chip_accent"
+            android:elevation="4dp"
+            android:contentDescription="Refresh tracking" />
+
+        <!-- Inside Train FAB -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/insideTrainBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:text="Inside Train ?"
+            android:textColor="#FFFFFF"
+            app:icon="@drawable/nearby_station_icon"
+            app:iconTint="#FFFFFF"
+            app:backgroundTint="#B7AA9D"
+            app:cornerRadius="24dp"
+            app:elevation="6dp" />
+    </FrameLayout>
 
 </LinearLayout>

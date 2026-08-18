@@ -26,9 +26,11 @@ public class Fragment_History_Screen extends Fragment {
     View history;
     ArrayList<User_History_Structure> arrHistoryData;
     User_History_ListView_Adapter adapter;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         history = inflater.inflate(R.layout.history_activity_fragment, container, false);
         requireActivity().setTitle("Search History");
         find_all_id();
@@ -40,11 +42,11 @@ public class Fragment_History_Screen extends Fragment {
         new Thread(() -> {
             arrHistoryData = fetchHistory();
 
-            if(arrHistoryData.isEmpty()){
+            if (arrHistoryData.isEmpty()) {
                 emptyStateContainer.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 emptyStateContainer.setVisibility(View.GONE);
-               adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
+                adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
 
                 requireActivity().runOnUiThread(() -> {
                     historyListView.setAdapter(adapter); // ✅ अब main thread पर
@@ -53,24 +55,23 @@ public class Fragment_History_Screen extends Fragment {
 
         }).start();
 
-
     }
+
     private void find_all_id() {
         historyListView = history.findViewById(R.id.historyListView);
         emptyStateContainer = history.findViewById(R.id.emptyStateContainer);
     }
 
-    public void refreshData(){
+    public void refreshData() {
         arrHistoryData.clear();
         adapter.notifyDataSetChanged();
         list_view_setUp();
 
     }
 
-    private ArrayList<User_History_Structure> fetchHistory(){
+    private ArrayList<User_History_Structure> fetchHistory() {
         User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());
         return helper.getHistory();
     }
 
 }
-

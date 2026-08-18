@@ -5,48 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="12dp"
-    android:layout_marginVertical="6dp"
+    android:layout_marginVertical="5dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/card_background"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="3dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp">
+        android:orientation="vertical"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
 
-        <!-- Train number chip -->
-        <TextView
-            android:id="@+id/trainScheduleTrainNumber"
-            android:layout_width="wrap_content"
+        <!-- Top: Train number + Name + Arrow -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_train_number_chip"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:text="19411"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <!-- Journey timeline -->
+            <TextView
+                android:id="@+id/trainScheduleTrainNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_train_number_chip"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="12057"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/trainScheduleTrainName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="JANSHATABDI EXP"
+                android:textColor="@color/card_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@android:drawable/ic_media_play"
+                android:tint="@color/card_text_secondary"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- Times row -->
         <LinearLayout
             android:id="@+id/timelineRow"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainScheduleTrainNumber">
+            android:gravity="center_vertical">
 
-            <!-- Departs -->
+            <!-- Depart -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -54,49 +80,26 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Departs"
-                    android:textColor="@color/card_text_secondary"
-                    android:textSize="11sp" />
-
-                <TextView
                     android:id="@+id/trainScheduleArrivalTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="03:33"
+                    android:text="4:44 PM"
                     android:textColor="@color/card_text_primary"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
-            <!-- Duration -->
-            <LinearLayout
-                android:layout_width="0dp"
+            <!-- Arrow -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:text="→"
+                android:textColor="@color/card_text_secondary"
+                android:textSize="18sp"
+                android:paddingHorizontal="8dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:layout_marginHorizontal="6dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@color/chip_background" />
-
-                <TextView
-                    android:id="@+id/trainScheduleJourneyDuration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3h 33m"
-                    android:textColor="@color/chip_accent"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Arrives -->
+            <!-- Arrive -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -105,67 +108,53 @@
                 android:gravity="end">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Arrives"
-                    android:textColor="@color/card_text_secondary"
-                    android:textSize="11sp" />
-
-                <TextView
                     android:id="@+id/trainScheduleFinalDestinationReachTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="07:06"
+                    android:text="6:47 PM"
                     android:textColor="@color/card_text_primary"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
+
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Divider -->
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/chip_background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timelineRow" />
-
-        <!-- Train name + Running days -->
-        <TextView
-            android:id="@+id/trainScheduleTrainName"
-            android:layout_width="0dp"
+        <!-- Bottom: Daily + Classes -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Rajdhani Express"
-            android:textColor="@color/card_text_primary"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintEnd_toStartOf="@id/trainScheduleRunningDays"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/trainScheduleRunningDays"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_running_days_chip"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="3dp"
-            android:text="Runs daily"
-            android:textColor="@color/chip_accent"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/trainScheduleTrainName"
-            app:layout_constraintBottom_toBottomOf="@id/trainScheduleTrainName" />
+            <TextView
+                android:id="@+id/trainScheduleRunningDays"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="📅  Daily"
+                android:textColor="@color/card_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@color/chip_background" />
+
+            <TextView
+                android:id="@+id/trainScheduleJourneyDuration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1 hour"
+                android:textColor="@color/card_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

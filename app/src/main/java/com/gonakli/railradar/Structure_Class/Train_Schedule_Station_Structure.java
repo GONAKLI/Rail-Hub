@@ -12,6 +12,8 @@ public class Train_Schedule_Station_Structure {
     private final String stnLat;
     private final String stnLng;
 
+    private String platform;
+
     public Train_Schedule_Station_Structure(String stationCode, String stationName, String arrivalTime,
                                 String departureTime, String haltTime, String distance,
                                 String dayCount, String stnSerialNumber, String stnLat, String stnLng) {
@@ -57,5 +59,13 @@ public class Train_Schedule_Station_Structure {
 
     public String getStnLng() {
         return stnLng;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 }

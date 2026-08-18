@@ -18,7 +18,10 @@ import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class User_Route_Train_List extends AppCompatActivity {
     String from_Station_Value,to_Station_Value;
@@ -39,6 +42,24 @@ public class User_Route_Train_List extends AppCompatActivity {
         new Thread(() ->{
             Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
             ArrayList<Train_Schedule_Structure> arrSchedule = dbHelper.getTrainsBetweenStations(from_Station_Value,to_Station_Value);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            Collections.sort(arrSchedule, (t1, t2) -> {
+                String time1 = t1.getStationList().get(0).getArrivalTime();
+                if(time1 == null || time1.equalsIgnoreCase("--")){
+                    time1 =  t1.getStationList().get(0).getDepartureTime();
+                }
+                String time2 = t2.getStationList().get(0).getArrivalTime();
+                if(time2 == null || time2.equalsIgnoreCase("--")){
+                    time2 =  t2.getStationList().get(0).getDepartureTime();
+                }
+
+                LocalTime lt1 = LocalTime.parse(time1, formatter);
+                LocalTime lt2 = LocalTime.parse(time2, formatter);
+
+                return lt1.compareTo(lt2);
+            });
             User_Route_Train_Recycler_View_Adapter recycler_adapter = new User_Route_Train_Recycler_View_Adapter(User_Route_Train_List.this, arrSchedule, from_Station_Value, to_Station_Value);
         this.runOnUiThread(() ->{
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
