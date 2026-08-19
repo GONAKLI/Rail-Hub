@@ -23,7 +23,8 @@ import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
-    private static final String API_URL = "https://railhub.gonakli.com/pnr-enquiry";
+    private static String API_URL;
+    //private static final String API_URL = "https://railhub.gonakli.com/pnr-enquiry";
 
 
     @Nullable
@@ -42,6 +43,7 @@ public class PNR_Enquiry_API_CALL extends Service {
 
         if (intent.hasExtra("pnrNumber")) {
             pnrNumber = intent.getStringExtra("pnrNumber");
+            API_URL = String.format("https://www.irctc.co.in/eticketing/protected/mapps1/pnrenq/%s?pnrEnqType=E", pnrNumber);
             new Thread(() ->{
                 call_pnr_api(intent);
             }).start();
@@ -60,17 +62,32 @@ public class PNR_Enquiry_API_CALL extends Service {
         try {
             URL url = new URL(API_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-            String query = String.format("{\"pnrNumber\":\"%s\"}", pnrNumber);
-            Log.d("PNR_Service", "call_pnr_api: " + query);
+            conn.setRequestProperty("Referer", "https://www.irctc.co.in/eticket/enquiry/pnr-enquiry");
 
-            OutputStream os = conn.getOutputStream();
-            os.write(query.getBytes());
-            os.flush();
-            os.close();
+            // 4. Baaki sabhi headers
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0");
+            conn.setRequestProperty("Accept", "application/json, text/plain, */*");
+            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.0");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("greq", "1787074947751:c48d8deb-131f-4a00-bb83-b51335bd8b90");
+            conn.setRequestProperty("bmirak", "webmb");
+            conn.setRequestProperty("Content-Language", "en");
+            conn.setRequestProperty("Alt-Used", "www.irctc.co.in");
+            conn.setRequestProperty("Sec-Fetch-Dest", "empty");
+            conn.setRequestProperty("Sec-Fetch-Mode", "cors");
+            conn.setRequestProperty("Sec-Fetch-Site", "same-origin");
+            conn.setRequestProperty("Priority", "u=0");
+            conn.setRequestMethod("GET");
+//            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+//            conn.setRequestProperty("Accept", "application/json");
+           // conn.setDoOutput(true);
+//            String query = String.format("{\"pnrNumber\":\"%s\"}", pnrNumber);
+//            Log.d("PNR_Service", "call_pnr_api: " + query);
+//
+//            OutputStream os = conn.getOutputStream();
+//            os.write(query.getBytes());
+//            os.flush();
+//            os.close();
 
             Log.d("PNR_Service", "call_pnr_api: " + conn.getResponseCode());
             if (conn.getResponseCode() == 200) {

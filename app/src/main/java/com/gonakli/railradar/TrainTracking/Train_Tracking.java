@@ -1,5 +1,7 @@
 package com.gonakli.railradar.TrainTracking;
 
+import android.app.Activity;
+import android.app.ComponentCaller;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railradar.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
+import com.gonakli.railradar.Permissions.GPS_Req;
+import com.gonakli.railradar.Permissions.Location_Permissions;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Services.API_Call.Train_Tracking_API_Call;
 import com.gonakli.railradar.Services.LocationService.myLocationServiceClass;
@@ -46,6 +50,7 @@ public class Train_Tracking extends AppCompatActivity {
     TextView tvFromStation,tvToStation;
     TextView trackingHeaderPreviousStation, trackingHeaderCurrentStation, trackingHeaderNextStation,trackingHeaderStatusInfo;
     ImageButton refreshButton, btnRefreshLiveTracking;
+    Location_Permissions obj;
 
     Train_Tracking_Recycler_View_Adapter adapter;
 
@@ -56,13 +61,13 @@ public class Train_Tracking extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_train_tracking_combined_main);
-
+        obj = new Location_Permissions(Train_Tracking.this);
         find_all_id();
         get_intent_data();
         set_custom_toolbar();
         train_finder();
         set_insideTrainBtn_action();
-        test_API_Service();
+        //test_API_Service();
         Refresh_Live_Tracking();
        
     }
@@ -151,6 +156,14 @@ public class Train_Tracking extends AppCompatActivity {
     boolean isInsideTrain = false;
         private void set_insideTrainBtn_action() {
             insideTrainBtn.setOnClickListener(v -> {
+                boolean isGranted = obj.checkPermission();
+                if(!isGranted){
+                    return;
+                }
+                GPS_Req isGPSEnabled = new GPS_Req(Train_Tracking.this);
+                if(!isGPSEnabled.gpsChecker()){
+                    return;
+                }
                 // Toggle State (ON -> OFF / OFF -> ON)
                 isInsideTrain = !isInsideTrain;
 
@@ -337,11 +350,25 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("locatPerm", "handlePermissionResult: in train: " + requestCode);
+       if(requestCode == Location_Permissions.REQ_CODE){
+           if(obj != null){
+               obj.handlePermissionResult(requestCode, permissions, grantResults);
+           }
+       }
 
 
-
-
-
-
-
+    }
+    //  @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == GPS_Req.REQ_CODE) {
+//            if(resultCode == Activity.RESULT_OK){
+//
+//            }
+//        }
+//    }
 }
