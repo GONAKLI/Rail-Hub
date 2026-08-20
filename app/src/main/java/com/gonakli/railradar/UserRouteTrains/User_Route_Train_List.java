@@ -46,13 +46,24 @@ public class User_Route_Train_List extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
             Collections.sort(arrSchedule, (t1, t2) -> {
-                String time1 = t1.getStationList().get(0).getArrivalTime();
-                if(time1 == null || time1.equalsIgnoreCase("--")){
-                    time1 =  t1.getStationList().get(0).getDepartureTime();
+                String time1 ="", time2 ="";
+                for(int i=0; i<t1.getStationList().size(); i++){
+                    if(t1.getStationList().get(i).getStationCode().trim().equalsIgnoreCase(from_Station_Value)){
+                         time1 = t1.getStationList().get(i).getArrivalTime();
+                        if(time1 == null || time1.equalsIgnoreCase("--")){
+                            time1 =  t1.getStationList().get(i).getDepartureTime();
+                        }
+                        break;
+                    }
                 }
-                String time2 = t2.getStationList().get(0).getArrivalTime();
-                if(time2 == null || time2.equalsIgnoreCase("--")){
-                    time2 =  t2.getStationList().get(0).getDepartureTime();
+                for (int i=0; i<t2.getStationList().size(); i++){
+                    if(t2.getStationList().get(i).getStationCode().trim().equalsIgnoreCase(from_Station_Value)){
+                         time2 = t2.getStationList().get(i).getArrivalTime();
+                        if(time2 == null || time2.equalsIgnoreCase("--")){
+                            time2 =  t2.getStationList().get(i).getDepartureTime();
+                        }
+                        break;
+                    }
                 }
 
                 LocalTime lt1 = LocalTime.parse(time1, formatter);
@@ -60,6 +71,17 @@ public class User_Route_Train_List extends AppCompatActivity {
 
                 return lt1.compareTo(lt2);
             });
+
+//            for(Train_Schedule_Structure s : arrSchedule){
+//                for(int i =0; i<s.getStationList().size(); i++){
+//                 String x =   s.getStationList().get(i).getArrivalTime();
+//                 String y = s.getStationList().get(i).getDepartureTime();
+//                 String z = s.getTrainNumber();
+//                    Log.d("filterDatas", "recyclerViewSetup: arr: " + x + " dep: " + y + " num: " + z);
+//                }
+//
+//            }
+
             User_Route_Train_Recycler_View_Adapter recycler_adapter = new User_Route_Train_Recycler_View_Adapter(User_Route_Train_List.this, arrSchedule, from_Station_Value, to_Station_Value);
         this.runOnUiThread(() ->{
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

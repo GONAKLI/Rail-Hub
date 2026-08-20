@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,7 @@ public class Train_Tracking extends AppCompatActivity {
     Train_Tracking_Recycler_View_Adapter adapter;
 
     double lat, lng;
+    String trainApiStatusMsg;
     Train_Schedule_Structure myTrainData;
     RecyclerView live_train_tracking_recycler_view;
     @Override
@@ -67,7 +70,7 @@ public class Train_Tracking extends AppCompatActivity {
         set_custom_toolbar();
         train_finder();
         set_insideTrainBtn_action();
-        //test_API_Service();
+        test_API_Service();
         Refresh_Live_Tracking();
        
     }
@@ -86,6 +89,7 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void tracking_upper_header(Train_Tracking_Structure trainLocationData) {
+        Log.d("checkStatusmsg", "tracking_upper_header: in header function");
         String prSt,crSt,nxSt, infoMsg;
         if(trainLocationData != null){
             if(trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null){
@@ -110,8 +114,31 @@ public class Train_Tracking extends AppCompatActivity {
             }
 
             if(trainLocationData.getStatusMessage() != null){
-                infoMsg = trainLocationData.getStatusMessage().trim();
-                trackingHeaderStatusInfo.setText(infoMsg);
+                Log.d("checkStatusmsg", "tracking_upper_header: inside if block enter");
+                if(trainApiStatusMsg != null  && !trainApiStatusMsg.isEmpty()){
+
+                    if(trainApiStatusMsg.contains("Train is not running today")){
+                        Log.d("checkStatusmsg", "tracking_upper_header: 1");
+                        trackingHeaderStatusInfo.setText(trainApiStatusMsg);
+                        trackingHeaderStatusInfo.setTextColor(Color.WHITE);
+                        trackingHeaderStatusInfo.setBackgroundColor(Color.RED);
+                    } else if (trainApiStatusMsg.contains("Train not started yet")) {
+
+                        Log.d("checkStatusmsg", "tracking_upper_header: 2");
+                        trackingHeaderStatusInfo.setText(trainApiStatusMsg);
+                    } else if (trainApiStatusMsg.contains("Train journey Already ended")) {
+
+                        Log.d("checkStatusmsg", "tracking_upper_header: 3");
+                        trackingHeaderStatusInfo.setText(trainApiStatusMsg);
+                        trackingHeaderStatusInfo.setTextColor(Color.RED);
+                    }
+                    Log.d("checkStatusmsg", "tracking_upper_header: msg value : " + trainApiStatusMsg );
+                }else{
+                    Log.d("checkStatusmsg", "tracking_upper_header: inside else block enter");
+                    infoMsg = trainLocationData.getStatusMessage().trim();
+                    trackingHeaderStatusInfo.setText(infoMsg);
+                }
+
             }
 
 
@@ -291,10 +318,17 @@ public class Train_Tracking extends AppCompatActivity {
     private BroadcastReceiver apiTrainLocation = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            lat = intent.getDoubleExtra("trainLat", 0);
-            lng = intent.getDoubleExtra("trainLng", 0);
-            ArrayList<API_Response_Train_Tracking> apiData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
-            API_Train_Location(apiData);
+            if(intent != null){
+                lat = intent.getDoubleExtra("trainLat", 0);
+                lng = intent.getDoubleExtra("trainLng", 0);
+                trainApiStatusMsg = intent.getStringExtra("trainApiStatusMsg");
+                ArrayList<API_Response_Train_Tracking> apiData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
+if(apiData != null){
+    API_Train_Location(apiData);
+                }
+
+            }
+
 
         }
     };
@@ -317,16 +351,16 @@ public class Train_Tracking extends AppCompatActivity {
         }else if (trainLocationData.getNextStation() != null){
             stData = trainLocationData.getNextStation().getStationCode();
         }
-        Log.d("scroll_testing", "track_user: " + stData);
+
+
         for(int i=0; i<arrTrainStations.size(); i++){
+            Log.d("scroll_debug", "StationList code='" + arrTrainStations.get(i).getStationCode() + "'");
             if(arrTrainStations.get(i).getStationCode().trim().equalsIgnoreCase(stData.trim())){
                 live_train_tracking_recycler_view.smoothScrollToPosition(i);
                 break;
             }
-            Log.d("scroll_testing", "track_user: arrTrainStations.get(i).getStationCode(): " + arrTrainStations.get(i).getStationCode());
-            Log.d("scroll_testing", "track_user: val of stData: " + stData);
-            Log.d("scroll_testing", "track_user: val of i: " + i);
         }
+
         tracking_upper_header(trainLocationData);
 
 

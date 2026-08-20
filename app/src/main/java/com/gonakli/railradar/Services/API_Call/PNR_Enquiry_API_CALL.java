@@ -44,6 +44,7 @@ public class PNR_Enquiry_API_CALL extends Service {
         if (intent.hasExtra("pnrNumber")) {
             pnrNumber = intent.getStringExtra("pnrNumber");
             API_URL = String.format("https://www.irctc.co.in/eticketing/protected/mapps1/pnrenq/%s?pnrEnqType=E", pnrNumber);
+            Log.d("PNR_Service", "onStartCommand: " + API_URL);
             new Thread(() ->{
                 call_pnr_api(intent);
             }).start();

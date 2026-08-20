@@ -41,17 +41,19 @@ public class Fragment_History_Screen extends Fragment {
     private void list_view_setUp() {
         new Thread(() -> {
             arrHistoryData = fetchHistory();
+           if(isAdded() && getActivity() != null) {
+               requireActivity().runOnUiThread(() -> {
+                   if (arrHistoryData.isEmpty()) {
+                       emptyStateContainer.setVisibility(View.VISIBLE);
+                   } else {
+                       emptyStateContainer.setVisibility(View.GONE);
+                       adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
 
-            if (arrHistoryData.isEmpty()) {
-                emptyStateContainer.setVisibility(View.VISIBLE);
-            } else {
-                emptyStateContainer.setVisibility(View.GONE);
-                adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
+                       historyListView.setAdapter(adapter); // ✅ अब main thread पर
 
-                requireActivity().runOnUiThread(() -> {
-                    historyListView.setAdapter(adapter); // ✅ अब main thread पर
-                });
-            }
+                   }
+               });
+           }
 
         }).start();
 

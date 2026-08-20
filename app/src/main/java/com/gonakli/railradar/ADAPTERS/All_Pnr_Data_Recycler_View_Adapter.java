@@ -2,6 +2,8 @@ package com.gonakli.railradar.ADAPTERS;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -133,11 +135,20 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
         delete_Pnr(holder, pnrNum);
         refresh_pnr(holder, pnrNum);
+        copy_Pnr(holder, pnrNum);
 
 
     }
 
-
+    private void copy_Pnr(viewHolder holder, String pnrNum) {
+        holder.pnrStatusPnrNumber.setOnLongClickListener(v ->{
+            ClipboardManager clipboardManager =(ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("pnrNumber", pnrNum);
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(context, "Pnr number copied", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+    }
 
 
     @Override

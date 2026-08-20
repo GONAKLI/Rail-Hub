@@ -2,7 +2,7 @@ package com.gonakli.railradar.Structure_Class;
 
 public class Train_Tracking_Structure {
     private final Train_Schedule_Station_Structure previousStation, currentStation, nextStation;
-    private final String statusMessage;
+    private  String statusMessage;
     private final boolean isOnRoute, isAtStation;
     private final int stationCoveredPercentage,totalJourneyCovered, totalJourneyCoveredPercentage, totalTrainJourney;
 
@@ -79,4 +79,7 @@ public class Train_Tracking_Structure {
         return finalStation;
     }
 
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
 }

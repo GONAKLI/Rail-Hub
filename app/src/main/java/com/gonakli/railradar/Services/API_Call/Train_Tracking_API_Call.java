@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 public class Train_Tracking_API_Call extends Service{
 
-//    private static final String API_URL = "http://10.236.89.39:5015/find-my-train";
-private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
+    private static final String API_URL = "http://10.232.190.180:5015/find-my-train";
+//     private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
     String trainNumber;
     @Nullable
@@ -78,6 +78,8 @@ private static final String API_URL = "https://railhub.gonakli.com/find-my-train
             Log.d("trackmyAPI", "fetch_Train_Location: lng " + trainTracking.optString("trainLng"));
             String lat = trainTracking.optString("trainLat");
             String lng = trainTracking.optString("trainLng");
+            String trainApiStatusMsg = trainTracking.optString("statusMsg");
+            String dataLastUpdatedAt = trainTracking.optString("lastUpdatedAt", "");
             JSONArray jsonArray = trainTracking.optJSONArray("stationData");
 
             ArrayList<API_Response_Train_Tracking> arrTrainApi = new ArrayList<>();
@@ -93,6 +95,8 @@ private static final String API_URL = "https://railhub.gonakli.com/find-my-train
             Intent iApiData = new Intent(API_TRAIN_DATA);
             iApiData.putExtra("trainLat", Double.parseDouble(lat));
             iApiData.putExtra("trainLng", Double.parseDouble(lng));
+            iApiData.putExtra("trainApiStatusMsg", trainApiStatusMsg);
+            iApiData.putExtra("dataLastUpdatedAt", dataLastUpdatedAt);
             iApiData.putExtra("stationData", arrTrainApi);
 
             iApiData.setPackage(getPackageName());
