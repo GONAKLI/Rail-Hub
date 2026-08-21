@@ -3,7 +3,10 @@ package com.gonakli.railradar.ADAPTERS;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
@@ -24,8 +28,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter<User_Route_Train_Recycler_View_Adapter.viewHolder> {
     Context context;
@@ -100,6 +107,26 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
            if (runOnSun.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Sun");
            runningDays = runningDaysBuilder.toString().trim();
         }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate date = LocalDate.now();
+            String day = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+            if(!runningDays.equalsIgnoreCase("daily") && !runningDays.toLowerCase().contains(day.toLowerCase())){
+                holder.itemView.setBackgroundColor(Color.GRAY);
+                holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#FAA18F"));
+                holder.trainScheduleJourneyDuration.setTextColor(Color.parseColor("#FAA18F"));
+                holder.otherWarning.setText("Train is not running Today");
+                holder.otherWarning.setTextColor(Color.RED);
+                holder.otherWarning.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemView.setBackgroundResource(R.color.card_background);
+                holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#54D12E"));
+                holder.trainScheduleJourneyDuration.setTextColor(ContextCompat.getColor(context,R.color.card_text_primary));
+                holder.otherWarning.setVisibility(View.GONE);
+            }
+        }
+
 
 
 
@@ -230,6 +257,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
     public class viewHolder extends RecyclerView.ViewHolder{
         TextView trainScheduleTrainNumber,trainScheduleArrivalTime,trainScheduleJourneyDuration;
         TextView trainScheduleFinalDestinationReachTime,trainScheduleTrainName,trainScheduleRunningDays;
+        TextView otherWarning;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             trainScheduleTrainNumber = itemView.findViewById(R.id.trainScheduleTrainNumber);
@@ -238,6 +266,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             trainScheduleFinalDestinationReachTime = itemView.findViewById(R.id.trainScheduleFinalDestinationReachTime);
             trainScheduleTrainName = itemView.findViewById(R.id.trainScheduleTrainName);
             trainScheduleRunningDays = itemView.findViewById(R.id.trainScheduleRunningDays);
+            otherWarning = itemView.findViewById(R.id.otherWarning);
         }
 
     }

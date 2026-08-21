@@ -25,6 +25,9 @@ import com.gonakli.railradar.Structure_Class.Train_Tracking_Structure;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -104,8 +107,8 @@ public class Train_Tracking_Recycler_View_Adapter
             }
 
         }
-        String actualArrAt;
-        String actualDepAt;
+        String actualArrAt = arrTrainStations.get(position).getActualArrivalTime();
+        String actualDepAt = arrTrainStations.get(position).getActualDepartureTime();
         String distanceTrav = arrTrainStations.get(position).getDistance();
         String platformAt = null;
         if (arrTrainStations.get(position).getPlatform() != null) {
@@ -119,6 +122,19 @@ public class Train_Tracking_Recycler_View_Adapter
         holder.trainArrivalAt.setText(arrAt);
         holder.trainDepartureAt.setText(depAt);
         holder.trainDistanceTravelled.setText(distanceTrav);
+        if(actualArrAt !=null && !actualArrAt.isEmpty()){
+            actualArrAt = apiTimeIn12Hours(actualArrAt);
+            holder.trainActualArrivalAt.setText(actualArrAt);
+        }else{
+            holder.trainActualArrivalAt.setText("--");
+        }
+        if (actualDepAt !=null && !actualDepAt.isEmpty()){
+            actualDepAt = apiTimeIn12Hours(actualDepAt);
+            holder.trainActualDepartureAt.setText(actualDepAt);
+        }else{
+            holder.trainActualDepartureAt.setText("--");
+        }
+
         if (platformAt != null) {
             holder.trainPlatformNo.setText("PF - " + platformAt);
         }
@@ -211,11 +227,28 @@ public class Train_Tracking_Recycler_View_Adapter
             for (API_Response_Train_Tracking obj : apiRes) {
                 if (st.getStationCode().equals(obj.getStationCode())) {
                     st.setPlatform(obj.getPlatform());
+                    st.setActualArrivalTime(obj.getActualArrival());
+                    st.setActualDepartureTime(obj.getActualDeparture());
                 }
             }
         }
         notifyDataSetChanged();
         
         
+    }
+
+    private String apiTimeIn12Hours(String apiTime){
+
+        // Parse input string as OffsetDateTime
+        OffsetDateTime odt = OffsetDateTime.parse(apiTime);
+
+        // Convert to LocalDateTime
+        LocalDateTime ldt = odt.toLocalDateTime();
+
+        // Define formatter for 12-hour format with AM/PM
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+        // Format output
+        return ldt.format(formatter);
     }
 }

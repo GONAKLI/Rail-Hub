@@ -11,6 +11,8 @@ public class Train_Schedule_Station_Structure {
     private final String stnSerialNumber;
     private final String stnLat;
     private final String stnLng;
+    private String actualArrivalTime;
+    private String actualDepartureTime;
 
     private String platform;
 
@@ -67,5 +69,21 @@ public class Train_Schedule_Station_Structure {
 
     public void setPlatform(String platform) {
         this.platform = platform;
+    }
+
+    public String getActualArrivalTime() {
+        return actualArrivalTime;
+    }
+
+    public void setActualArrivalTime(String actualArrivalTime) {
+        this.actualArrivalTime = actualArrivalTime;
+    }
+
+    public String getActualDepartureTime() {
+        return actualDepartureTime;
+    }
+
+    public void setActualDepartureTime(String actualDepartureTime) {
+        this.actualDepartureTime = actualDepartureTime;
     }
 }

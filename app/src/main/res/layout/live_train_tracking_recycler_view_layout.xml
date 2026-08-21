@@ -52,8 +52,8 @@
     <!-- Live Train Icon -->
     <ImageView
         android:id="@+id/liveTrainIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:contentDescription="Live train position"
         android:src="@drawable/train_icon_photoroom"
         android:visibility="gone"

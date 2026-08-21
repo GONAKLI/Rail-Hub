@@ -70,19 +70,20 @@ public class Train_Tracking extends AppCompatActivity {
         set_custom_toolbar();
         train_finder();
         set_insideTrainBtn_action();
-        test_API_Service();
+        call_API_Service();
         Refresh_Live_Tracking();
        
     }
 
     private void Refresh_Live_Tracking() {
+
         btnRefreshLiveTracking.setOnClickListener(v -> {
             Toast.makeText(this, "Refreshing ...", Toast.LENGTH_SHORT).show();
-            test_API_Service();
+            call_API_Service();
         });
     }
 
-    private void test_API_Service() {
+    private void call_API_Service() {
     Intent intent = new Intent(Train_Tracking.this, Train_Tracking_API_Call.class);
     intent.putExtra("trainNumber", trainNumber);
     startService(intent);
@@ -334,6 +335,7 @@ if(apiData != null){
     };
 
     private void API_Train_Location( ArrayList<API_Response_Train_Tracking> apiData) {
+        if(myTrainData == null) return;
         String stData = "";
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
         ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();

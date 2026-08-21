@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 public class Train_Tracking_API_Call extends Service{
 
-    private static final String API_URL = "http://10.232.190.180:5015/find-my-train";
-//     private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
+//    private static final String API_URL = "http://10.232.190.180:5015/find-my-train";
+     private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
     String trainNumber;
     @Nullable

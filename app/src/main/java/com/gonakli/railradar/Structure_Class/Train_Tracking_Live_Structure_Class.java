@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Train_Tracking_Live_Structure_Class {
 
-    private static final float ARRIVED_THRESHOLD = 200f;       // Inside station radius (200m)
+    private static final float ARRIVED_THRESHOLD = 300f;       // Inside station radius (200m)
     private static final float DEPARTED_THRESHOLD = 1000f;      // Departed window (1 KM)
     private static final float APPROACHING_THRESHOLD = 1000f;   // Approaching window (1 KM)
-    private static final float OFF_ROUTE_THRESHOLD = 1500f;     // Max tolerance from polyline track (1.5 KM)
+    private static final float OFF_ROUTE_THRESHOLD = 4000f;     // Max tolerance from polyline track (1.5 KM)
     private static final String TAG = "myTrackedUser";
 
     private final double userLat, userLng;
