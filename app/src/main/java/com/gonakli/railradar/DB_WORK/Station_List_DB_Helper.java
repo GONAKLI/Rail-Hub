@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -112,6 +113,33 @@ public class Station_List_DB_Helper extends SQLiteAssetHelper {
         cursor.close();
         db.close();
         return stName;
+    }
+
+    public ArrayList<Station_List_Structure> getDataForPredictiveTextFields(String stationCodeOrName){
+        Log.d("testStatt", "getDataForPredictiveTextFields: " + stationCodeOrName);
+        ArrayList<Station_List_Structure> arrStationListData = new ArrayList<>();
+        String sqlQuery;
+        Cursor cursor;
+    if(stationCodeOrName == null || stationCodeOrName.isEmpty()){
+        sqlQuery = String.format("SELECT %s, %s FROM %s ORDER BY RANDOM() LIMIT 8",
+                TABLE_STATION_CODE_COLUMN, TABLE_STATION_NAME_COLUMN, TABLE_NAME);
+    }else {
+        stationCodeOrName = stationCodeOrName.trim().toLowerCase();
+        sqlQuery = String.format("SELECT %s, %s FROM %s WHERE LOWER(%s) LIKE ? OR LOWER(%s) LIKE ? LIMIT 8",
+                TABLE_STATION_CODE_COLUMN, TABLE_STATION_NAME_COLUMN, TABLE_NAME, TABLE_STATION_CODE_COLUMN,
+                TABLE_STATION_NAME_COLUMN);
+    }
+    arrStationListData.clear();
+    try(SQLiteDatabase db = this.getReadableDatabase()){
+         cursor = db.rawQuery(sqlQuery, null);
+         while (cursor.moveToNext()){
+             String stationCode = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_CODE_COLUMN));
+             String stationName = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
+             arrStationListData.add(new Station_List_Structure(stationCode,stationName));
+         }
+         cursor.close();
+    }
+    return arrStationListData;
     }
 
 

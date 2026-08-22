@@ -78,6 +78,7 @@ public class Train_Tracking extends AppCompatActivity {
     private void Refresh_Live_Tracking() {
 
         btnRefreshLiveTracking.setOnClickListener(v -> {
+            btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(this, R.anim.train_location_refresh_btn));
             Toast.makeText(this, "Refreshing ...", Toast.LENGTH_SHORT).show();
             call_API_Service();
         });

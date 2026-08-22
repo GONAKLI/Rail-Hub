@@ -14,6 +14,7 @@ import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.Structure_Class.Train_List_Structure;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Structure_Class.Train_List_Structure_New;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
 
@@ -21,13 +22,11 @@ import java.util.ArrayList;
 
 public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List_Recycler_Adapter.viewHolder>{
     Context context;
-    ArrayList<Train_List_Structure> arrTrainList;       // current list
-    ArrayList<Train_List_Structure> arrTrainListFull;   // backup list
+    ArrayList<Train_List_Structure_New> arrTrainList;
 
-    public Train_List_Recycler_Adapter(Context context, ArrayList<Train_List_Structure> arrTrainList){
+    public Train_List_Recycler_Adapter(Context context, ArrayList<Train_List_Structure_New> arrTrainList){
         this.context = context;
         this.arrTrainList = new ArrayList<>(arrTrainList);
-        this.arrTrainListFull = new ArrayList<>(arrTrainList); // backup copy
     }
 
     @NonNull
@@ -41,13 +40,16 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         holder.trainNumber.setText(arrTrainList.get(position).getTrainNumber());
         holder.trainName.setText(arrTrainList.get(position).getTrainName());
+        holder.trainSourceStation.setText(arrTrainList.get(position).getSourceStationName());
+        holder.trainDestinationStation.setText(arrTrainList.get(position).getDestinationStationName());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = holder.getBindingAdapterPosition();
                if(pos != RecyclerView.NO_POSITION){
-                  Train_List_Structure clickedItem = arrTrainList.get(pos);
+                  Train_List_Structure_New clickedItem = arrTrainList.get(pos);
                   Intent trainTrackingLive = new Intent(context, Train_Tracking.class);
                   trainTrackingLive.putExtra("trainNumber", clickedItem.getTrainNumber());
                   trainTrackingLive.putExtra("trainName", clickedItem.getTrainName());
@@ -75,49 +77,22 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
 
     @Override
     public int getItemCount() {
-        if(arrTrainList.size() >=15){
-            return 15;
-        }
         return arrTrainList.size();
     }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-        TextView trainNumber, trainName, trainRouteFrom, trainRouteTo;
+        TextView trainNumber, trainName, trainSourceStation, trainDestinationStation;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             trainNumber = itemView.findViewById(R.id.trainNumber);
             trainName = itemView.findViewById(R.id.trainName);
-//            trainRouteFrom = itemView.findViewById(R.id.trainRouteFrom);
-//            trainRouteTo = itemView.findViewById(R.id.trainRouteTo);
+            trainSourceStation = itemView.findViewById(R.id.sourceStation);
+            trainDestinationStation = itemView.findViewById(R.id.destinationStation);
         }
     }
 
-    // 🔹 Filter method
-    public void filterSearchResult(String text){
-        ArrayList<Train_List_Structure> filteredList = new ArrayList<>();
 
-        if (text.isEmpty()) {
-            filteredList.addAll(arrTrainListFull);
-        } else {
-            try {
-                int trainNumber = Integer.parseInt(text);
-                for (Train_List_Structure data: arrTrainListFull){
-                    if(data.getTrainNumber().contains(text)){
-                        filteredList.add(data);
-                    }
-                }
-            } catch (NumberFormatException e) {
-                for (Train_List_Structure data: arrTrainListFull){
-                    if(data.getTrainName().toLowerCase().contains(text.toLowerCase())){
-                        filteredList.add(data);
-                    }
-                }
-            }
-        }
-        updateList(filteredList);
-    }
-
-    public void updateList(ArrayList<Train_List_Structure> newList){
+    public void updateList(ArrayList<Train_List_Structure_New> newList){
         arrTrainList.clear();
         arrTrainList.addAll(newList);
         notifyDataSetChanged();

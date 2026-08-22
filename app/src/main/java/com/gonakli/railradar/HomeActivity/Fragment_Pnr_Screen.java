@@ -132,6 +132,7 @@ public class Fragment_Pnr_Screen extends Fragment {
                             }
 
                             if(isRefresh){
+                                allPnrCheckRecyclerView.smoothScrollToPosition(0);
                                 Toast.makeText(getContext(), "Pnr refreshed", Toast.LENGTH_SHORT).show();
                             }
 

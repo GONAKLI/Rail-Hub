@@ -12,7 +12,10 @@ import androidx.annotation.Nullable;
 import com.gonakli.railradar.Structure_Class.PassengerList_Structure;
 import com.gonakli.railradar.Structure_Class.Pnr_Api_Response_Structure;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PNR_DATABASE";
@@ -154,8 +157,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             values.put(TABLE_COLUMN_BOOKING_DATE, bookingDate );
             values.put(TABLE_COLUMN_TICKET_TYPE, ticketType );
             values.put(TABLE_COLUMN_CHART_STATUS, chartStatus);
-            db.insertOrThrow(TABLE_NAME,null, values);
-
+            db.insertWithOnConflict(TABLE_NAME,null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
             for(PassengerList_Structure passenger: arrPassengerList){
                 String passengerSerialNumber = passenger.getPassengerSerialNumber();
@@ -215,7 +217,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
     public ArrayList<Pnr_Api_Response_Structure> getPnrDataFromDB(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Pnr_Api_Response_Structure> arrPnrList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME +" ORDER BY datetime(" + TABLE_COLUMN_CREATED_AT + ") DESC", null );
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME +" ORDER BY " + TABLE_COLUMN_CREATED_AT + " DESC", null );
         while(cursor.moveToNext()){
             Pnr_Api_Response_Structure pnrObj = new Pnr_Api_Response_Structure(true, "");
             String pnrNumber = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_COLUMN_PNR_NUMBER));
@@ -302,6 +304,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             String  ticketFare = obj.getTicketFare();
             String bookingDate = obj.getBookingDate();
             String ticketType = obj.getTicketType();
+            String updatedTimeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
             ArrayList<PassengerList_Structure> arrPassengerList = obj.getArrPassengerList();
             ArrayList<Object> arrInformationMessage = obj.getArrInformationMessage();
 
@@ -323,6 +326,8 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             values.put(TABLE_COLUMN_BOOKING_DATE, bookingDate );
             values.put(TABLE_COLUMN_TICKET_TYPE, ticketType );
             values.put(TABLE_COLUMN_CHART_STATUS, chartStatus);
+
+            values.put(TABLE_COLUMN_CREATED_AT, updatedTimeStamp);
             db.update(TABLE_NAME,  values, TABLE_COLUMN_PNR_NUMBER + " = ? ", new String[]{pnrNumber});
 
             db.delete(PASS_TABLE_NAME, TABLE_COLUMN_PNR_NUMBER + " = ?", new String[]{pnrNumber});

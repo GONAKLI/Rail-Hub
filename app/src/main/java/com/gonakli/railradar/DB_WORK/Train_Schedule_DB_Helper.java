@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 //import com.gonakli.railradar.ArrayGenerater.Make_Array_Of_Train_Schedule;
 import com.gonakli.railradar.Structure_Class.Track_Polyline_Point_Structure;
+import com.gonakli.railradar.Structure_Class.Train_List_Structure_New;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -250,5 +251,35 @@ public class Train_Schedule_DB_Helper extends SQLiteAssetHelper {
         db.close();
         cursor.close();
         return arrPolyLineList;
+    }
+
+    public ArrayList<Train_List_Structure_New> getTrainSearchResult(String trainNameOrNumber){
+        ArrayList<Train_List_Structure_New> arrTrainListData = new ArrayList<>();
+        try(SQLiteDatabase db = this.getReadableDatabase(); Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(applicationContext)) {
+            arrTrainListData.clear();
+            String sqlQuery;
+            Cursor cursor;
+            if(trainNameOrNumber == null || trainNameOrNumber.isEmpty()){
+                sqlQuery = String.format("SELECT %s, %s, %s, %s FROM %s ORDER BY RANDOM() LIMIT 10",
+                        COLUMN_trainNumber,COLUMN_trainName, COLUMN_stationFrom, COLUMN_stationTo, TABLE_NAME);
+            }else {
+                sqlQuery = String.format("SELECT %s, %s, %s, %s FROM %s WHERE %s LIKE '%%%s%%' OR %s LIKE '%%%s%%' LIMIT 15",
+                        COLUMN_trainNumber,COLUMN_trainName, COLUMN_stationFrom, COLUMN_stationTo, TABLE_NAME,
+                        COLUMN_trainNumber, trainNameOrNumber, COLUMN_trainName,trainNameOrNumber);
+            }
+            cursor = db.rawQuery(sqlQuery,null);
+            while(cursor.moveToNext()){
+
+                String trNumber = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainNumber));
+                String trName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_trainName));
+
+                String sourceStation = dbHelper.getStationNameByCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_stationFrom)));
+                String destinationStation = dbHelper.getStationNameByCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_stationTo)));
+                arrTrainListData.add(new Train_List_Structure_New(trNumber,trName,sourceStation,destinationStation));
+            }
+            cursor.close();
+        }
+    return arrTrainListData;
+
     }
 }

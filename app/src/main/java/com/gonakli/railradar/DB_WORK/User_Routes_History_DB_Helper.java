@@ -24,6 +24,7 @@ public class User_Routes_History_DB_Helper extends SQLiteOpenHelper {
     private final String TABLE_COLUMN_SOURCE_STATION_CODE = "sourceCode";
     private final String TABLE_COLUMN_DESTINATION_STATION_CODE = "destinationCode";
     private final String TABLE_COLUMN_ADDED_ON = "addedOn";
+    private final String TABLE_COLUMN_UNIQUE_ID = "id";
 
     public User_Routes_History_DB_Helper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,9 +33,9 @@ public class User_Routes_History_DB_Helper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
        String sqlQuery = String.format("CREATE TABLE IF NOT EXISTS %s (" +
-               " %s text, %s text, %s text, %s text, %s text )", TABLE_NAME, TABLE_COLUMN_TRAIN_NUMBER,
+               " %s text, %s text, %s text, %s text, %s text, %s text PRIMARY KEY)", TABLE_NAME, TABLE_COLUMN_TRAIN_NUMBER,
                TABLE_COLUMN_TRAIN_NAME,TABLE_COLUMN_SOURCE_STATION_CODE,TABLE_COLUMN_DESTINATION_STATION_CODE,
-               TABLE_COLUMN_ADDED_ON);
+               TABLE_COLUMN_ADDED_ON, TABLE_COLUMN_UNIQUE_ID);
         db.execSQL(sqlQuery);
 
     }
@@ -55,8 +56,9 @@ public class User_Routes_History_DB_Helper extends SQLiteOpenHelper {
         values.put(TABLE_COLUMN_DESTINATION_STATION_CODE, destination);
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         values.put(TABLE_COLUMN_ADDED_ON, currentDate );
-
-        db.insert(TABLE_NAME, null, values);
+        String id = trainNumber+source+destination;
+        values.put(TABLE_COLUMN_UNIQUE_ID, id);
+        db.insertWithOnConflict(TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
     public ArrayList<User_History_Structure> getHistory(){
@@ -79,5 +81,16 @@ public class User_Routes_History_DB_Helper extends SQLiteOpenHelper {
     public void deleteHistory(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
+    }
+
+    public void updateHistory(String trainNumber, String fromStationCode, String toStationCode){
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        String sqlQuery = String.format("UPDATE %S SET %s = \"%s\" WHERE %s = \"%s\" AND %s = \"%s\" AND %s = \"%s\"",
+                TABLE_NAME, TABLE_COLUMN_ADDED_ON, currentDate, TABLE_COLUMN_TRAIN_NUMBER, trainNumber, TABLE_COLUMN_SOURCE_STATION_CODE,
+                fromStationCode, TABLE_COLUMN_DESTINATION_STATION_CODE, toStationCode);
+
+        try(SQLiteDatabase db = this.getWritableDatabase()){
+            db.execSQL(sqlQuery);
+        }
     }
 }

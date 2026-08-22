@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginVertical="6dp"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginVertical="7dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/card_background"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="3dp"
-    app:cardUseCompatPadding="true">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1.5dp"
+    app:strokeColor="#12000000"
+    app:strokeWidth="1dp"
+    app:rippleColor="#1A000000">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp">
+        android:padding="16dp">
 
-        <!-- Round Icon -->
-        <androidx.cardview.widget.CardView
+        <!-- Header Icon (Material Shapeable) -->
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iconHolder"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            app:cardBackgroundColor="@color/chip_background"
-            app:cardCornerRadius="23dp"
-            app:cardElevation="0dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@color/chip_background"
+            android:padding="9dp"
+            android:scaleType="centerInside"
+            android:src="@android:drawable/ic_menu_directions"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:tint="@color/chip_accent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_directions"
-                app:tint="@color/chip_accent"
-                android:contentDescription="@null" />
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Train Number Badge -->
         <TextView
@@ -49,14 +44,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@drawable/bg_train_number_chip"
-            android:paddingHorizontal="10dp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.04"
+            android:paddingHorizontal="8dp"
             android:paddingVertical="3dp"
-            android:text="57124"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@id/iconHolder"
-            app:layout_constraintTop_toTopOf="@id/iconHolder" />
+            app:layout_constraintTop_toTopOf="@id/iconHolder"
+            tools:text="12002" />
 
         <!-- Train Name -->
         <TextView
@@ -64,30 +60,114 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="Shatabdi Express"
             android:textColor="@color/card_text_primary"
             android:textSize="15sp"
-            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/arrowIcon"
             app:layout_constraintStart_toEndOf="@id/iconHolder"
             app:layout_constraintTop_toBottomOf="@id/trainNumber"
-            app:layout_constraintEnd_toStartOf="@id/arrowIcon"
-            app:layout_constraintBottom_toBottomOf="@id/iconHolder" />
+            tools:text="Bhopal Shatabdi Express" />
 
-        <!-- Arrow -->
+        <!-- Forward Arrow Icon -->
         <ImageView
             android:id="@+id/arrowIcon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@android:drawable/ic_media_play"
-            app:tint="#A0A3B8"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:alpha="0.4"
             android:contentDescription="@null"
+            android:src="@android:drawable/ic_media_play"
+            app:layout_constraintBottom_toBottomOf="@id/iconHolder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iconHolder"
+            app:tint="@color/card_text_primary" />
+
+        <!-- Subtle Divider Line -->
+        <View
+            android:id="@+id/cardDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="14dp"
+            android:alpha="0.08"
+            android:background="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainName" />
+
+        <!-- ===== ROUTE SECTION (Source -> Destination) ===== -->
+
+        <!-- Source Station -->
+        <TextView
+            android:id="@+id/sourceStation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/card_text_primary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/routeIndicatorLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardDivider"
+            tools:text="NDLS (New Delhi)" />
+
+        <!-- Middle Visual Route Indicator -->
+        <LinearLayout
+            android:id="@+id/routeIndicatorLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/sourceStation"
+            app:layout_constraintEnd_toStartOf="@+id/destinationStation"
+            app:layout_constraintStart_toEndOf="@+id/sourceStation"
+            app:layout_constraintTop_toTopOf="@+id/sourceStation">
+
+            <!-- Source Dot -->
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_timeline_dot"
+                app:backgroundTint="@color/chip_accent" />
+
+            <!-- Connecting Track Line -->
+            <View
+                android:layout_width="28dp"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="4dp"
+                android:alpha="0.3"
+                android:background="@color/chip_accent" />
+
+            <!-- Destination Arrow/Dot -->
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_timeline_dot"
+                app:backgroundTint="@color/chip_accent" />
+        </LinearLayout>
+
+        <!-- Destination Station -->
+        <TextView
+            android:id="@+id/destinationStation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/card_text_primary"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sourceStation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/routeIndicatorLayout"
+            app:layout_constraintTop_toTopOf="@+id/sourceStation"
+            tools:text="RKMP (Rani Kamlapati)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+
+</com.google.android.material.card.MaterialCardView>

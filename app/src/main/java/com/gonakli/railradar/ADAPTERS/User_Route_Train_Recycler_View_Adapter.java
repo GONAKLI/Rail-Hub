@@ -114,7 +114,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             String day = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
             if(!runningDays.equalsIgnoreCase("daily") && !runningDays.toLowerCase().contains(day.toLowerCase())){
                 holder.itemView.setBackgroundColor(Color.GRAY);
-                holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#FAA18F"));
+                holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#54D12E"));
                 holder.trainScheduleJourneyDuration.setTextColor(Color.parseColor("#FAA18F"));
                 holder.otherWarning.setText("Train is not running Today");
                 holder.otherWarning.setTextColor(Color.RED);

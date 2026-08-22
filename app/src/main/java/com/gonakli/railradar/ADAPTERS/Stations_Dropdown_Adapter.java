@@ -18,29 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stations_Dropdown_Adapter extends ArrayAdapter<Station_List_Structure> {
-    private List<Station_List_Structure> originalList;     // full list
-    private List<Station_List_Structure> filteredList;     // filtered list
-
     public Stations_Dropdown_Adapter(@NonNull Context context, List<Station_List_Structure> station_List) {
         super(context, 0, station_List);
-        this.originalList = new ArrayList<>(station_List);
-        this.filteredList = new ArrayList<>(station_List);
-    }
 
-    @Override
-    public int getCount() {
-        return Math.min(filteredList == null ? 0 : filteredList.size(), 5);
     }
-
-    @Nullable
-    @Override
-    public Station_List_Structure getItem(int position) {
-        if (filteredList != null && position >= 0 && position < filteredList.size()) {
-            return filteredList.get(position);
-        }
-        return null;
-    }
-
+    
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -64,34 +46,11 @@ public class Stations_Dropdown_Adapter extends ArrayAdapter<Station_List_Structu
         return convertView;
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();
-                if (constraint == null || constraint.length() == 0) {
-                    results.values = originalList;
-                    results.count = originalList.size();
-                } else {
-                    List<Station_List_Structure> filtered = new ArrayList<>();
-                    for (Station_List_Structure s : originalList) {
-                        if (s.getStation_Name().toLowerCase().contains(constraint.toString().toLowerCase()) ||
-                                s.getStation_Code().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                            filtered.add(s);
-                        }
-                    }
-                    results.values = filtered;
-                    results.count = filtered.size();
-                }
-                return results;
-            }
+    public void updateData(ArrayList<Station_List_Structure> arrStationData){
+        clear();
+        addAll(arrStationData);
+        notifyDataSetChanged();
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredList = (List<Station_List_Structure>) results.values;
-                notifyDataSetChanged();
-            }
-        };
     }
+
 }

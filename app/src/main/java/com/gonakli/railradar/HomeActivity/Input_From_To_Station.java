@@ -1,5 +1,6 @@
 package com.gonakli.railradar.HomeActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,15 +26,15 @@ import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Station_List_Structure;
 import com.gonakli.railradar.UserRouteTrains.User_Route_Train_List;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
 
 public class Input_From_To_Station extends LinearLayout {
     Context context;
-    MaterialAutoCompleteTextView fromStation, toStation;
+    AutoCompleteTextView fromStation, toStation;
     TextView fromStationCodeBadge, toStationCodeBadge;
     Button btnFindTrain;
+    Stations_Dropdown_Adapter customStationAdapter;
 
     ImageButton btn_swap_stations;
 
@@ -80,10 +82,10 @@ public class Input_From_To_Station extends LinearLayout {
     private void add_Predictive_Text() {
         new Thread(() -> {
             // custom adapter needed for proper functioning
-            ArrayList<Station_List_Structure> arrStationList = new Station_List_DB_Helper(getContext()).getStationList();
+            ArrayList<Station_List_Structure> arrStationList = new ArrayList<>(new Station_List_DB_Helper(getContext()).getDataForPredictiveTextFields(null));
 
-            ((android.app.Activity) context).runOnUiThread(() -> {
-                Stations_Dropdown_Adapter customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
+            ((Activity) context).runOnUiThread(() -> {
+                 customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
 
 
                 fromStation.setAdapter(customStationAdapter);
@@ -91,6 +93,7 @@ public class Input_From_To_Station extends LinearLayout {
                 fromStation.setDropDownHeight(900);
                 toStation.setAdapter(customStationAdapter);
                 toStation.setThreshold(0);
+                input_Field_Text_Change_Listeners(fromStation, toStation);
 
                 fromStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -120,6 +123,52 @@ public class Input_From_To_Station extends LinearLayout {
             });
         }).start();
 
+    }
+
+    private void input_Field_Text_Change_Listeners(AutoCompleteTextView fromStation, AutoCompleteTextView toStation) {
+        fromStation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)) {
+                    ArrayList<Station_List_Structure> fromStation = dbHelper.getDataForPredictiveTextFields(s.toString());
+                    if (customStationAdapter != null) {
+                        customStationAdapter.updateData(fromStation);
+                    }
+                }
+            }
+        });
+
+        toStation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)){
+                    ArrayList<Station_List_Structure> toStation = dbHelper.getDataForPredictiveTextFields(s.toString());
+                    if(customStationAdapter != null){
+                        customStationAdapter.updateData(toStation);
+                    }
+                }
+            }
+        });
     }
 
     private void find_all_id() {

@@ -70,10 +70,11 @@ public class Train_Tracking_Recycler_View_Adapter
         String toStCode = arrTrainStations.get(position).getStationCode();
         holder.trainStationName.setTextColor(ContextCompat.getColor(context, R.color.card_text_primary));
         if (fromStationCode != null && fromStationCode.equalsIgnoreCase(fromStCode)) {
-            holder.trainStationName.setTextColor(Color.GREEN);
-        }
-        if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)) {
-            holder.trainStationName.setTextColor(Color.RED);
+            holder.itemView.setBackgroundColor(Color.parseColor("#9DC775"));
+        }else if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#E6A5A5"));
+        }else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.card_background));
         }
 
         set_Train_Icon(holder, position);
@@ -180,39 +181,93 @@ public class Train_Tracking_Recycler_View_Adapter
         }
     }
 
+//    private void set_Train_Icon(myViewHolder holder, int position) {
+//        if (trainLocationData != null) {
+//
+//            Log.d("bbc", "set_Train_Icon: " + trainLocationData.getStatusMessage());
+//            if (trainLocationData.getCurrentStation() != null) {
+//                Log.d("bbc", "set_Train_Icon: " + trainLocationData.getCurrentStation().getStationName());
+//                if (arrTrainStations.get(position).getStationCode()
+//                        .equals(trainLocationData.getCurrentStation().getStationCode())) {
+//                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
+//                } else {
+//                    holder.liveTrainIcon.setVisibility(View.GONE);
+//                }
+//            } else if (trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null) {
+//                if (arrTrainStations.get(position).getStationCode()
+//                        .equals(trainLocationData.getPreviousStation().getStationCode())) {
+//                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
+//                    int rowHeight = holder.itemView.getHeight();
+//                    float fraction = trainLocationData.getStationCoveredPercentage() / 100.0f;
+//                    holder.liveTrainIcon.setTranslationY(fraction * rowHeight);
+//                } else {
+//                    holder.liveTrainIcon.setVisibility(View.GONE);
+//                    holder.liveTrainIcon.setTranslationY(0f);
+//
+//                }
+//            }
+//        } else {
+//            if (arrTrainStations != null && !arrTrainStations.isEmpty() && position == 0) {
+//                holder.liveTrainIcon.setVisibility(View.VISIBLE);
+//                holder.liveTrainIcon.setTranslationY(0f);
+//            } else {
+//                holder.liveTrainIcon.setVisibility(View.GONE);
+//            }
+//        }
+//    }
+
     private void set_Train_Icon(myViewHolder holder, int position) {
         if (trainLocationData != null) {
-
             Log.d("bbc", "set_Train_Icon: " + trainLocationData.getStatusMessage());
+
             if (trainLocationData.getCurrentStation() != null) {
-                Log.d("bbc", "set_Train_Icon: " + trainLocationData.getCurrentStation().getStationName());
+                // Case 1: Train station par khadi hai
                 if (arrTrainStations.get(position).getStationCode()
                         .equals(trainLocationData.getCurrentStation().getStationCode())) {
+
                     holder.liveTrainIcon.setVisibility(View.VISIBLE);
+                    holder.liveTrainIcon.setTranslationY(0f);
+                    holder.itemView.setTranslationZ(1f); // Top priority layer
                 } else {
-                    holder.liveTrainIcon.setVisibility(View.GONE);
+                    resetTrainIconState(holder);
                 }
             } else if (trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null) {
+                // Case 2: Train raste me hai (Moving between stations)
                 if (arrTrainStations.get(position).getStationCode()
                         .equals(trainLocationData.getPreviousStation().getStationCode())) {
-                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
-                    int rowHeight = holder.itemView.getHeight();
-                    float fraction = trainLocationData.getStationCoveredPercentage() / 100.0f;
-                    holder.liveTrainIcon.setTranslationY(fraction * rowHeight);
-                } else {
-                    holder.liveTrainIcon.setVisibility(View.GONE);
-                    holder.liveTrainIcon.setTranslationY(0f);
 
+                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
+                    holder.itemView.setTranslationZ(1f); // Pure row ko agle rows ke upar laata hai
+
+                    // post() ensure karta hai ki height 0 na mile
+                    holder.itemView.post(() -> {
+                        int rowHeight = holder.itemView.getHeight();
+                        float fraction = trainLocationData.getStationCoveredPercentage() / 100.0f;
+                        holder.liveTrainIcon.setTranslationY(fraction * rowHeight);
+                    });
+                } else {
+                    resetTrainIconState(holder);
                 }
+            } else {
+                resetTrainIconState(holder);
             }
         } else {
+            // Fallback / Initial State
             if (arrTrainStations != null && !arrTrainStations.isEmpty() && position == 0) {
                 holder.liveTrainIcon.setVisibility(View.VISIBLE);
                 holder.liveTrainIcon.setTranslationY(0f);
+                holder.itemView.setTranslationZ(1f);
             } else {
-                holder.liveTrainIcon.setVisibility(View.GONE);
+                resetTrainIconState(holder);
             }
         }
+    }
+
+    // Reset method taaki recycled views me bug na aaye
+    private void resetTrainIconState(myViewHolder holder) {
+        holder.liveTrainIcon.setVisibility(View.GONE);
+        holder.liveTrainIcon.setTranslationY(0f);
+        holder.itemView.setTranslationZ(0f); // Normal layer par wapas
     }
 
     public void updateAdapter(Train_Tracking_Structure trainLocationData) {

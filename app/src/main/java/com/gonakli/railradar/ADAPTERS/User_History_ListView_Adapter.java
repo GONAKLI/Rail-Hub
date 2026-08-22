@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.User_History_Structure;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
@@ -71,6 +72,12 @@ public class User_History_ListView_Adapter extends ArrayAdapter<User_History_Str
                 iTracking.putExtra("fromStationCode", sourceStation );
                 iTracking.putExtra("toStationCode", destinationStation );
             }
+            new Thread(() -> {
+                try(User_Routes_History_DB_Helper dbHelper = new User_Routes_History_DB_Helper(context)){
+                    dbHelper.updateHistory(trainNumber,sourceStation,destinationStation);
+                }
+
+            }).start();
             context.startActivity(iTracking);
         });
         return convertView;
