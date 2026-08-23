@@ -263,7 +263,7 @@ public class Train_Schedule_DB_Helper extends SQLiteAssetHelper {
                 sqlQuery = String.format("SELECT %s, %s, %s, %s FROM %s ORDER BY RANDOM() LIMIT 10",
                         COLUMN_trainNumber,COLUMN_trainName, COLUMN_stationFrom, COLUMN_stationTo, TABLE_NAME);
             }else {
-                sqlQuery = String.format("SELECT %s, %s, %s, %s FROM %s WHERE %s LIKE '%%%s%%' OR %s LIKE '%%%s%%' LIMIT 15",
+                sqlQuery = String.format("SELECT %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%' OR %s LIKE '%%%s%%' LIMIT 15",
                         COLUMN_trainNumber,COLUMN_trainName, COLUMN_stationFrom, COLUMN_stationTo, TABLE_NAME,
                         COLUMN_trainNumber, trainNameOrNumber, COLUMN_trainName,trainNameOrNumber);
             }

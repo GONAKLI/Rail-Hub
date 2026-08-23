@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gonakli.railradar.API_Limit.Pnr_Check_Api_Limit;
 import com.gonakli.railradar.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.R;
@@ -228,15 +229,20 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     private void refresh_pnr(viewHolder holder, String pnrNum) {
-        holder.btnRefreshPnr.setOnClickListener(v ->{
-            Intent iService = new Intent(context, PNR_Enquiry_API_CALL.class);
-            iService.putExtra("pnrNumber", pnrNum);
-            iService.putExtra("isRefresh", true);
-            context.startService(iService);
-            Animation animation = AnimationUtils.loadAnimation(context,R.anim.pnr_refresh_rotation);
-            holder.btnRefreshPnr.startAnimation(animation);
+        if(Pnr_Check_Api_Limit.canCallPnrAPI(pnrNum)){
+            holder.btnRefreshPnr.setOnClickListener(v ->{
+                Intent iService = new Intent(context, PNR_Enquiry_API_CALL.class);
+                iService.putExtra("pnrNumber", pnrNum);
+                iService.putExtra("isRefresh", true);
+                context.startService(iService);
+                Animation animation = AnimationUtils.loadAnimation(context,R.anim.pnr_refresh_rotation);
+                holder.btnRefreshPnr.startAnimation(animation);
 
-        });
+            });
+        }else {
+            Toast.makeText(context, "Pnr Status is already upTodate", Toast.LENGTH_SHORT).show();
+        }
+
     }
     public void refreshAdapter(){
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,6 +29,7 @@ import com.gonakli.railradar.Structure_Class.Station_List_Structure;
 import com.gonakli.railradar.UserRouteTrains.User_Route_Train_List;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Input_From_To_Station extends LinearLayout {
     Context context;
@@ -99,23 +101,58 @@ public class Input_From_To_Station extends LinearLayout {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
-                        fromStationCodeBadge.setText(selected.getStation_Code());
-                        fromStationCodeBadge.setVisibility(View.VISIBLE);
+                        Station_List_Structure selected = null;
+                        if(view !=null && view.getTag() instanceof Station_List_Structure){
+                            selected = (Station_List_Structure) view.getTag();
+                        }
+//                        else if (customStationAdapter !=null && position < customStationAdapter.getCount()) {
+//                            selected = customStationAdapter.getItem(position);
+//                        }
+                        if(selected !=null){
+                            String stCode = selected.getStation_Code();
+                            String stName = selected.getStation_Name();
+                            if(stCode != null){
+                                fromStationCodeBadge.setText(stCode);
+                                fromStationCodeBadge.setVisibility(View.VISIBLE);
+                            }
+                            if(stName !=null){
+                                fromStation.setText(stName,false);
+                            }
+                            toStation.requestFocus();
+                        }
 
-                        fromStation.setText(selected.getStation_Name());
-                        toStation.requestFocus();
+//                        Station_List_Structure selected =(Station_List_Structure) parent.getItemAtPosition(position);
+//                        fromStationCodeBadge.setText(selected.getStation_Code());
+//                        fromStationCodeBadge.setVisibility(View.VISIBLE);
+//                        fromStation.setText(selected.getStation_Name());
+//                        toStation.requestFocus();
                     }
                 });
 
                 toStation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
-                        toStationCodeBadge.setText(selected.getStation_Code());
-                        toStationCodeBadge.setVisibility(View.VISIBLE);
+                        Station_List_Structure selected = null;
+                        if(view != null && view.getTag() instanceof Station_List_Structure){
+                            selected = (Station_List_Structure) view.getTag();
+                        }
+                        if(selected != null){
+                            String stCode = selected.getStation_Code();
+                            String stName = selected.getStation_Name();
+                            if(stCode !=null){
+                                toStationCodeBadge.setText(stCode);
+                                toStationCodeBadge.setVisibility(View.VISIBLE);
+                            }
+                            if(stName != null){
+                                toStation.setText(stName);
+                            }
+                        }
 
-                        toStation.setText(selected.getStation_Name());
+//                        Station_List_Structure selected = (Station_List_Structure) parent.getItemAtPosition(position);
+//                        toStationCodeBadge.setText(selected.getStation_Code());
+//                        toStationCodeBadge.setVisibility(View.VISIBLE);
+//
+//                        toStation.setText(selected.getStation_Name());
                         InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(toStation.getWindowToken(), 0);
                     }
@@ -140,9 +177,11 @@ public class Input_From_To_Station extends LinearLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)) {
-                    ArrayList<Station_List_Structure> fromStation = dbHelper.getDataForPredictiveTextFields(s.toString());
+                    ArrayList<Station_List_Structure> myData = new ArrayList<>();
+                    myData.clear();
+                    myData.addAll( dbHelper.getDataForPredictiveTextFields(s.toString()));
                     if (customStationAdapter != null) {
-                        customStationAdapter.updateData(fromStation);
+                        customStationAdapter.updateData(myData);
                     }
                 }
             }
@@ -162,9 +201,12 @@ public class Input_From_To_Station extends LinearLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)){
-                    ArrayList<Station_List_Structure> toStation = dbHelper.getDataForPredictiveTextFields(s.toString());
+                    ArrayList<Station_List_Structure> myData = new ArrayList<>();
+                    myData.clear();
+                    myData.addAll(dbHelper.getDataForPredictiveTextFields(s.toString()));
                     if(customStationAdapter != null){
-                        customStationAdapter.updateData(toStation);
+                        Log.d("customer", "onTextChanged: " + "called");
+                        customStationAdapter.updateData(myData);
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.gonakli.railradar.ADAPTERS;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -76,8 +77,11 @@ public class Train_Tracking_Recycler_View_Adapter
         }else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.card_background));
         }
+        new Thread(()->{
+            set_Train_Icon(holder, position);
+        }).start();
 
-        set_Train_Icon(holder, position);
+
         String stName = arrTrainStations.get(position).getStationName();
 
         String arrAt = arrTrainStations.get(position).getArrivalTime();
@@ -271,25 +275,34 @@ public class Train_Tracking_Recycler_View_Adapter
     }
 
     public void updateAdapter(Train_Tracking_Structure trainLocationData) {
-        this.trainLocationData = trainLocationData;
-        notifyDataSetChanged();
+        new Thread(() ->{
+            this.trainLocationData = trainLocationData;
+            ((Activity) context).runOnUiThread(()->{
+                notifyDataSetChanged();
+            });
+        }).start();
+
     }
 
     public void APi_Adapter_Update(Train_Tracking_Structure trainLocationData,
             ArrayList<API_Response_Train_Tracking> apiRes) {
-        this.trainLocationData = trainLocationData;
-        for (Train_Schedule_Station_Structure st : this.arrTrainStations) {
-            for (API_Response_Train_Tracking obj : apiRes) {
-                if (st.getStationCode().equals(obj.getStationCode())) {
-                    st.setPlatform(obj.getPlatform());
-                    st.setActualArrivalTime(obj.getActualArrival());
-                    st.setActualDepartureTime(obj.getActualDeparture());
+        new Thread(()->{
+            this.trainLocationData = trainLocationData;
+            for (Train_Schedule_Station_Structure st : this.arrTrainStations) {
+                for (API_Response_Train_Tracking obj : apiRes) {
+                    if (st.getStationCode().equals(obj.getStationCode())) {
+                        st.setPlatform(obj.getPlatform());
+                        st.setActualArrivalTime(obj.getActualArrival());
+                        st.setActualDepartureTime(obj.getActualDeparture());
+                    }
                 }
             }
-        }
-        notifyDataSetChanged();
-        
-        
+            ((Activity) context).runOnUiThread(()->{
+                notifyDataSetChanged();
+            });
+
+        }).start();
+
     }
 
     private String apiTimeIn12Hours(String apiTime){

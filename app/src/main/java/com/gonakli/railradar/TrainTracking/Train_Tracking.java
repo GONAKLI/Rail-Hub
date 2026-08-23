@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railradar.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
+import com.gonakli.railradar.API_Limit.Train_Finder_Api_Limit;
 import com.gonakli.railradar.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railradar.Permissions.GPS_Req;
 import com.gonakli.railradar.Permissions.Location_Permissions;
@@ -85,9 +86,14 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void call_API_Service() {
-    Intent intent = new Intent(Train_Tracking.this, Train_Tracking_API_Call.class);
-    intent.putExtra("trainNumber", trainNumber);
-    startService(intent);
+        if(Train_Finder_Api_Limit.canCallFindTrainAPI(trainNumber)){
+            Intent intent = new Intent(Train_Tracking.this, Train_Tracking_API_Call.class);
+            intent.putExtra("trainNumber", trainNumber);
+            startService(intent);
+        }else{
+            Toast.makeText(this, "Train status updated a few seconds ago", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void tracking_upper_header(Train_Tracking_Structure trainLocationData) {
@@ -129,8 +135,10 @@ public class Train_Tracking extends AppCompatActivity {
                         Log.d("checkStatusmsg", "tracking_upper_header: 2");
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
                     } else if (trainApiStatusMsg.contains("Train journey Already ended")) {
-
                         Log.d("checkStatusmsg", "tracking_upper_header: 3");
+                        trackingHeaderStatusInfo.setText(trainApiStatusMsg);
+                        trackingHeaderStatusInfo.setTextColor(Color.RED);
+                    } else if (trainApiStatusMsg.contains("is cancelled")) {
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
                         trackingHeaderStatusInfo.setTextColor(Color.RED);
                     }
@@ -169,7 +177,11 @@ public class Train_Tracking extends AppCompatActivity {
         Log.d("scroll_testing", "track_user: " + stData);
         for(int i=0; i<arrTrainStations.size(); i++){
             if(arrTrainStations.get(i).getStationCode().equals(stData)){
-                live_train_tracking_recycler_view.smoothScrollToPosition(i);
+                int finalI = i;
+                new Thread(() -> {
+                    live_train_tracking_recycler_view.smoothScrollToPosition(finalI);
+                }).start();
+
                 break;
             }
             Log.d("scroll_testing", "track_user: arrTrainStations.get(i).getStationCode(): " + arrTrainStations.get(i).getStationCode());
@@ -199,6 +211,7 @@ public class Train_Tracking extends AppCompatActivity {
                 Intent intent = new Intent(Train_Tracking.this, myLocationServiceClass.class);
 
                 if (isInsideTrain) {
+                    trainApiStatusMsg = null;
                     // ================= STATE 1: INSIDE TRAIN (ACTIVE / ON) =================
                     insideTrainBtn.setText("Stop, I'm Outside");
                     insideTrainBtn.setIconResource(R.drawable.nearby_station_icon); // Ya aapka active icon

@@ -120,31 +120,29 @@ public class Station_List_DB_Helper extends SQLiteAssetHelper {
         ArrayList<Station_List_Structure> arrStationListData = new ArrayList<>();
         String sqlQuery;
         Cursor cursor;
+        arrStationListData.clear();
+
     if(stationCodeOrName == null || stationCodeOrName.isEmpty()){
         sqlQuery = String.format("SELECT %s, %s FROM %s ORDER BY RANDOM() LIMIT 8",
                 TABLE_STATION_CODE_COLUMN, TABLE_STATION_NAME_COLUMN, TABLE_NAME);
     }else {
-        stationCodeOrName = stationCodeOrName.trim().toLowerCase();
-        sqlQuery = String.format("SELECT %s, %s FROM %s WHERE LOWER(%s) LIKE ? OR LOWER(%s) LIKE ? LIMIT 8",
-                TABLE_STATION_CODE_COLUMN, TABLE_STATION_NAME_COLUMN, TABLE_NAME, TABLE_STATION_CODE_COLUMN,
-                TABLE_STATION_NAME_COLUMN);
+        sqlQuery = String.format("SELECT %s, %s FROM %s WHERE LOWER(%s) LIKE LOWER('%s%%') OR LOWER(%s) LIKE LOWER('%%%s%%') LIMIT 8",
+                TABLE_STATION_CODE_COLUMN, TABLE_STATION_NAME_COLUMN, TABLE_NAME, TABLE_STATION_CODE_COLUMN, stationCodeOrName,
+                TABLE_STATION_NAME_COLUMN, stationCodeOrName);
     }
-    arrStationListData.clear();
-    try(SQLiteDatabase db = this.getReadableDatabase()){
-         cursor = db.rawQuery(sqlQuery, null);
-         while (cursor.moveToNext()){
-             String stationCode = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_CODE_COLUMN));
-             String stationName = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
-             arrStationListData.add(new Station_List_Structure(stationCode,stationName));
-         }
-         cursor.close();
-    }
+        try(SQLiteDatabase db = this.getReadableDatabase()){
+            cursor = db.rawQuery(sqlQuery, null);
+            while (cursor.moveToNext()){
+                String stationCode = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_CODE_COLUMN));
+                String stationName = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_STATION_NAME_COLUMN));
+                Log.d("myCursor", "getDataForPredictiveTextFields: " + stationName + " " + stationCode);
+                arrStationListData.add(new Station_List_Structure(stationCode,stationName));
+            }
+            cursor.close();
+        }
+        Log.d("testStatt", "getDataForPredictiveTextFields: " + sqlQuery);
+
     return arrStationListData;
     }
-
-
-
-
-
 
 }

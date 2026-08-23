@@ -44,8 +44,11 @@ public class Home_Activity_All_Fragment_Manager extends Fragment {
        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-       fragmentTransaction.add(R.id.frameLayout1, new Fragment_Home_Screen());
-       fragmentTransaction.commit();
+        if( fragmentManager.findFragmentById(R.id.frameLayout1) == null){
+            fragmentTransaction.add(R.id.frameLayout1, new Fragment_Home_Screen());
+            fragmentTransaction.commit();
+        }
+
     }
 
     private void BottomNavigationClickManage(){
