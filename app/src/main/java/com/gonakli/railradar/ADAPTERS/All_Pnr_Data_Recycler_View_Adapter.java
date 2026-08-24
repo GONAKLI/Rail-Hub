@@ -38,17 +38,20 @@ import java.util.ArrayList;
 
 public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All_Pnr_Data_Recycler_View_Adapter.viewHolder> {
     ArrayList<Pnr_Api_Response_Structure> arrPnrData;
+    Intent iPnrApiService;
 
     Context context;
-    public All_Pnr_Data_Recycler_View_Adapter(Context context, ArrayList<Pnr_Api_Response_Structure> arrPnrData){
-    this.context = context;
+
+    public All_Pnr_Data_Recycler_View_Adapter(Context context, ArrayList<Pnr_Api_Response_Structure> arrPnrData) {
+        this.context = context;
         this.arrPnrData = arrPnrData;
     }
+
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view = LayoutInflater.from(context).inflate(R.layout.pnr_card,parent,false);
-       return new viewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.pnr_card, parent, false);
+        return new viewHolder(view);
     }
 
     @Override
@@ -56,8 +59,8 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
 
         Station_List_DB_Helper db = new Station_List_DB_Helper(context);
-        String trNumber, trName, pnrNum, boardStName,boardStCode, reservationUptoStName, reservationUptoStCode;
-        String journeyClass, quota, chartStatus, journeyDate,ticketFare;
+        String trNumber, trName, pnrNum, boardStName, boardStCode, reservationUptoStName, reservationUptoStCode;
+        String journeyClass, quota, chartStatus, journeyDate, ticketFare;
         StringBuilder informationMessage;
         trNumber = arrPnrData.get(position).getTrainNumber();
         trName = arrPnrData.get(position).getTrainName();
@@ -73,19 +76,18 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         journeyDate = dateFormater(arrPnrData.get(position).getDateOfJourney());
         informationMessage = new StringBuilder();
         ticketFare = arrPnrData.get(position).getTicketFare();
-        for(Object data : arrPnrData.get(position).getArrInformationMessage()){
-            if(data != null && !data.toString().isEmpty() && !data.toString().equalsIgnoreCase("null")){
+        for (Object data : arrPnrData.get(position).getArrInformationMessage()) {
+            if (data != null && !data.toString().isEmpty() && !data.toString().equalsIgnoreCase("null")) {
                 holder.pnrStatusInfoMessage.setVisibility(View.VISIBLE);
                 informationMessage.append(String.format("• %s \n", data.toString().trim()));
             }
         }
 
-        if(arrPnrData.get(position).getArrPassengerList() != null){
+        if (arrPnrData.get(position).getArrPassengerList() != null) {
             holder.pnrStatusPassengerContainer.removeAllViews();
 
 
-
-            for (PassengerList_Structure myPass : arrPnrData.get(position).getArrPassengerList()){
+            for (PassengerList_Structure myPass : arrPnrData.get(position).getArrPassengerList()) {
                 View view = LayoutInflater.from(context).inflate(R.layout.passenger_list_view_layout, holder.pnrStatusPassengerContainer, false);
                 TextView passengerSerialNumber, bookingDetails, currentStatus;
                 TextView passengerAgeNationality, passengerBerthChoice;
@@ -107,15 +109,15 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                 String currentStatusDetails = myPass.getCurrentStatusDetails();
 
                 passengerSerialNumber.setText(String.format("Passenger %s", srNo));
-                passengerAgeNationality.setText(String.format("Age: %s • Nationality: %s", passengerAge,passengerNationality));
+                passengerAgeNationality.setText(String.format("Age: %s • Nationality: %s", passengerAge, passengerNationality));
                 passengerBerthChoice.setText(String.format("Berth Choice: %s", passengerBerthChoi));
-                bookingDetails.setText(String.format("Booking: %s • Coach: %s • Berth: %s (%s)", bookingStatus,bookingCoachId, bookingBerthNo,bookingBerthCode));
+                bookingDetails.setText(String.format("Booking: %s • Coach: %s • Berth: %s (%s)", bookingStatus, bookingCoachId, bookingBerthNo, bookingBerthCode));
                 currentStatus.setText(String.format("Current Status: %s", currentStatusDetails));
-                if(currentStatusDetails.contains("CNF")){
+                if (currentStatusDetails.contains("CNF")) {
                     currentStatus.setBackgroundColor(Color.parseColor("#469C11"));
                 } else if (currentStatusDetails.contains("CAN")) {
                     currentStatus.setBackgroundColor(Color.parseColor("#9C1F11"));
-                }else {
+                } else {
                     currentStatus.setBackgroundColor(Color.parseColor("#787474"));
                 }
                 holder.pnrStatusPassengerContainer.addView(view);
@@ -129,7 +131,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         holder.pnrStatusPnrNumber.setText(String.format("PNR: %s", pnrNum));
         holder.pnrStatusBoardingPoint.setText(String.format("Boarding: %s (%s)", boardStName, boardStCode));
         holder.pnrStatusReservationUpto.setText(String.format("Reservation Upto: %s (%s)", reservationUptoStName, reservationUptoStCode));
-        holder.pnrStatusDetails.setText(String.format("Class: %s • Quota: %s • Chart Status: %s", journeyClass, quota,chartStatus));
+        holder.pnrStatusDetails.setText(String.format("Class: %s • Quota: %s • Chart Status: %s", journeyClass, quota, chartStatus));
         holder.pnrStatusJourneyDate.setText(String.format("Journey Date: %s", journeyDate));
         holder.pnrStatusInfoMessage.setText(informationMessage.toString());
         holder.pnrStatusTicketFare.setText(String.format("Ticket Fare: %s", ticketFare));
@@ -142,8 +144,8 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     private void copy_Pnr(viewHolder holder, String pnrNum) {
-        holder.pnrStatusPnrNumber.setOnLongClickListener(v ->{
-            ClipboardManager clipboardManager =(ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        holder.pnrStatusPnrNumber.setOnLongClickListener(v -> {
+            ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("pnrNumber", pnrNum);
             clipboardManager.setPrimaryClip(clipData);
             Toast.makeText(context, "Pnr number copied", Toast.LENGTH_SHORT).show();
@@ -157,10 +159,10 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         return arrPnrData.size();
     }
 
-    public static class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView pnrStatusTrainNumber, pnrStatusTrainName,pnrStatusPnrNumber,pnrStatusBoardingPoint;
-        TextView pnrStatusReservationUpto, pnrStatusDetails, pnrStatusJourneyDate,pnrStatusInfoMessage, pnrStatusTicketFare;
+        TextView pnrStatusTrainNumber, pnrStatusTrainName, pnrStatusPnrNumber, pnrStatusBoardingPoint;
+        TextView pnrStatusReservationUpto, pnrStatusDetails, pnrStatusJourneyDate, pnrStatusInfoMessage, pnrStatusTicketFare;
         LinearLayout pnrCardParentContainer;
         LinearLayout pnrStatusPassengerContainer;
         ImageView btnRefreshPnr;
@@ -185,7 +187,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         }
     }
 
-    private  String dateFormater(String dateStr){
+    private String dateFormater(String dateStr) {
         LocalDateTime dateTime = null;
         String formatted = "";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -194,8 +196,9 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         }
         return formatted;
     }
+
     private void delete_Pnr(viewHolder holder, String pnrNum) {
-        holder.itemView.setOnLongClickListener(v ->{
+        holder.itemView.setOnLongClickListener(v -> {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle("Delete PNR")
                     .setMessage("Shall i delete PNR - " + pnrNum + " ?")
@@ -208,11 +211,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new Thread(()->{
+                            new Thread(() -> {
                                 PNR_Data_DB_Helper db = new PNR_Data_DB_Helper(context);
                                 db.deletePnrFromDB(pnrNum);
                                 db.close();
-                                ((Activity) context).runOnUiThread(()->{
+                                ((Activity) context).runOnUiThread(() -> {
                                     refreshAdapter();
                                 });
                             }).start();
@@ -229,28 +232,31 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     private void refresh_pnr(viewHolder holder, String pnrNum) {
-        if(Pnr_Check_Api_Limit.canCallPnrAPI(pnrNum)){
-            holder.btnRefreshPnr.setOnClickListener(v ->{
-                Intent iService = new Intent(context, PNR_Enquiry_API_CALL.class);
-                iService.putExtra("pnrNumber", pnrNum);
-                iService.putExtra("isRefresh", true);
-                context.startService(iService);
-                Animation animation = AnimationUtils.loadAnimation(context,R.anim.pnr_refresh_rotation);
+
+        holder.btnRefreshPnr.setOnClickListener(v -> {
+            if (Pnr_Check_Api_Limit.canCallPnrAPI(pnrNum)) {
+                iPnrApiService = new Intent(context, PNR_Enquiry_API_CALL.class);
+                iPnrApiService.putExtra("pnrNumber", pnrNum);
+                iPnrApiService.putExtra("isRefresh", true);
+                context.startService(iPnrApiService);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.pnr_refresh_rotation);
                 holder.btnRefreshPnr.startAnimation(animation);
+            } else {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.pnr_refresh_rotation);
+                holder.btnRefreshPnr.startAnimation(animation);
+                Toast.makeText(context, "Pnr Status is already upTodate", Toast.LENGTH_SHORT).show();
+            }
 
-            });
-        }else {
-            Toast.makeText(context, "Pnr Status is already upTodate", Toast.LENGTH_SHORT).show();
-        }
-
+        });
     }
-    public void refreshAdapter(){
 
-        new Thread(() ->{
+    public void refreshAdapter() {
+
+        new Thread(() -> {
             PNR_Data_DB_Helper db = new PNR_Data_DB_Helper(context);
             ArrayList<Pnr_Api_Response_Structure> latestData = db.getPnrDataFromDB();
             db.close();
-            ((Activity) context).runOnUiThread(()->{
+            ((Activity) context).runOnUiThread(() -> {
                 this.arrPnrData.clear();
                 this.arrPnrData.addAll(latestData);
                 this.notifyDataSetChanged();
@@ -258,5 +264,12 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         }).start();
 
 
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        if (iPnrApiService != null) {
+            context.stopService(iPnrApiService);
+        }
     }
 }

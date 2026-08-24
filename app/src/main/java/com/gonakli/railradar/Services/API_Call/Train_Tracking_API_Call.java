@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 public class Train_Tracking_API_Call extends Service{
 
-//    private static final String API_URL = "http://10.232.190.180:5015/find-my-train";
+//   private static final String API_URL = "http://10.62.223.99:5015/find-my-train";
      private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
-    String trainNumber;
+    String trainNumber, startDate;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,6 +42,9 @@ public class Train_Tracking_API_Call extends Service{
         }
         if(intent != null && intent.hasExtra("trainNumber")){
             trainNumber = intent.getStringExtra("trainNumber");
+            if(intent.hasExtra("startDate")){
+                startDate = intent.getStringExtra("startDate");
+            }
             new Thread(this::fetch_Train_Location).start();
         }else {
             stopSelf();
@@ -58,9 +61,14 @@ public class Train_Tracking_API_Call extends Service{
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
-            String trNumJSON = String.format("{\"trainNumber\" : \"%s\"}", trainNumber);
+
             OutputStream os = conn.getOutputStream();
-            os.write(trNumJSON.getBytes());
+            JSONObject dataForAPI = new JSONObject();
+            dataForAPI.put("trainNumber", trainNumber);
+            if(startDate !=null){
+                dataForAPI.put("startDate", startDate);
+            }
+            os.write(dataForAPI.toString().getBytes());
             os.flush();
             os.close();
 

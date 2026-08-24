@@ -42,6 +42,8 @@ public class Fragment_Pnr_Screen extends Fragment {
     AppCompatButton btnFindPnr;
     RecyclerView allPnrCheckRecyclerView;
     All_Pnr_Data_Recycler_View_Adapter adapter;
+    Intent iPnrApiService;
+    Context context;
 
     @Nullable
     @Override
@@ -49,6 +51,7 @@ public class Fragment_Pnr_Screen extends Fragment {
       getActivity().setTitle("PNR Status");
        view = LayoutInflater.from(getActivity()).inflate(R.layout.pnr_check, container,false);
        find_all_id();
+        context = getContext();
        onSubmitAction();
        recyclerView_setup();
        return view;
@@ -91,16 +94,16 @@ public class Fragment_Pnr_Screen extends Fragment {
                 Toast.makeText(getContext(), "Pnr should be a valid 10 digit number", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent iPNR = new Intent(getContext(), PNR_Enquiry_API_CALL.class);
-            iPNR.putExtra("pnrNumber", pnrValue);
-            getContext().startService(iPNR);
+            iPnrApiService = new Intent(getContext(), PNR_Enquiry_API_CALL.class);
+            iPnrApiService.putExtra("pnrNumber", pnrValue);
+            if(context != null)  context.startService(iPnrApiService);
             pnrSearchField.clearFocus();
             pnrSearchField.setText("");
             InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(pnrSearchField.getWindowToken(), 0);
         });
     }
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -110,7 +113,7 @@ public class Fragment_Pnr_Screen extends Fragment {
                 Station_List_DB_Helper db = new Station_List_DB_Helper(getContext());
                 Pnr_Api_Response_Structure resData =(Pnr_Api_Response_Structure) intent.getSerializableExtra("pnrResponse");
                 boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
-                if(resData.isSuccess()){
+                if(resData !=null && resData.isSuccess()){
                     new Thread(() ->{
                         PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
                         if(isRefresh){
@@ -142,7 +145,7 @@ public class Fragment_Pnr_Screen extends Fragment {
 
 
                 }else{
-                    if(!resData.isSuccess()){
+                    if(resData!=null && !resData.isSuccess()){
                         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                                 .setTitle("Something Wrong")
                                 .setMessage(resData.getErrorMessage())
@@ -162,22 +165,29 @@ public class Fragment_Pnr_Screen extends Fragment {
         }
     };
 
+
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getContext().registerReceiver(broadcastReceiver, new IntentFilter("PNR_RESPONSE_ACTION"), Context.RECEIVER_NOT_EXPORTED);
+            context.registerReceiver(broadcastReceiver, new IntentFilter("PNR_RESPONSE_ACTION"), Context.RECEIVER_NOT_EXPORTED);
             Log.d("pnrWork", "onAttachedToWindow: receiver registered");
+        }
+        else{
+            context.registerReceiver(broadcastReceiver, new IntentFilter("PNR_RESPONSE_ACTION"), Context.RECEIVER_NOT_EXPORTED);
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onPause() {
+        super.onPause();
         try{
             requireContext().unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             Log.d("detach", "onDetach error: " + e);
+        }
+        if(iPnrApiService !=null){
+            context.stopService(iPnrApiService);
         }
     }
 }

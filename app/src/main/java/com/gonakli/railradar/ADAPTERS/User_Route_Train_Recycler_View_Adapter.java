@@ -133,6 +133,9 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
 
         String[] splitArrival = arrivalTime.split(":", 2);
         String[] splitDepart = finalDestinationReachTime.split(":", 2);
+        Log.d("testCrashing", "onBindViewHolder: " + splitDepart[0] + " " + splitDepart[1]);
+        Log.d("testCrashing", "onBindViewHolder: " + splitArrival[0] + " " + splitArrival[1]);
+
 
         int arrivalHour = Integer.parseInt(splitArrival[0]);
         int arrivalMinutes = Integer.parseInt(splitArrival[1]);

@@ -29,7 +29,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/card_text_primary"
-            android:textColorHint="@color/card_text_secondary"
+            android:textColorHint="@color/card_text_primary"
             android:background="@drawable/pnr_input_field"
             android:gravity="center_vertical"
             android:importantForAutofill="no" />
