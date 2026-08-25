@@ -450,6 +450,10 @@ public class Train_Tracking extends AppCompatActivity {
             registerReceiver(apiTrainLocation, new IntentFilter(Train_Tracking_API_Call.API_TRAIN_DATA), Context.RECEIVER_NOT_EXPORTED);
         }
 
+        if(isInsideTrain && iLocationService !=null){
+            startService(iLocationService);
+        }
+
     }
 
     @Override

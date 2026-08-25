@@ -23,8 +23,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.gonakli.railradar.ADAPTERS.Stations_Dropdown_Adapter;
+import com.gonakli.railradar.DB_WORK.Input_Field_Last_Search_DB_Helper;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.R;
+import com.gonakli.railradar.Structure_Class.Input_Field_Last_Search_Structure;
 import com.gonakli.railradar.Structure_Class.Station_List_Structure;
 import com.gonakli.railradar.UserRouteTrains.User_Route_Train_List;
 
@@ -46,12 +48,30 @@ public class Input_From_To_Station extends LinearLayout {
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.input_field_from_station_to_station, this, true);
         find_all_id();
+
         add_Predictive_Text();
         from_station_to_station_fields();
         Action_On_Swap_Button();
         clearBadge();
+        get_Recent_Field_Data_From_DB();
 
     }
+
+    private void get_Recent_Field_Data_From_DB() {
+        try(Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context)){
+            Input_Field_Last_Search_Structure recentData = db.getRecentFieldData();
+            if(recentData != null){
+                fromStationCodeBadge.setText(recentData.getFromCode());
+                fromStation.setText(recentData.getFromValue());
+                fromStationCodeBadge.setVisibility(VISIBLE);
+
+                toStationCodeBadge.setText(recentData.getToCode());
+                toStation.setText(recentData.getToValue());
+                toStationCodeBadge.setVisibility(VISIBLE);
+            }
+        }
+    }
+
     private void Action_On_Swap_Button() {
         btn_swap_stations.setOnClickListener(v ->{
             fromStation.clearFocus();
@@ -228,11 +248,21 @@ public class Input_From_To_Station extends LinearLayout {
             String fromStationCode_value = fromStationCodeBadge.getText().toString().trim();
             String toStationCode_value = toStationCodeBadge.getText().toString().trim();
 
+
             if(fromStationCode_value.isBlank() || toStationCode_value.isBlank()){
                 Toast.makeText(context, "Select a valid station", Toast.LENGTH_SHORT)
                         .show();
                 return;
             }else{
+                new Thread(() ->{
+                    try(Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context);
+                        Station_List_DB_Helper stDbHelper = new Station_List_DB_Helper(context)){
+                        Input_Field_Last_Search_Structure structureObj = new Input_Field_Last_Search_Structure(
+                                fromStationCode_value,stDbHelper.getStationNameByCode(fromStationCode_value),toStationCode_value,stDbHelper.getStationNameByCode(toStationCode_value)
+                        );
+                        db.insertRecentFieldDataInDB(structureObj);
+                    }
+                }).start();
                 Intent iUserRouteTrainList = new Intent(context, User_Route_Train_List.class);
                 iUserRouteTrainList.putExtra("fromStation", fromStationCode_value);
                 iUserRouteTrainList.putExtra("toStation", toStationCode_value);

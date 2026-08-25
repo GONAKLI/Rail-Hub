@@ -11,6 +11,7 @@
         android:iconifiedByDefault="false"
         android:searchIcon="@drawable/search_icon"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showTrainsRecyclerView"
         android:layout_width="match_parent"

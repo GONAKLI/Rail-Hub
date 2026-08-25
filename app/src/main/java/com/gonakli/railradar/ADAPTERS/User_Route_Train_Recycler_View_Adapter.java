@@ -1,9 +1,7 @@
 package com.gonakli.railradar.ADAPTERS;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
@@ -24,8 +22,6 @@ import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -136,22 +132,28 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         Log.d("testCrashing", "onBindViewHolder: " + splitDepart[0] + " " + splitDepart[1]);
         Log.d("testCrashing", "onBindViewHolder: " + splitArrival[0] + " " + splitArrival[1]);
 
-
+        Log.d("testCrashing", "onBindViewHolder: line 135");
         int arrivalHour = Integer.parseInt(splitArrival[0]);
         int arrivalMinutes = Integer.parseInt(splitArrival[1]);
+
+        Log.d("testCrashing", "onBindViewHolder: line 138");
         int deptHour = Integer.parseInt(splitDepart[0]);
         int deptMinutes = Integer.parseInt(splitDepart[1]);
+
+        Log.d("testCrashing", "onBindViewHolder: line 142");
         int arrivalTotalMinutes = arrivalHour * 60 + arrivalMinutes;
         int departTotalMinutes = deptHour * 60 + deptMinutes;
         if(departTotalMinutes < arrivalTotalMinutes){
             departTotalMinutes += 24*60;
         }
 
+        Log.d("testCrashing", "onBindViewHolder: line 145");
+
         int difference = Math.abs(departTotalMinutes - arrivalTotalMinutes);
         int hours = difference/60;
         int minutes = difference%60;
 
-
+        Log.d("testCrashing", "onBindViewHolder: line 156");
         String journeyDuration = hours + " Hours " + minutes + " Minutes";
 
 
@@ -164,7 +166,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         String trainNumber = arrScheduleList.get(position).getTrainNumber();
         String trainName = arrScheduleList.get(position).getTrainName();
 
-
+        Log.d("testCrashing", "onBindViewHolder: line 169");
 
         holder.trainScheduleTrainNumber.setText(trainNumber);
         holder.trainScheduleTrainName.setText(trainName);
@@ -196,10 +198,10 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             TextView infoTrainName, infoTrainNumber, infoTrainService, infoTrainJourneyTime;
             TextView infoTrainStops, infoTrainTotalDistance, infoTrainStartingPoint, infoTrainEndingPoint;
             Button btnClose;
-
+            Log.d("testCrashing", "onBindViewHolder: line 201");
 
             BottomSheetDialog dialog = new BottomSheetDialog( context);
-            dialog.setContentView(R.layout.user_route_train_info_bottom_layout);
+            dialog.setContentView(R.layout.user_route_train_info_bottom_sheet);
 
             infoTrainName = dialog.findViewById(R.id.userRouteBottomDialogueTrainName);
             infoTrainNumber = dialog.findViewById(R.id.userRouteBottomDialogueTrainNumber);

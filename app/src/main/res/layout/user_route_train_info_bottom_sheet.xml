@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:padding="16dp"
+    android:background="@drawable/bg_passenger_pnr_card"
+    android:elevation="8dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/layoutTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Train Information"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1E3A8A"
+        android:textAlignment="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Train Name -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainNameContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/layoutTitle"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Train Name"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainName"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="Kalka Express"
+            android:textStyle="bold"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Train Number -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainNumberContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainNameContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Train Number"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainNumber"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="15512"
+            android:textStyle="bold"
+            android:textColor="#1E3A8A" />
+    </LinearLayout>
+
+    <!-- Start From -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainStartingPointContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainNumberContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Start From"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainStartingPoint"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="Kalka"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- End At -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainEndingPointContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainStartingPointContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="End At"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainEndingPoint"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="Shimla"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Service -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainServiceContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainEndingPointContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Service"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainService"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="Daily"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Travel Time -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainTravelTimeContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainServiceContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Travel Time"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainTravelTime"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="5 hour"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Total Distance -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainTotalDistanceContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainTravelTimeContainer"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Total Distance"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainTotalDistance"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="115 km"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Total Stops -->
+    <LinearLayout
+        android:id="@+id/userRouteBottomDialogueTrainTotalStopsContainer"
+        style="@style/bottomDialogTrainInfoKeysAndValuesContainer"
+        android:layout_below="@+id/userRouteBottomDialogueTrainTotalDistanceContainer"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            style="@style/bottomDialogTrainInfoKeys"
+            android:text="Total Stops"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/userRouteBottomDialogueTrainTotalStops"
+            style="@style/bottomDialogTrainInfoValues"
+            android:text="20"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <!-- Close Button -->
+    <Button
+        android:id="@+id/btnCloseDialog"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/userRouteBottomDialogueTrainTotalStopsContainer"
+        android:text="Close"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FF6E40"
+        android:elevation="2dp" />
+
+</RelativeLayout>
