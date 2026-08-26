@@ -98,5 +98,34 @@
         android:backgroundTint="#FF6E40"
         android:textColor="#FFFFFF"
         app:cornerRadius="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp"
+        android:id="@+id/no_NearBy_Station_Found_Container"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:src="@drawable/no_nearby_station_found"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:contentDescription="no_NearBy_Station_Found"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sorry! There is no Near By Station found on your location"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:lineHeight="25dp"
+            android:textAlignment="center"
+            android:layout_marginTop="45dp"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

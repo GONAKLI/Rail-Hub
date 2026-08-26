@@ -185,41 +185,6 @@ public class Train_Tracking_Recycler_View_Adapter
         }
     }
 
-//    private void set_Train_Icon(myViewHolder holder, int position) {
-//        if (trainLocationData != null) {
-//
-//            Log.d("bbc", "set_Train_Icon: " + trainLocationData.getStatusMessage());
-//            if (trainLocationData.getCurrentStation() != null) {
-//                Log.d("bbc", "set_Train_Icon: " + trainLocationData.getCurrentStation().getStationName());
-//                if (arrTrainStations.get(position).getStationCode()
-//                        .equals(trainLocationData.getCurrentStation().getStationCode())) {
-//                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
-//                } else {
-//                    holder.liveTrainIcon.setVisibility(View.GONE);
-//                }
-//            } else if (trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null) {
-//                if (arrTrainStations.get(position).getStationCode()
-//                        .equals(trainLocationData.getPreviousStation().getStationCode())) {
-//                    holder.liveTrainIcon.setVisibility(View.VISIBLE);
-//                    int rowHeight = holder.itemView.getHeight();
-//                    float fraction = trainLocationData.getStationCoveredPercentage() / 100.0f;
-//                    holder.liveTrainIcon.setTranslationY(fraction * rowHeight);
-//                } else {
-//                    holder.liveTrainIcon.setVisibility(View.GONE);
-//                    holder.liveTrainIcon.setTranslationY(0f);
-//
-//                }
-//            }
-//        } else {
-//            if (arrTrainStations != null && !arrTrainStations.isEmpty() && position == 0) {
-//                holder.liveTrainIcon.setVisibility(View.VISIBLE);
-//                holder.liveTrainIcon.setTranslationY(0f);
-//            } else {
-//                holder.liveTrainIcon.setVisibility(View.GONE);
-//            }
-//        }
-//    }
-
     private void set_Train_Icon(myViewHolder holder, int position) {
         if (trainLocationData != null) {
             Log.d("bbc", "set_Train_Icon: " + trainLocationData.getStatusMessage());

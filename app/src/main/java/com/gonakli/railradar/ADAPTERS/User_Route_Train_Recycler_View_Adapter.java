@@ -21,10 +21,15 @@ import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railradar.TrainTracking.Train_Tracking;
+import com.gonakli.railradar.Utility.Current_Day_Finder;
+import com.gonakli.railradar.Utility.Journey_Time_Finder;
+import com.gonakli.railradar.Utility.Time_Converter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +59,8 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         ArrayList < Train_Schedule_Station_Structure> arrStation = arrScheduleList.get(position).getStationList();
         String arrivalTime = "", finalDestinationReachTime = "";
         String runningDays = "";
+        int startDayCount = Integer.MIN_VALUE;
+        int endDayCount = Integer.MIN_VALUE;
 
 
 
@@ -65,9 +72,20 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
                 if(arrivalTime.equalsIgnoreCase("--")){
                     arrivalTime = stationData.getDepartureTime();
                 }
+                try{
+                    startDayCount = Integer.parseInt(stationData.getDayCount());
+                } catch (NumberFormatException e) {
+                     e.printStackTrace();
+                }
+
             }
             if(stationData.getStationCode().equals(toStationCode)){
                 finalDestinationReachTime = stationData.getArrivalTime();
+                try{
+                    endDayCount = Integer.parseInt(stationData.getDayCount());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -129,44 +147,18 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
 
         String[] splitArrival = arrivalTime.split(":", 2);
         String[] splitDepart = finalDestinationReachTime.split(":", 2);
-        Log.d("testCrashing", "onBindViewHolder: " + splitDepart[0] + " " + splitDepart[1]);
-        Log.d("testCrashing", "onBindViewHolder: " + splitArrival[0] + " " + splitArrival[1]);
+        Journey_Time_Finder finder = new Journey_Time_Finder();
+       Duration durationResult = finder.getJourneyTime(Integer.parseInt(splitArrival[0]),Integer.parseInt(splitArrival[1]),startDayCount,Integer.parseInt(splitDepart[0]),Integer.parseInt(splitDepart[1]),endDayCount);
+       String journeyDuration = durationResult.toHours() + " Hours " + durationResult.toMinutes()%60 + " Minutes";
 
-        Log.d("testCrashing", "onBindViewHolder: line 135");
-        int arrivalHour = Integer.parseInt(splitArrival[0]);
-        int arrivalMinutes = Integer.parseInt(splitArrival[1]);
-
-        Log.d("testCrashing", "onBindViewHolder: line 138");
-        int deptHour = Integer.parseInt(splitDepart[0]);
-        int deptMinutes = Integer.parseInt(splitDepart[1]);
-
-        Log.d("testCrashing", "onBindViewHolder: line 142");
-        int arrivalTotalMinutes = arrivalHour * 60 + arrivalMinutes;
-        int departTotalMinutes = deptHour * 60 + deptMinutes;
-        if(departTotalMinutes < arrivalTotalMinutes){
-            departTotalMinutes += 24*60;
-        }
-
-        Log.d("testCrashing", "onBindViewHolder: line 145");
-
-        int difference = Math.abs(departTotalMinutes - arrivalTotalMinutes);
-        int hours = difference/60;
-        int minutes = difference%60;
-
-        Log.d("testCrashing", "onBindViewHolder: line 156");
-        String journeyDuration = hours + " Hours " + minutes + " Minutes";
-
-
-        String[] obj = convert_Time_In_12_Hours(arrivalTime, finalDestinationReachTime);
-        arrivalTime = obj[0];
-        finalDestinationReachTime = obj[1];
+        arrivalTime = Time_Converter.giveMe_HH_MM(arrivalTime);
+        finalDestinationReachTime = Time_Converter.giveMe_HH_MM(finalDestinationReachTime);
 
 
 
         String trainNumber = arrScheduleList.get(position).getTrainNumber();
         String trainName = arrScheduleList.get(position).getTrainName();
 
-        Log.d("testCrashing", "onBindViewHolder: line 169");
 
         holder.trainScheduleTrainNumber.setText(trainNumber);
         holder.trainScheduleTrainName.setText(trainName);
@@ -236,22 +228,6 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         });
 
 
-    }
-
-    private String[] convert_Time_In_12_Hours(String arrivalTime, String finalDestinationReachTime) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
-        try{
-            Date arr = inputFormat.parse(arrivalTime);
-            arrivalTime = outputFormat.format(arr);
-            Date dest = inputFormat.parse(finalDestinationReachTime);
-            finalDestinationReachTime = outputFormat.format(dest);
-            String[] obj = {arrivalTime, finalDestinationReachTime};
-            return obj;
-        }catch (ParseException e){
-            Log.d("parseException", "convert_Time_In_12_Hours: " + e.getMessage());
-        }
-        return null;
     }
 
     @Override

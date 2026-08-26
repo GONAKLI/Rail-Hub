@@ -1,6 +1,7 @@
 package com.gonakli.railradar.ExtraOptions;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +44,8 @@ import androidx.core.app.ActivityCompat;
 import com.gonakli.railradar.ADAPTERS.NearBy_Station_ListView_Adapter;
 import com.gonakli.railradar.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railradar.HomeActivity.Home_Screen_Activity;
+import com.gonakli.railradar.Permissions.GPS_Req;
+import com.gonakli.railradar.Permissions.Location_Permissions;
 import com.gonakli.railradar.R;
 import com.gonakli.railradar.Structure_Class.NearBy_Station_Structure;
 import com.gonakli.railradar.Structure_Class.Station_List_Structure;
@@ -64,9 +68,12 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     Button nearbyListRefreshBtn;
     ProgressBar nearbyStationProgressBar;
     Dialog dialog, gpsDialog ;
+    Location_Permissions locationPermissionsObj;
+    GPS_Req gpsReqObj;
     double latitude, longitude;
-    private ActivityResultLauncher<Intent> gpsSettingsLauncher;
-    private ActivityResultLauncher<Intent> locationPermissionChecker;
+    LinearLayout no_NearBy_Station_Found_Container, nearbyListHeadingContainer;
+    TextView nearbyListTitle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,37 +81,17 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         find_all_id();
         set_toolbar();
         action_on_refresh_btn();
-        if(is_Permission_Enabled()){
-            isGPS_Enabled();
-        }
+        permissionCheckpoint();
 
+    }
 
-
-        gpsSettingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result ->{
-                    if(gpsDialog !=null && gpsDialog.isShowing()){
-                        gpsDialog.dismiss();
-                    }
-                    if(is_Permission_Enabled()){
-                        isGPS_Enabled();
-                    }else{
-                        Toast.makeText(NearBy_Station_Activity.this, "GPS not enabled yet", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        locationPermissionChecker = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                res ->{
-                    if(dialog !=null && dialog.isShowing()){
-                        dialog.dismiss();
-                    }
-                    if(is_Permission_Enabled()){
-                        isGPS_Enabled();
-                    }else {
-                        Toast.makeText(NearBy_Station_Activity.this, "Location Permission not Given", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-
+    private void permissionCheckpoint() {
+    locationPermissionsObj = new Location_Permissions(NearBy_Station_Activity.this);
+    gpsReqObj = new GPS_Req(NearBy_Station_Activity.this);
+    boolean isPermissionGiven = locationPermissionsObj.checkPermission();
+    if(!isPermissionGiven) return;
+    if(!gpsReqObj.gpsChecker()) return;
+    final_location_fetch();
 
     }
 
@@ -114,10 +101,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
             if(adapter != null){
                 adapter.notifyDataSetChanged();
             }
-
-            if(is_Permission_Enabled()){
-                isGPS_Enabled();
-            }
+            permissionCheckpoint();
 
         });
     }
@@ -128,6 +112,13 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         if(!arrNearByStations.isEmpty()){
             adapter = new NearBy_Station_ListView_Adapter(NearBy_Station_Activity.this, arrNearByStations);
             nearbyStationListView.setAdapter(adapter);
+            no_NearBy_Station_Found_Container.setVisibility(View.GONE);
+            nearbyListHeadingContainer.setVisibility(View.VISIBLE);
+            nearbyListTitle.setVisibility(View.VISIBLE);
+        }else{
+            no_NearBy_Station_Found_Container.setVisibility(View.VISIBLE);
+            nearbyListHeadingContainer.setVisibility(View.GONE);
+            nearbyListTitle.setVisibility(View.GONE);
         }
         nearbyStationProgressBar.setVisibility(View.GONE);
 
@@ -144,7 +135,7 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         ArrayList<Station_List_Structure> arrStations = dbHelper.getStationList();
         dbHelper.close();
         if(latitude == 0.0d && longitude == 0.0d){
-            is_Permission_Enabled();
+            permissionCheckpoint();
             return;
         }
         Location startPoint = new Location("startPoint");
@@ -176,47 +167,6 @@ public class NearBy_Station_Activity extends AppCompatActivity {
 
     }
 
-    private boolean is_Permission_Enabled() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    || !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                //dialog work starts here:
-                dialog = new Dialog(this);
-                dialog.setContentView(R.layout.location_permission_dialog);
-                dialog.setCanceledOnTouchOutside(false);
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    );
-                }
-                ImageButton crossIcon = dialog.findViewById(R.id.locationPermissionDialogueCross);
-                Button enablePermissionBtn = dialog.findViewById(R.id.locationPermissionDialogueEnableLocation);
-                crossIcon.setOnClickListener(v -> {
-                    Toast.makeText(NearBy_Station_Activity.this, "Location Permission denied !!", Toast.LENGTH_SHORT).show();
-                    finish();
-                });
-                enablePermissionBtn.setOnClickListener(v -> {
-                    Intent iSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    iSettings.setData(Uri.fromParts("package", getPackageName(), null));
-                    locationPermissionChecker.launch(iSettings);
-                });
-                dialog.show();
-
-                //dialog work end here;
-                return false;
-            } else {
-                ActivityCompat.requestPermissions(
-                        this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION}, 50);
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void set_toolbar() {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Nearby Stations");
@@ -230,54 +180,10 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         nearbyStationListView = findViewById(R.id.nearbyStationListView);
         nearbyListRefreshBtn = findViewById(R.id.nearbyListRefreshBtn);
         nearbyStationProgressBar = findViewById(R.id.nearbyStationProgressBar);
+        no_NearBy_Station_Found_Container = findViewById(R.id.no_NearBy_Station_Found_Container);
+        nearbyListHeadingContainer = findViewById(R.id.nearbyListHeadingContainer);
+        nearbyListTitle = findViewById(R.id.nearbyListTitle);
 
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults, int deviceId) {
-
-        if(requestCode == 50){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED){
-                Toast toast = new Toast(getApplicationContext());
-                toast.setText("Location Permission Required ");
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.show();
-                finish();
-                return;
-
-            }
-            isGPS_Enabled();
-        }
-
-    }
-
-    public void isGPS_Enabled(){
-        LocationManager locationManager =(LocationManager) getSystemService(NearBy_Station_Activity.LOCATION_SERVICE);
-        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isGpsEnabled){
-            gpsDialog = new Dialog(this);
-            gpsDialog.setContentView(R.layout.gps_permission_dialog);
-            gpsDialog.setCanceledOnTouchOutside(false);
-            if (gpsDialog.getWindow() != null) {
-                gpsDialog.getWindow().setLayout(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-            }
-            ImageButton crossIcon = gpsDialog.findViewById(R.id.locationPermissionDialogueCross);
-            Button enableGpsBtn = gpsDialog.findViewById(R.id.locationPermissionDialogueEnableGPS);
-            crossIcon.setOnClickListener(v -> {
-                Toast.makeText(NearBy_Station_Activity.this, "Enable GPS to use this feature", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-            enableGpsBtn.setOnClickListener(v -> {
-                Intent iLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                 gpsSettingsLauncher.launch(iLocation);
-            });
-            gpsDialog.show();
-            return;
-        }
-            final_location_fetch();
     }
 
     @Override
@@ -377,6 +283,27 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                 }
                 }
 
+    }
+
+      @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GPS_Req.REQ_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                final_location_fetch();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("locatPerm", "handlePermissionResult: in train: " + requestCode);
+        if (requestCode == Location_Permissions.REQ_CODE) {
+            if (locationPermissionsObj != null) {
+                locationPermissionsObj.handlePermissionResult(requestCode, permissions, grantResults);
+            }
+        }
     }
 
 

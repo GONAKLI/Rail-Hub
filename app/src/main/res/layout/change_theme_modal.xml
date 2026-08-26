@@ -39,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/modalThemeTitle"
         android:layout_marginTop="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/modalThemeLightRadio"
@@ -87,7 +88,8 @@
             android:textColor="@color/card_text_primary"
             android:textSize="15sp"
             android:buttonTint="@color/chip_accent"
-            app:buttonTint="@color/chip_accent" />
+            app:buttonTint="@color/chip_accent"
+            android:checked="true"/>
     </RadioGroup>
 
     <!-- Action Buttons -->

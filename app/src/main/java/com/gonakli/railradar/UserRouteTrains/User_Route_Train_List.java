@@ -50,7 +50,7 @@ public class User_Route_Train_List extends AppCompatActivity {
             if (!arrSchedule.isEmpty()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-                Collections.sort(arrSchedule, (t1, t2) -> {
+                arrSchedule.sort((t1, t2) -> {
                     String time1 = "", time2 = "";
                     for (int i = 0; i < t1.getStationList().size(); i++) {
                         if (t1.getStationList().get(i).getStationCode().trim().equalsIgnoreCase(from_Station_Value)) {
@@ -77,15 +77,6 @@ public class User_Route_Train_List extends AppCompatActivity {
                     return lt1.compareTo(lt2);
                 });
 
-//            for(Train_Schedule_Structure s : arrSchedule){
-//                for(int i =0; i<s.getStationList().size(); i++){
-//                 String x =   s.getStationList().get(i).getArrivalTime();
-//                 String y = s.getStationList().get(i).getDepartureTime();
-//                 String z = s.getTrainNumber();
-//                    Log.d("filterDatas", "recyclerViewSetup: arr: " + x + " dep: " + y + " num: " + z);
-//                }
-//
-//            }
 
                 User_Route_Train_Recycler_View_Adapter recycler_adapter = new User_Route_Train_Recycler_View_Adapter(User_Route_Train_List.this, arrSchedule, from_Station_Value, to_Station_Value);
                 this.runOnUiThread(() -> {
