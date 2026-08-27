@@ -39,7 +39,8 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
     Context context;
     String fromStationCode, toStationCode;
     ArrayList<Train_Schedule_Structure> arrScheduleList;
-   public User_Route_Train_Recycler_View_Adapter(Context context, ArrayList<Train_Schedule_Structure> arrScheduleList, String fromStationCode, String toStationCode){
+
+    public User_Route_Train_Recycler_View_Adapter(Context context, ArrayList<Train_Schedule_Structure> arrScheduleList, String fromStationCode, String toStationCode) {
         this.context = context;
         this.arrScheduleList = new ArrayList<>(arrScheduleList);
         this.fromStationCode = fromStationCode;
@@ -50,38 +51,35 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-       View view = LayoutInflater.from(context).inflate(R.layout.custom_layout_for_train_schedule_recycler, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_layout_for_train_schedule_recycler, parent, false);
         return new viewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        ArrayList < Train_Schedule_Station_Structure> arrStation = arrScheduleList.get(position).getStationList();
+        ArrayList<Train_Schedule_Station_Structure> arrStation = arrScheduleList.get(position).getStationList();
         String arrivalTime = "", finalDestinationReachTime = "";
         String runningDays = "";
         int startDayCount = Integer.MIN_VALUE;
         int endDayCount = Integer.MIN_VALUE;
 
 
-
-
-
-        for(Train_Schedule_Station_Structure stationData : arrStation){
-            if(stationData.getStationCode().equals(fromStationCode)){
+        for (Train_Schedule_Station_Structure stationData : arrStation) {
+            if (stationData.getStationCode().equals(fromStationCode)) {
                 arrivalTime = stationData.getArrivalTime();
-                if(arrivalTime.equalsIgnoreCase("--")){
+                if (arrivalTime.equalsIgnoreCase("--")) {
                     arrivalTime = stationData.getDepartureTime();
                 }
-                try{
+                try {
                     startDayCount = Integer.parseInt(stationData.getDayCount());
                 } catch (NumberFormatException e) {
-                     e.printStackTrace();
+                    e.printStackTrace();
                 }
 
             }
-            if(stationData.getStationCode().equals(toStationCode)){
+            if (stationData.getStationCode().equals(toStationCode)) {
                 finalDestinationReachTime = stationData.getArrivalTime();
-                try{
+                try {
                     endDayCount = Integer.parseInt(stationData.getDayCount());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -100,7 +98,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         String runOnSat = arrScheduleList.get(position).getTrainRunsOnSat();
         String runOnSun = arrScheduleList.get(position).getTrainRunsOnSun();
 
-        if(
+        if (
                 runOnMon.equalsIgnoreCase("Y") &&
                         runOnTue.equalsIgnoreCase("Y") &&
                         runOnWed.equalsIgnoreCase("Y") &&
@@ -108,25 +106,25 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
                         runOnFri.equalsIgnoreCase("Y") &&
                         runOnSat.equalsIgnoreCase("Y") &&
                         runOnSun.equalsIgnoreCase("Y")
-        ){
-                runningDays = "Daily";
-        }else{
+        ) {
+            runningDays = "Daily";
+        } else {
             StringBuilder runningDaysBuilder = new StringBuilder();
-           if (runOnMon.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Mon ");
-           if (runOnTue.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Tue ");
-           if (runOnWed.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Wed ");
-           if (runOnThu.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Thu ");
-           if (runOnFri.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Fri ");
-           if (runOnSat.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Sat ");
-           if (runOnSun.equalsIgnoreCase("Y") ) runningDaysBuilder.append("Sun");
-           runningDays = runningDaysBuilder.toString().trim();
+            if (runOnMon.equalsIgnoreCase("Y")) runningDaysBuilder.append("Mon ");
+            if (runOnTue.equalsIgnoreCase("Y")) runningDaysBuilder.append("Tue ");
+            if (runOnWed.equalsIgnoreCase("Y")) runningDaysBuilder.append("Wed ");
+            if (runOnThu.equalsIgnoreCase("Y")) runningDaysBuilder.append("Thu ");
+            if (runOnFri.equalsIgnoreCase("Y")) runningDaysBuilder.append("Fri ");
+            if (runOnSat.equalsIgnoreCase("Y")) runningDaysBuilder.append("Sat ");
+            if (runOnSun.equalsIgnoreCase("Y")) runningDaysBuilder.append("Sun");
+            runningDays = runningDaysBuilder.toString().trim();
         }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDate date = LocalDate.now();
             String day = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-            if(!runningDays.equalsIgnoreCase("daily") && !runningDays.toLowerCase().contains(day.toLowerCase())){
+            if (!runningDays.equalsIgnoreCase("daily") && !runningDays.toLowerCase().contains(day.toLowerCase())) {
                 holder.itemView.setBackgroundColor(Color.GRAY);
                 holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#54D12E"));
                 holder.trainScheduleJourneyDuration.setTextColor(Color.parseColor("#FAA18F"));
@@ -136,24 +134,20 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             } else {
                 holder.itemView.setBackgroundResource(R.color.card_background);
                 holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#54D12E"));
-                holder.trainScheduleJourneyDuration.setTextColor(ContextCompat.getColor(context,R.color.card_text_primary));
+                holder.trainScheduleJourneyDuration.setTextColor(ContextCompat.getColor(context, R.color.card_text_primary));
                 holder.otherWarning.setVisibility(View.GONE);
             }
         }
 
 
-
-
-
         String[] splitArrival = arrivalTime.split(":", 2);
         String[] splitDepart = finalDestinationReachTime.split(":", 2);
         Journey_Time_Finder finder = new Journey_Time_Finder();
-       Duration durationResult = finder.getJourneyTime(Integer.parseInt(splitArrival[0]),Integer.parseInt(splitArrival[1]),startDayCount,Integer.parseInt(splitDepart[0]),Integer.parseInt(splitDepart[1]),endDayCount);
-       String journeyDuration = durationResult.toHours() + " Hours " + durationResult.toMinutes()%60 + " Minutes";
+        Duration durationResult = finder.getJourneyTime(Integer.parseInt(splitArrival[0]), Integer.parseInt(splitArrival[1]), startDayCount, Integer.parseInt(splitDepart[0]), Integer.parseInt(splitDepart[1]), endDayCount);
+        String journeyDuration = durationResult.toHours() + " Hours " + durationResult.toMinutes() % 60 + " Minutes";
 
         arrivalTime = Time_Converter.giveMe_HH_MM(arrivalTime);
         finalDestinationReachTime = Time_Converter.giveMe_HH_MM(finalDestinationReachTime);
-
 
 
         String trainNumber = arrScheduleList.get(position).getTrainNumber();
@@ -167,7 +161,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         holder.trainScheduleFinalDestinationReachTime.setText(finalDestinationReachTime);
         holder.trainScheduleRunningDays.setText(runningDays);
 
-        holder.itemView.setOnClickListener(v->{
+        holder.itemView.setOnClickListener(v -> {
             String trNumber = holder.trainScheduleTrainNumber.getText().toString();
             String trName = holder.trainScheduleTrainName.getText().toString();
             Intent trainTracking = new Intent(context.getApplicationContext(), Train_Tracking.class);
@@ -179,20 +173,20 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             new Thread(() -> {
                 //save user train inhistory for future access
                 User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
-                helper.addHistoryInDB(trNumber,trName,fromStationCode,toStationCode);
+                helper.addHistoryInDB(trNumber, trName, fromStationCode, toStationCode);
                 helper.close();
             }).start();
 
             context.startActivity(trainTracking);
         });
-            final String serviceDays = runningDays;
-        holder.itemView.setOnLongClickListener(v ->{
+        final String serviceDays = runningDays;
+        holder.itemView.setOnLongClickListener(v -> {
             TextView infoTrainName, infoTrainNumber, infoTrainService, infoTrainJourneyTime;
             TextView infoTrainStops, infoTrainTotalDistance, infoTrainStartingPoint, infoTrainEndingPoint;
             Button btnClose;
             Log.d("testCrashing", "onBindViewHolder: line 201");
 
-            BottomSheetDialog dialog = new BottomSheetDialog( context);
+            BottomSheetDialog dialog = new BottomSheetDialog(context);
             dialog.setContentView(R.layout.user_route_train_info_bottom_sheet);
 
             infoTrainName = dialog.findViewById(R.id.userRouteBottomDialogueTrainName);
@@ -206,7 +200,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             btnClose = dialog.findViewById(R.id.btnCloseDialog);
 
             String[] journeyTime = arrScheduleList.get(position).getDuration().split(":", 2);
-            String formattedJourneyTime = String.format("%s Hours %s Minutes",journeyTime[0],journeyTime[1]);
+            String formattedJourneyTime = String.format("%s Hours %s Minutes", journeyTime[0], journeyTime[1]);
 
             infoTrainName.setText(trainName);
             infoTrainNumber.setText(trainNumber);
@@ -216,7 +210,6 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             infoTrainTotalDistance.setText(String.valueOf(arrStation.get(arrStation.size() - 1).getDistance() + " Km"));
             infoTrainStartingPoint.setText(arrStation.get(0).getStationName());
             infoTrainEndingPoint.setText(arrStation.get(arrStation.size() - 1).getStationName());
-
 
 
             dialog.show();
@@ -235,10 +228,11 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         return arrScheduleList.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
-        TextView trainScheduleTrainNumber,trainScheduleArrivalTime,trainScheduleJourneyDuration;
-        TextView trainScheduleFinalDestinationReachTime,trainScheduleTrainName,trainScheduleRunningDays;
+    public class viewHolder extends RecyclerView.ViewHolder {
+        TextView trainScheduleTrainNumber, trainScheduleArrivalTime, trainScheduleJourneyDuration;
+        TextView trainScheduleFinalDestinationReachTime, trainScheduleTrainName, trainScheduleRunningDays;
         TextView otherWarning;
+
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             trainScheduleTrainNumber = itemView.findViewById(R.id.trainScheduleTrainNumber);

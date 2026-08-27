@@ -74,6 +74,8 @@ public class Train_Tracking extends AppCompatActivity {
     Train_Tracking_Recycler_View_Adapter adapter;
 
     double lat, lng;
+    Long selectedDateInLong;
+    boolean isInsideTrain = false;
     String selectedDate;
     String trainApiStatusMsg;
     Train_Schedule_Structure myTrainData;
@@ -199,10 +201,11 @@ public class Train_Tracking extends AppCompatActivity {
         for (int i = 0; i < arrTrainStations.size(); i++) {
             if (arrTrainStations.get(i).getStationCode().equals(stData)) {
                 int finalI = i;
-                new Thread(() -> {
-                    live_train_tracking_recycler_view.smoothScrollToPosition(finalI);
-                }).start();
-
+                live_train_tracking_recycler_view.post(() -> {
+                    LinearLayoutManager lm = (LinearLayoutManager) live_train_tracking_recycler_view.getLayoutManager();
+                    lm.scrollToPositionWithOffset(finalI, 0);
+                    //live_train_tracking_recycler_view.smoothScrollToPosition(finalI);
+                });
                 break;
             }
             Log.d("scroll_testing", "track_user: arrTrainStations.get(i).getStationCode(): " + arrTrainStations.get(i).getStationCode());
@@ -215,9 +218,8 @@ public class Train_Tracking extends AppCompatActivity {
 
     }
 
-    boolean isInsideTrain = false;
 
-    private boolean permissionCheckPoint(){
+    private boolean permissionCheckPoint() {
         boolean isGranted = obj.checkPermission();
         if (!isGranted) return false;
         GPS_Req isGPSEnabled = new GPS_Req(Train_Tracking.this);
@@ -226,14 +228,14 @@ public class Train_Tracking extends AppCompatActivity {
 
     private void set_insideTrainBtn_action() {
         insideTrainBtn.setOnClickListener(v -> {
-            if(permissionCheckPoint()){
+            if (permissionCheckPoint()) {
                 final_inside_task();
             }
         });
     }
 
     private void final_inside_task() {
-        if(!permissionCheckPoint()) return;
+        if (!permissionCheckPoint()) return;
         // Toggle State (ON -> OFF / OFF -> ON)
         isInsideTrain = !isInsideTrain;
 
@@ -265,7 +267,7 @@ public class Train_Tracking extends AppCompatActivity {
             insideTrainBtn.setIconTint(android.content.res.ColorStateList.valueOf(Color.WHITE));
 
             // Stop Service
-            if(iLocationService != null){
+            if (iLocationService != null) {
                 stopService(iLocationService);
             }
 
@@ -370,12 +372,13 @@ public class Train_Tracking extends AppCompatActivity {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker
                 .Builder.datePicker().setCalendarConstraints(constraint.build())
                 .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                .setSelection(today.getTimeInMillis())
+                .setSelection(selectedDateInLong == null ? today.getTimeInMillis() : selectedDateInLong)
                 .setTitleText("Choose Train Journey Start Date").build();
         datePicker.show(getSupportFragmentManager(), "MY_CALENDER");
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
             @Override
             public void onPositiveButtonClick(Long aLong) {
+                selectedDateInLong = aLong;
                 Date date = new Date(aLong);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 selectedDate = simpleDateFormat.format(date);
@@ -392,8 +395,8 @@ public class Train_Tracking extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             lat = intent.getDoubleExtra("lat", 0);
             lng = intent.getDoubleExtra("lng", 0);
+            if(lat == 0 || lng == 0) return;
             Log.d("Serviceclass", "onReceive: receiver h" + lat);
-            // Toast.makeText(Train_Tracking.this, "Lat: " + lat + "\nLng: " + lng, Toast.LENGTH_SHORT).show();
             track_user();
         }
     };
@@ -404,6 +407,7 @@ public class Train_Tracking extends AppCompatActivity {
             if (intent != null) {
                 lat = intent.getDoubleExtra("trainLat", 0);
                 lng = intent.getDoubleExtra("trainLng", 0);
+                if(lat == 0 || lng == 0) return;
                 trainApiStatusMsg = intent.getStringExtra("trainApiStatusMsg");
                 ArrayList<API_Response_Train_Tracking> apiData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
                 if (apiData != null) {
@@ -440,7 +444,10 @@ public class Train_Tracking extends AppCompatActivity {
         for (int i = 0; i < arrTrainStations.size(); i++) {
             Log.d("scroll_debug", "StationList code='" + arrTrainStations.get(i).getStationCode() + "'");
             if (arrTrainStations.get(i).getStationCode().trim().equalsIgnoreCase(stData.trim())) {
-                live_train_tracking_recycler_view.smoothScrollToPosition(i);
+                int finalI = i;
+                live_train_tracking_recycler_view.post(() -> {
+                    live_train_tracking_recycler_view.scrollToPosition(finalI);
+                });
                 break;
             }
         }
@@ -462,7 +469,7 @@ public class Train_Tracking extends AppCompatActivity {
             registerReceiver(apiTrainLocation, new IntentFilter(Train_Tracking_API_Call.API_TRAIN_DATA), Context.RECEIVER_NOT_EXPORTED);
         }
 
-        if(isInsideTrain && iLocationService !=null){
+        if (isInsideTrain && iLocationService != null) {
             startService(iLocationService);
         }
 
@@ -493,15 +500,15 @@ public class Train_Tracking extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d("locatPerm", "handlePermissionResult: in train: " + requestCode);
         if (requestCode == Location_Permissions.REQ_CODE) {
-            if(grantResults.length>0){
+            if (grantResults.length > 0) {
                 boolean isAllPermissionGranted = true;
-                for (int res : grantResults){
-                    if(res == PackageManager.PERMISSION_DENIED){
+                for (int res : grantResults) {
+                    if (res == PackageManager.PERMISSION_DENIED) {
                         isAllPermissionGranted = false;
                         break;
                     }
                 }
-                if(isAllPermissionGranted) final_inside_task();
+                if (isAllPermissionGranted) final_inside_task();
                 else if (obj != null) {
                     obj.handlePermissionResult(requestCode, permissions, grantResults);
                 }
@@ -509,11 +516,12 @@ public class Train_Tracking extends AppCompatActivity {
 
         }
     }
-      @Override
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GPS_Req.REQ_CODE) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 final_inside_task();
             }
         }

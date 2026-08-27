@@ -144,12 +144,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     private void copy_Pnr(viewHolder holder, String pnrNum) {
-        holder.pnrStatusPnrNumber.setOnLongClickListener(v -> {
+        holder.pnrStatusPnrNumber.setOnClickListener(v -> {
             ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("pnrNumber", pnrNum);
             clipboardManager.setPrimaryClip(clipData);
             Toast.makeText(context, "Pnr number copied", Toast.LENGTH_SHORT).show();
-            return true;
         });
     }
 

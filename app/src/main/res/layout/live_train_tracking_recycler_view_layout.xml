@@ -169,7 +169,7 @@
                 android:text="ARR"
                 android:textColor="@color/card_text_primary"
                 android:textSize="11sp"
-                android:textStyle="bold" />
+                />
 
             <TextView
                 android:id="@+id/trainActualArrivalAt"
@@ -179,6 +179,7 @@
                 android:textColor="@color/card_text_primary"
                 android:letterSpacing="0.06"
                 android:textSize="11sp"
+                android:textStyle="bold"
                 tools:text="10:45" />
         </LinearLayout>
 
@@ -202,7 +203,7 @@
                 android:text="DEP"
                 android:textColor="@color/card_text_primary"
                 android:textSize="11sp"
-                android:textStyle="bold" />
+                 />
 
             <TextView
                 android:id="@+id/trainActualDepartureAt"
@@ -211,6 +212,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/card_text_primary"
                 android:textSize="11sp"
+                android:textStyle="bold"
                 android:letterSpacing="0.06"
                 tools:text="10:48" />
         </LinearLayout>

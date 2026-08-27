@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -59,8 +60,22 @@ public class Drawer_Item {
     private void Work_On_Nav_Item_Click(MenuItem item) {
 
         if(item.getItemId() == R.id.applicationTheme){
+            SharedPreferences sharedPreferences = context.getSharedPreferences("applicationTheme", Context.MODE_PRIVATE);
             Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.change_theme_modal);
+            AppCompatRadioButton darkRadio, lightRadio, systemRadio;
+            darkRadio = dialog.findViewById(R.id.modalThemeDarkRadio);
+            lightRadio = dialog.findViewById(R.id.modalThemeLightRadio);
+            systemRadio = dialog.findViewById(R.id.modalThemeSystemRadio);
+            if(sharedPreferences.getBoolean("isDark", false)){
+                darkRadio.setChecked(true);
+            } else if (sharedPreferences.getBoolean("isLight", false)) {
+                lightRadio.setChecked(true);
+            } else {
+                systemRadio.setChecked(true);
+            }
+
+
             modalThemeApplyBtn = dialog.findViewById(R.id.modalThemeApplyBtn);
             modalThemeCancelBtn = dialog.findViewById(R.id.modalThemeCancelBtn);
             modalThemeRadioGroup = dialog.findViewById(R.id.modalThemeRadioGroup);
@@ -72,7 +87,7 @@ public class Drawer_Item {
 
             // application theme change work Start here
             modalThemeApplyBtn.setOnClickListener(v -> {
-                SharedPreferences sharedPreferences = context.getSharedPreferences("applicationTheme", Context.MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 int selectedRadio = modalThemeRadioGroup.getCheckedRadioButtonId();
 

@@ -4,7 +4,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
 
         <item name="android:layout_weight">1</item>
     </style>
@@ -12,7 +12,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:layout_weight">2</item>
         <item name="android:padding">10sp</item>
     </style>
@@ -32,8 +32,8 @@
     </style>
 
     <style name="nearbyStationDataImageValues">
-        <item name="android:layout_width">5dp</item>
-        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">23dp</item>
         <item name="android:layout_weight">0.7</item>
         <item name="android:scaleType">fitXY</item>
     </style>

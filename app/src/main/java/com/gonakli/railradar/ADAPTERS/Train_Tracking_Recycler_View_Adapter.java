@@ -32,8 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Train_Tracking_Recycler_View_Adapter
-        extends RecyclerView.Adapter<Train_Tracking_Recycler_View_Adapter.myViewHolder> {
+public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<Train_Tracking_Recycler_View_Adapter.myViewHolder> {
 
     Context context;
     String fromStationCode, toStationCode;
@@ -42,8 +41,7 @@ public class Train_Tracking_Recycler_View_Adapter
     Train_Tracking_Structure trainLocationData;
     ArrayList<Train_Schedule_Station_Structure> arrTrainStations;
 
-    public Train_Tracking_Recycler_View_Adapter(Context context, Train_Schedule_Structure trainData,
-            String fromStationCode, String toStationCode) {
+    public Train_Tracking_Recycler_View_Adapter(Context context, Train_Schedule_Structure trainData, String fromStationCode, String toStationCode) {
         this.context = context;
         this.trainData = trainData;
         arrTrainStations = trainData.getStationList();
@@ -60,8 +58,7 @@ public class Train_Tracking_Recycler_View_Adapter
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.live_train_tracking_recycler_view_layout, parent,
-                false);
+        View view = LayoutInflater.from(context).inflate(R.layout.live_train_tracking_recycler_view_layout, parent, false);
         return new myViewHolder(view);
     }
 
@@ -72,14 +69,14 @@ public class Train_Tracking_Recycler_View_Adapter
         holder.trainStationName.setTextColor(ContextCompat.getColor(context, R.color.card_text_primary));
         if (fromStationCode != null && fromStationCode.equalsIgnoreCase(fromStCode)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#9DC775"));
-        }else if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)) {
+        } else if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#E6A5A5"));
-        }else {
+        } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.card_background));
         }
-        new Thread(()->{
-            set_Train_Icon(holder, position);
-        }).start();
+//        new Thread(()->{
+        set_Train_Icon(holder, position);
+//        }).start();
 
 
         String stName = arrTrainStations.get(position).getStationName();
@@ -127,16 +124,16 @@ public class Train_Tracking_Recycler_View_Adapter
         holder.trainArrivalAt.setText(arrAt);
         holder.trainDepartureAt.setText(depAt);
         holder.trainDistanceTravelled.setText(distanceTrav);
-        if(actualArrAt !=null && !actualArrAt.isEmpty()){
+        if (actualArrAt != null && !actualArrAt.isEmpty()) {
             actualArrAt = apiTimeIn12Hours(actualArrAt);
             holder.trainActualArrivalAt.setText(actualArrAt);
-        }else{
+        } else {
             holder.trainActualArrivalAt.setText("--");
         }
-        if (actualDepAt !=null && !actualDepAt.isEmpty()){
+        if (actualDepAt != null && !actualDepAt.isEmpty()) {
             actualDepAt = apiTimeIn12Hours(actualDepAt);
             holder.trainActualDepartureAt.setText(actualDepAt);
-        }else{
+        } else {
             holder.trainActualDepartureAt.setText("--");
         }
 
@@ -191,8 +188,7 @@ public class Train_Tracking_Recycler_View_Adapter
 
             if (trainLocationData.getCurrentStation() != null) {
                 // Case 1: Train station par khadi hai
-                if (arrTrainStations.get(position).getStationCode()
-                        .equals(trainLocationData.getCurrentStation().getStationCode())) {
+                if (arrTrainStations.get(position).getStationCode().equals(trainLocationData.getCurrentStation().getStationCode())) {
 
                     holder.liveTrainIcon.setVisibility(View.VISIBLE);
                     holder.liveTrainIcon.setTranslationY(0f);
@@ -202,8 +198,7 @@ public class Train_Tracking_Recycler_View_Adapter
                 }
             } else if (trainLocationData.isOnRoute() && trainLocationData.getPreviousStation() != null) {
                 // Case 2: Train raste me hai (Moving between stations)
-                if (arrTrainStations.get(position).getStationCode()
-                        .equals(trainLocationData.getPreviousStation().getStationCode())) {
+                if (arrTrainStations.get(position).getStationCode().equals(trainLocationData.getPreviousStation().getStationCode())) {
 
                     holder.liveTrainIcon.setVisibility(View.VISIBLE);
                     holder.itemView.setTranslationZ(1f); // Pure row ko agle rows ke upar laata hai
@@ -240,18 +235,17 @@ public class Train_Tracking_Recycler_View_Adapter
     }
 
     public void updateAdapter(Train_Tracking_Structure trainLocationData) {
-        new Thread(() ->{
-            this.trainLocationData = trainLocationData;
-            ((Activity) context).runOnUiThread(()->{
-                notifyDataSetChanged();
-            });
-        }).start();
+//        new Thread(() ->{
+        this.trainLocationData = trainLocationData;
+//        ((Activity) context).runOnUiThread(() -> {
+            notifyDataSetChanged();
+//        });
+//        }).start();
 
     }
 
-    public void APi_Adapter_Update(Train_Tracking_Structure trainLocationData,
-            ArrayList<API_Response_Train_Tracking> apiRes) {
-        new Thread(()->{
+    public void APi_Adapter_Update(Train_Tracking_Structure trainLocationData, ArrayList<API_Response_Train_Tracking> apiRes) {
+//        new Thread(() -> {
             this.trainLocationData = trainLocationData;
             for (Train_Schedule_Station_Structure st : this.arrTrainStations) {
                 for (API_Response_Train_Tracking obj : apiRes) {
@@ -262,15 +256,15 @@ public class Train_Tracking_Recycler_View_Adapter
                     }
                 }
             }
-            ((Activity) context).runOnUiThread(()->{
+//            ((Activity) context).runOnUiThread(() -> {
                 notifyDataSetChanged();
-            });
+//            });
 
-        }).start();
+//        }).start();
 
     }
 
-    private String apiTimeIn12Hours(String apiTime){
+    private String apiTimeIn12Hours(String apiTime) {
 
         // Parse input string as OffsetDateTime
         OffsetDateTime odt = OffsetDateTime.parse(apiTime);
