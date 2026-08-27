@@ -71,6 +71,11 @@ public class Home_Activity_All_Fragment_Manager extends Fragment {
              fragmentTransaction.replace(R.id.frameLayout1, new Fragment_Pnr_Screen());
              fragmentTransaction.commit();
              
+         } else if (v.getItemId() == R.id.bookTicket) {
+             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+             fragmentTransaction.replace(R.id.frameLayout1, new Fragment_Ticket_Screen());
+             fragmentTransaction.commit();
+             
          }
          return true;
      });
