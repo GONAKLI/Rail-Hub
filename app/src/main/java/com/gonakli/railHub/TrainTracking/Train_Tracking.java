@@ -25,6 +25,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.Train_Tracking_Recycler_View_Adapter;
 import com.gonakli.railHub.API_Limit.Train_Finder_Api_Limit;
 import com.gonakli.railHub.DB_WORK.Train_Schedule_DB_Helper;
@@ -62,6 +64,7 @@ public class Train_Tracking extends AppCompatActivity {
     ImageButton refreshButton, btnRefreshLiveTracking;
     Location_Permissions obj;
     Intent iLocationService, iTrainApiService;
+    LottieAnimationView liveTrackingLoadingAnimation;
 
     Train_Tracking_Recycler_View_Adapter adapter;
 
@@ -299,13 +302,14 @@ public class Train_Tracking extends AppCompatActivity {
         } else {
             adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData);
         }
-
+        stopLoadingAnimation();
         live_train_tracking_recycler_view.setLayoutManager(new LinearLayoutManager(Train_Tracking.this));
         live_train_tracking_recycler_view.setAdapter(adapter);
 
     }
 
     private void train_finder() {
+        startLoadingAnimation();
         new Thread(() -> {
             Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(Train_Tracking.this);
             myTrainData = dbHelper.getTrainDataByTrainNumber(trainNumber);
@@ -347,6 +351,7 @@ public class Train_Tracking extends AppCompatActivity {
         trackingHeaderCurrentStation = findViewById(R.id.trackingHeaderCurrentStation);
         trackingHeaderNextStation = findViewById(R.id.trackingHeaderNextStation);
         trackingHeaderStatusInfo = findViewById(R.id.trackingHeaderStatusInfo);
+        liveTrackingLoadingAnimation = findViewById(R.id.liveTrackingLoadingAnimation);
     }
 
     @Override
@@ -530,6 +535,22 @@ public class Train_Tracking extends AppCompatActivity {
 //            }
 //        }
 //    }
+
+    public void startLoadingAnimation(){
+        if(liveTrackingLoadingAnimation != null){
+            liveTrackingLoadingAnimation.setVisibility(View.VISIBLE);
+            liveTrackingLoadingAnimation.setAnimation(R.raw.loading_dots);
+            liveTrackingLoadingAnimation.playAnimation();
+            liveTrackingLoadingAnimation.setRepeatCount(LottieDrawable.INFINITE);
+            liveTrackingLoadingAnimation.setRepeatMode(LottieDrawable.REVERSE);
+        }
+    }
+    public void stopLoadingAnimation(){
+        if(liveTrackingLoadingAnimation != null){
+            liveTrackingLoadingAnimation.cancelAnimation();
+            liveTrackingLoadingAnimation.setVisibility(View.GONE);
+        }
+    }
 
 
 }

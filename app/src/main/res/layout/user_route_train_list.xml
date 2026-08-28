@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/screen_background">
+    android:background="@color/screen_background"
+    android:orientation="vertical">
 
     <include layout="@layout/custom_toolbar" />
 
@@ -16,59 +16,59 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_route_header_gradient"
+        android:elevation="5dp"
         android:paddingHorizontal="18dp"
-        android:paddingVertical="18dp"
-        android:elevation="5dp">
+        android:paddingVertical="18dp">
 
         <!-- FROM -->
         <TextView
             android:id="@+id/fromLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:letterSpacing="0.12"
             android:text="FROM"
             android:textColor="#B3FFFFFF"
             android:textSize="10sp"
-            android:letterSpacing="0.12"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/iconCircle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iconCircle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/user_route_from_station_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="New Delhi"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@id/iconCircle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fromLabel"
-            app:layout_constraintEnd_toStartOf="@id/iconCircle" />
+            app:layout_constraintTop_toBottomOf="@id/fromLabel" />
 
         <!-- Center Icon -->
         <androidx.cardview.widget.CardView
             android:id="@+id/iconCircle"
             android:layout_width="42dp"
             android:layout_height="42dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="21dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/home_screen_train_icon"
-                app:tint="@color/gradient_start"
-                android:contentDescription="@null" />
+                app:tint="@color/gradient_start" />
         </androidx.cardview.widget.CardView>
 
         <!-- TO -->
@@ -76,61 +76,67 @@
             android:id="@+id/toLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
+            android:letterSpacing="0.12"
             android:text="TO"
             android:textColor="#B3FFFFFF"
             android:textSize="10sp"
-            android:letterSpacing="0.12"
             android:textStyle="bold"
-            android:gravity="end"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconCircle"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/user_route_to_station_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
             android:text="Mumbai Central"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:gravity="end"
-            android:ellipsize="end"
-            android:maxLines="1"
-            app:layout_constraintTop_toBottomOf="@id/toLabel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconCircle"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/toLabel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/no_Train_Found_Container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="15dp"
-        android:id="@+id/no_Train_Found_Container"
-        android:visibility="gone"
-        >
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="300dp"
             android:layout_height="250dp"
-            android:src="@drawable/no_train_found"
-            android:scaleType="fitXY"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:contentDescription="no_Train_Found"
-            />
+            android:scaleType="fitXY"
+            android:src="@drawable/no_train_found" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sorry! No Direct Trains found between the given Stations"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginTop="45dp"
             android:lineHeight="25dp"
+            android:text="Sorry! No Direct Trains found between the given Stations"
             android:textAlignment="center"
-            android:layout_marginTop="45dp"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/trainLoadingWaitTimeLottieAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 
     <!-- Train List -->
@@ -140,8 +146,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
+        android:overScrollMode="never"
         android:paddingTop="4dp"
-        android:paddingBottom="12dp"
-        android:overScrollMode="never" />
+        android:paddingBottom="12dp" />
 
 </LinearLayout>

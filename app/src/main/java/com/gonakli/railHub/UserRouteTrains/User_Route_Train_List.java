@@ -14,6 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.User_Route_Train_Recycler_View_Adapter;
 import com.gonakli.railHub.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railHub.R;
@@ -29,22 +31,41 @@ public class User_Route_Train_List extends AppCompatActivity {
     RecyclerView recyclerView;
     LinearLayout no_Train_Found_Container;
     Toolbar toolbar;
+    LottieAnimationView trainLoadingWaitTimeLottieAnimation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_route_train_list);
         find_all_id();
+        startLoadingAnimation();
         set_Station_sName_In_Ui();
         setToolBar();
         recyclerViewSetup();
+
+
+    }
+
+    private void startLoadingAnimation() {
+        if(trainLoadingWaitTimeLottieAnimation != null){
+            trainLoadingWaitTimeLottieAnimation.setAnimation(R.raw.loading_panda);
+            trainLoadingWaitTimeLottieAnimation.playAnimation();
+            trainLoadingWaitTimeLottieAnimation.setRepeatCount(LottieDrawable.INFINITE);
+            trainLoadingWaitTimeLottieAnimation.setRepeatMode(LottieDrawable.REVERSE);
+        }
+    }
+    private void stopLoadingAnimation(){
+        if(trainLoadingWaitTimeLottieAnimation != null){
+            trainLoadingWaitTimeLottieAnimation.cancelAnimation();
+            trainLoadingWaitTimeLottieAnimation.setVisibility(View.GONE);
+        }
     }
 
     private void recyclerViewSetup() {
         new Thread(() -> {
             Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(getApplicationContext());
             ArrayList<Train_Schedule_Structure> arrSchedule = dbHelper.getTrainsBetweenStations(from_Station_Value, to_Station_Value);
-
+            runOnUiThread(this::stopLoadingAnimation);
             if (!arrSchedule.isEmpty()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -116,6 +137,7 @@ public class User_Route_Train_List extends AppCompatActivity {
         recyclerView = findViewById(R.id.trainScheduleRecyclerView);
         toolbar = findViewById(R.id.application_custom_toolbar);
         no_Train_Found_Container = findViewById(R.id.no_Train_Found_Container);
+        trainLoadingWaitTimeLottieAnimation = findViewById(R.id.trainLoadingWaitTimeLottieAnimation);
     }
 
     @Override

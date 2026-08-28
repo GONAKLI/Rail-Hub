@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.NearBy_Station_ListView_Adapter;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railHub.Permissions.GPS_Req;
@@ -50,13 +51,14 @@ public class NearBy_Station_Activity extends AppCompatActivity {
     ListView nearbyStationListView;
     NearBy_Station_ListView_Adapter adapter;
     Button nearbyListRefreshBtn;
-    ProgressBar nearbyStationProgressBar;
+//    ProgressBar nearbyStationProgressBar;
     Dialog dialog, gpsDialog ;
     Location_Permissions locationPermissionsObj;
     GPS_Req gpsReqObj;
     double latitude, longitude;
     LinearLayout no_NearBy_Station_Found_Container, nearbyListHeadingContainer;
     TextView nearbyListTitle;
+    LottieAnimationView nearbyStationLoadingAnimation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +106,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
             nearbyListHeadingContainer.setVisibility(View.GONE);
             nearbyListTitle.setVisibility(View.GONE);
         }
-        nearbyStationProgressBar.setVisibility(View.GONE);
+        // nearbyStationProgressBar.setVisibility(View.GONE);
+        stopLoadingAnimation();
 
         nearbyListRefreshBtn.setEnabled(true);
         nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
@@ -163,10 +166,11 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         toolbar = findViewById(R.id.application_custom_toolbar);
         nearbyStationListView = findViewById(R.id.nearbyStationListView);
         nearbyListRefreshBtn = findViewById(R.id.nearbyListRefreshBtn);
-        nearbyStationProgressBar = findViewById(R.id.nearbyStationProgressBar);
+//        nearbyStationProgressBar = findViewById(R.id.nearbyStationProgressBar);
         no_NearBy_Station_Found_Container = findViewById(R.id.no_NearBy_Station_Found_Container);
         nearbyListHeadingContainer = findViewById(R.id.nearbyListHeadingContainer);
         nearbyListTitle = findViewById(R.id.nearbyListTitle);
+        nearbyStationLoadingAnimation = findViewById(R.id.nearbyStationLoadingAnimation);
 
     }
 
@@ -184,7 +188,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         nearbyListRefreshBtn.setText("Loading ...");
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                nearbyStationProgressBar.setVisibility(View.VISIBLE);
+//                nearbyStationProgressBar.setVisibility(View.VISIBLE);
+                startLoadingAnimation();
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                 if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -208,7 +213,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                                                     longitude = location1.getLongitude();
                                                     findNearByStations();
                                                 }else{
-                                                    nearbyStationProgressBar.setVisibility(View.GONE);
+//                                                    nearbyStationProgressBar.setVisibility(View.GONE);
+                                                    stopLoadingAnimation();
                                                     nearbyListRefreshBtn.setEnabled(true);
                                                     nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                                                     nearbyListRefreshBtn.setText("Refresh Stations");
@@ -226,7 +232,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                         snackbar.setBackgroundTint(Color.RED);
                         snackbar.setTextColor(Color.BLUE);
                         snackbar.show();
-                        nearbyStationProgressBar.setVisibility(View.GONE);
+//                        nearbyStationProgressBar.setVisibility(View.GONE);
+                        stopLoadingAnimation();
                         nearbyListRefreshBtn.setEnabled(true);
                         nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                         nearbyListRefreshBtn.setText("Refresh Stations");
@@ -247,7 +254,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                                 findNearByStations();
 
                             }else{
-                                nearbyStationProgressBar.setVisibility(View.GONE);
+//                                nearbyStationProgressBar.setVisibility(View.GONE);
+                                stopLoadingAnimation();
                                 nearbyListRefreshBtn.setEnabled(true);
                                 nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                                 nearbyListRefreshBtn.setText("Refresh Stations");
@@ -260,7 +268,8 @@ public class NearBy_Station_Activity extends AppCompatActivity {
                     snackbar.setBackgroundTint(Color.RED);
                     snackbar.setTextColor(Color.BLUE);
                     snackbar.show();
-                    nearbyStationProgressBar.setVisibility(View.GONE);
+//                    nearbyStationProgressBar.setVisibility(View.GONE);
+                    stopLoadingAnimation();
                     nearbyListRefreshBtn.setEnabled(true);
                     nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                     nearbyListRefreshBtn.setText("Refresh Stations");
@@ -287,6 +296,22 @@ public class NearBy_Station_Activity extends AppCompatActivity {
             if (locationPermissionsObj != null) {
                 locationPermissionsObj.handlePermissionResult(requestCode, permissions, grantResults);
             }
+        }
+    }
+
+    public void startLoadingAnimation(){
+        if(nearbyStationLoadingAnimation != null){
+            nearbyStationLoadingAnimation.setVisibility(View.VISIBLE);
+            nearbyStationLoadingAnimation.setAnimation(R.raw.loading_black_magic_lady);
+            nearbyStationLoadingAnimation.playAnimation();
+            nearbyStationLoadingAnimation.setRepeatCount(LottieDrawable.INFINITE);
+            nearbyStationLoadingAnimation.setRepeatMode(LottieDrawable.REVERSE);
+        }
+    }
+    public void stopLoadingAnimation(){
+        if(nearbyStationLoadingAnimation != null){
+            nearbyStationLoadingAnimation.cancelAnimation();
+            nearbyStationLoadingAnimation.setVisibility(View.GONE);
         }
     }
 

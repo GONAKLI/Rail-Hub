@@ -76,13 +76,13 @@
         android:overScrollMode="never" />
 
     <!-- Progress -->
-    <ProgressBar
-        android:id="@+id/nearbyStationProgressBar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/nearbyStationLoadingAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:indeterminateTint="#FF5722"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
     <!-- Refresh Button -->
     <com.google.android.material.button.MaterialButton

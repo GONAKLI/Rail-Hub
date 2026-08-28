@@ -10,16 +10,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
-        <com.gonakli.railradar.HomeActivity.Input_From_To_Station
+        <com.gonakli.railHub.HomeActivity.Input_From_To_Station
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
-        <com.gonakli.railradar.TrainNumber_NameSearch.Action_Settter_For_Train_Search_by_Number_Or_Name_Layout
+        <com.gonakli.railHub.TrainNumber_NameSearch.Action_Settter_For_Train_Search_by_Number_Or_Name_Layout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-        <com.gonakli.railradar.ExtraOptions.Home_Screen_Extras
+        <com.gonakli.railHub.ExtraOptions.Home_Screen_Extras
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
