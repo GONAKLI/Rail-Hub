@@ -25,6 +25,10 @@
         <item name="android:statusBarColor">#0D0D0D</item>
         <item name="android:windowLightStatusBar">false</item>
 
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="android:navigationBarColor">#D75839</item>
+        <item name="android:fitsSystemWindows">true</item>
+
     </style>
 
 </resources>

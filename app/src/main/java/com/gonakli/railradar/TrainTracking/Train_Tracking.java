@@ -157,19 +157,25 @@ public class Train_Tracking extends AppCompatActivity {
 
                         Log.d("checkStatusmsg", "tracking_upper_header: 2");
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
+                        trackingHeaderStatusInfo.setTextColor(Color.BLACK);
+                        trackingHeaderStatusInfo.setBackgroundColor(Color.parseColor("#FFF3E0"));
                     } else if (trainApiStatusMsg.contains("Train journey Already ended")) {
                         Log.d("checkStatusmsg", "tracking_upper_header: 3");
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
-                        trackingHeaderStatusInfo.setTextColor(Color.RED);
+                        trackingHeaderStatusInfo.setTextColor(Color.BLACK);
+                        trackingHeaderStatusInfo.setBackgroundColor(Color.parseColor("#FFF3E0"));
                     } else if (trainApiStatusMsg.contains("is cancelled")) {
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
-                        trackingHeaderStatusInfo.setTextColor(Color.RED);
+                        trackingHeaderStatusInfo.setTextColor(Color.WHITE);
+                        trackingHeaderStatusInfo.setBackgroundColor(Color.RED);
                     }
                     Log.d("checkStatusmsg", "tracking_upper_header: msg value : " + trainApiStatusMsg);
                 } else {
                     Log.d("checkStatusmsg", "tracking_upper_header: inside else block enter");
                     infoMsg = trainLocationData.getStatusMessage().trim();
                     trackingHeaderStatusInfo.setText(infoMsg);
+                    trackingHeaderStatusInfo.setTextColor(Color.BLACK);
+                    trackingHeaderStatusInfo.setBackgroundColor(Color.parseColor("#FFF3E0"));
                 }
 
             }
@@ -229,6 +235,10 @@ public class Train_Tracking extends AppCompatActivity {
     private void set_insideTrainBtn_action() {
 
         insideTrainBtn.setOnClickListener(v -> {
+              if (isInsideTrain) {
+             final_inside_task();
+                  return;
+                }
             if (permissionCheckPoint()) {
                 final_inside_task();
             }
@@ -236,15 +246,14 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void final_inside_task() {
-        if (!permissionCheckPoint()) return;
+//        if (!permissionCheckPoint()) return;
         // Toggle State (ON -> OFF / OFF -> ON)
         isInsideTrain = !isInsideTrain;
 
-
-
         if (isInsideTrain) {
-            iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
-
+            if(iLocationService == null) {
+                iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
+            }
             btnRefreshLiveTracking.setVisibility(View.GONE);
             trainApiStatusMsg = null;
             // ================= STATE 1: INSIDE TRAIN (ACTIVE / ON) =================
@@ -271,6 +280,8 @@ public class Train_Tracking extends AppCompatActivity {
             // Stop Service
             if (iLocationService != null) {
                 stopService(iLocationService);
+                btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(this, R.anim.train_location_refresh_btn));
+                call_API_Service();
             }
 
 
@@ -397,7 +408,7 @@ public class Train_Tracking extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             lat = intent.getDoubleExtra("lat", 0);
             lng = intent.getDoubleExtra("lng", 0);
-            if(lat == 0 || lng == 0) return;
+            if (lat == 0 || lng == 0) return;
             Log.d("Serviceclass", "onReceive: receiver h" + lat);
             track_user();
         }
@@ -409,7 +420,7 @@ public class Train_Tracking extends AppCompatActivity {
             if (intent != null) {
                 lat = intent.getDoubleExtra("trainLat", 0);
                 lng = intent.getDoubleExtra("trainLng", 0);
-                if(lat == 0 || lng == 0) return;
+                if (lat == 0 || lng == 0) return;
                 trainApiStatusMsg = intent.getStringExtra("trainApiStatusMsg");
                 ArrayList<API_Response_Train_Tracking> apiData = (ArrayList<API_Response_Train_Tracking>) intent.getSerializableExtra("stationData");
                 if (apiData != null) {
@@ -518,16 +529,15 @@ public class Train_Tracking extends AppCompatActivity {
 
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GPS_Req.REQ_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                final_inside_task();
-            }
-        }
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == GPS_Req.REQ_CODE) {
+//            if (resultCode == Activity.RESULT_OK){
+//            }
+//        }
+//    }
 
 
 }
