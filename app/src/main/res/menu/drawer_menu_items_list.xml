@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_update_timetable"
-        android:title="@string/timetable"
-        android:icon="@drawable/drawer_icon_update_timetable"
-        />
+<!--    <item-->
+<!--        android:id="@+id/nav_update_timetable"-->
+<!--        android:title="@string/timetable"-->
+<!--        android:icon="@drawable/drawer_icon_update_timetable"-->
+<!--        />-->
     <item
         android:id="@+id/applicationTheme"
         android:title="@string/application_theme"
         android:icon="@drawable/drawer_icon_dark_mode_24px"
         />
-    <item
-        android:id="@+id/applicationSetting"
-        android:title="@string/settings"
-        android:icon="@drawable/drawer_icon_settings_heart_24px"
-        />
-    <item
-        android:id="@+id/applicationShare"
-        android:title="@string/share_application"
-        android:icon="@drawable/drawer_icon_share_24px"
-        />
+<!--    <item-->
+<!--        android:id="@+id/applicationSetting"-->
+<!--        android:title="@string/settings"-->
+<!--        android:icon="@drawable/drawer_icon_settings_heart_24px"-->
+<!--        />-->
+<!--    <item-->
+<!--        android:id="@+id/applicationShare"-->
+<!--        android:title="@string/share_application"-->
+<!--        android:icon="@drawable/drawer_icon_share_24px"-->
+<!--        />-->
     <item
         android:id="@+id/applicationRateUs"
         android:title="@string/application_rate_us"
         android:icon="@drawable/drawer_icon_rate_us"
         />
-    <item
-        android:id="@+id/applicationReportIssue"
-        android:title="@string/application_bug_report"
-        android:icon="@drawable/drawer_icon_bug_report_24px"
-        />
+<!--    <item-->
+<!--        android:id="@+id/applicationReportIssue"-->
+<!--        android:title="@string/application_bug_report"-->
+<!--        android:icon="@drawable/drawer_icon_bug_report_24px"-->
+<!--        />-->
     <item android:id="@+id/clearSearchHistory"
         android:title="@string/clear_history"
         android:icon="@drawable/history_svgrepo_com"
         />
-    <item
-        android:id="@+id/applicationFeedback"
-        android:title="@string/application_feedback"
-        android:icon="@drawable/drawer_icon_thumbs_up_down_24px"
-        />
+<!--    <item-->
+<!--        android:id="@+id/applicationFeedback"-->
+<!--        android:title="@string/application_feedback"-->
+<!--        android:icon="@drawable/drawer_icon_thumbs_up_down_24px"-->
+<!--        />-->
 
 </menu>

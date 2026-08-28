@@ -126,11 +126,12 @@ public class Drawer_Item {
             }
 
         } // end of play store rating condition
-        else if (item.getItemId() == R.id.applicationFeedback) {
-            Dialog dialog = new Dialog(context);
-            dialog.setContentView(R.layout.feedback_modal);
-            dialog.show();
-        } else if (item.getItemId() == R.id.clearSearchHistory) {
+//        else if (item.getItemId() == R.id.applicationFeedback) {
+//            Dialog dialog = new Dialog(context);
+//            dialog.setContentView(R.layout.feedback_modal);
+//            dialog.show();
+//        }
+        else if (item.getItemId() == R.id.clearSearchHistory) {
             new Thread(() -> {
                 User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
                 helper.deleteHistory();

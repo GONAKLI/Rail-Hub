@@ -227,6 +227,7 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void set_insideTrainBtn_action() {
+
         insideTrainBtn.setOnClickListener(v -> {
             if (permissionCheckPoint()) {
                 final_inside_task();
@@ -239,9 +240,10 @@ public class Train_Tracking extends AppCompatActivity {
         // Toggle State (ON -> OFF / OFF -> ON)
         isInsideTrain = !isInsideTrain;
 
-        iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
+
 
         if (isInsideTrain) {
+            iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
 
             btnRefreshLiveTracking.setVisibility(View.GONE);
             trainApiStatusMsg = null;

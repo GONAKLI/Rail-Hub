@@ -86,7 +86,7 @@ public class myLocationServiceClass extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (fusedLocationProviderClient !=null){
+        if (fusedLocationProviderClient !=null && locationCallback != null){
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         }
     }
