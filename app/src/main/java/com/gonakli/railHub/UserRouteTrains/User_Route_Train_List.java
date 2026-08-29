@@ -51,7 +51,7 @@ public class User_Route_Train_List extends AppCompatActivity {
             trainLoadingWaitTimeLottieAnimation.setAnimation(R.raw.loading_panda);
             trainLoadingWaitTimeLottieAnimation.playAnimation();
             trainLoadingWaitTimeLottieAnimation.setRepeatCount(LottieDrawable.INFINITE);
-            trainLoadingWaitTimeLottieAnimation.setRepeatMode(LottieDrawable.REVERSE);
+            trainLoadingWaitTimeLottieAnimation.setRepeatMode(LottieDrawable.RESTART);
         }
     }
     private void stopLoadingAnimation(){

@@ -6,10 +6,20 @@
     <SearchView
         android:id="@+id/showTrainSearchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:queryHint="Enter Train Number or name"
         android:iconifiedByDefault="false"
-        android:searchIcon="@drawable/search_icon"
+        android:searchIcon="@drawable/search_key"
+        android:background="@drawable/show_train_input_field"
+        android:layout_marginBottom="15dp"
+        />
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loadingTrainAnimation"
+        android:visibility="gone"
+        android:layout_gravity="center"
+
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -17,4 +27,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+
 </LinearLayout>
