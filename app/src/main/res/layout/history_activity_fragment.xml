@@ -19,7 +19,7 @@
             android:id="@+id/img_no_history_found"
             android:layout_width="220dp"
             android:layout_height="160dp"
-            android:src="@drawable/first_history"
+            android:src="@drawable/second_history"
             android:contentDescription="no history"
             android:alpha="0.85" />
 

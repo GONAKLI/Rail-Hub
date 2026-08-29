@@ -45,7 +45,7 @@ public class myLocationServiceClass extends Service {
         Log.d("Serviceclass", "onStartCommand: come in fetch_location");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest locationRequest = new LocationRequest.Builder(
-                Priority.PRIORITY_HIGH_ACCURACY,
+                Priority.PRIORITY_BALANCED_POWER_ACCURACY,
                 10000
         )
                 .setMinUpdateIntervalMillis(5000)
