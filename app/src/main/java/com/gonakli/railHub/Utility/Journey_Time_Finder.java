@@ -1,5 +1,8 @@
 package com.gonakli.railHub.Utility;
 
+import android.util.Log;
+
+import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -12,18 +15,30 @@ public class Journey_Time_Finder {
     public Duration getJourneyTime(int startHour, int startMinutes, int startDayCount,
                                    int endHour, int endMinutes, int endDayCount) {
         // Start time = current date + startDayCount offset
-        LocalDateTime journeyStartAt = LocalDateTime.of(currentYear, currentMonth, currentDate + (startDayCount - 1), startHour, startMinutes);
+        try{
+            LocalDateTime baseDate = LocalDateTime.of(currentYear,currentMonth,currentDate,0,0);
 
-        // End time = current date + endDayCount offset
-        LocalDateTime journeyEndAt = LocalDateTime.of(currentYear, currentMonth, currentDate + (endDayCount - 1), endHour, endMinutes);
+            LocalDateTime journeyStartAt = baseDate.plusDays(startDayCount - 1).plusHours(startHour).plusMinutes(startMinutes);
+            // End time = current date + endDayCount offset
+            LocalDateTime journeyEndAt = baseDate.plusDays(endDayCount - 1).plusHours(endHour).plusMinutes(endMinutes);
+            // Duration calculation
+            return Duration.between(journeyStartAt, journeyEndAt);
+        }catch (DateTimeException e){
+            Log.d("dateException", "getJourneyTime: exception occurred " + e.getMessage());
+            Log.d("dateException", "getJourneyTime: exception occurred " + startDayCount+ " " + endDayCount);
 
-        // Duration calculation
-        return Duration.between(journeyStartAt, journeyEndAt);
+        }
+        return null;
     }
 
 
     public int getDaysInMonth(int year, int month){
-        YearMonth yearMonth = YearMonth.of(year,month);
-        return yearMonth.lengthOfMonth();
+        try{
+            YearMonth yearMonth = YearMonth.of(year,month);
+            return yearMonth.lengthOfMonth();
+        } catch (Exception e) {
+            Log.d("dateException", "getDaysInMonth: exception occured " + e.getMessage());
+        }
+        return 0;
     }
 }
