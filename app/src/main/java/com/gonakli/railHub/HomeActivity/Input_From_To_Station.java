@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class Input_From_To_Station extends LinearLayout {
     Stations_Dropdown_Adapter customStationAdapter;
 
     ImageButton btn_swap_stations;
+    ImageView btn_clear_from, btn_clear_to;
 
 
     public Input_From_To_Station(Context context, @Nullable AttributeSet attrs) {
@@ -52,14 +54,26 @@ public class Input_From_To_Station extends LinearLayout {
         from_station_to_station_fields();
         Action_On_Swap_Button();
         clearBadge();
+        clearFieldData();
         get_Recent_Field_Data_From_DB();
 
     }
 
+    private void clearFieldData() {
+        btn_clear_from.setOnClickListener(v -> {
+            fromStation.setText("");
+            fromStationCodeBadge.setText("");
+        });
+        btn_clear_to.setOnClickListener(v -> {
+            toStation.setText("");
+            toStationCodeBadge.setText("");
+        });
+    }
+
     private void get_Recent_Field_Data_From_DB() {
-        try(Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context)){
+        try (Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context)) {
             Input_Field_Last_Search_Structure recentData = db.getRecentFieldData();
-            if(recentData != null){
+            if (recentData != null) {
                 fromStationCodeBadge.setText(recentData.getFromCode());
                 fromStation.setText(recentData.getFromValue());
                 fromStationCodeBadge.setVisibility(VISIBLE);
@@ -72,7 +86,7 @@ public class Input_From_To_Station extends LinearLayout {
     }
 
     private void Action_On_Swap_Button() {
-        btn_swap_stations.setOnClickListener(v ->{
+        btn_swap_stations.setOnClickListener(v -> {
             fromStation.clearFocus();
             toStation.clearFocus();
             Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.swap_button_rotation);
@@ -80,17 +94,17 @@ public class Input_From_To_Station extends LinearLayout {
 
 
             String fromStationValue = fromStation.getText().toString();
-            String fromStationCodeBadgeValue =   fromStationCodeBadge.getText().toString();
-            String toStationValue =  toStation.getText().toString();
-            String toStationCodeBadgeValue =  toStationCodeBadge.getText().toString();
+            String fromStationCodeBadgeValue = fromStationCodeBadge.getText().toString();
+            String toStationValue = toStation.getText().toString();
+            String toStationCodeBadgeValue = toStationCodeBadge.getText().toString();
 
 
-            if(!fromStationCodeBadgeValue.isBlank()){
+            if (!fromStationCodeBadgeValue.isBlank()) {
                 toStation.setText(fromStationValue);
                 toStationCodeBadge.setText(fromStationCodeBadgeValue);
                 toStationCodeBadge.setVisibility(VISIBLE);
             }
-            if(!toStationCodeBadgeValue.isBlank()){
+            if (!toStationCodeBadgeValue.isBlank()) {
                 fromStation.setText(toStationValue);
                 fromStationCodeBadge.setText(toStationCodeBadgeValue);
                 fromStationCodeBadge.setVisibility(VISIBLE);
@@ -106,7 +120,7 @@ public class Input_From_To_Station extends LinearLayout {
             ArrayList<Station_List_Structure> arrStationList = new ArrayList<>(new Station_List_DB_Helper(getContext()).getDataForPredictiveTextFields(null));
 
             ((Activity) context).runOnUiThread(() -> {
-                 customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
+                customStationAdapter = new Stations_Dropdown_Adapter(getContext(), arrStationList);
 
 
                 fromStation.setAdapter(customStationAdapter);
@@ -121,21 +135,21 @@ public class Input_From_To_Station extends LinearLayout {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Station_List_Structure selected = null;
-                        if(view !=null && view.getTag() instanceof Station_List_Structure){
+                        if (view != null && view.getTag() instanceof Station_List_Structure) {
                             selected = (Station_List_Structure) view.getTag();
                         }
 //                        else if (customStationAdapter !=null && position < customStationAdapter.getCount()) {
 //                            selected = customStationAdapter.getItem(position);
 //                        }
-                        if(selected !=null){
+                        if (selected != null) {
                             String stCode = selected.getStation_Code();
                             String stName = selected.getStation_Name();
-                            if(stCode != null){
+                            if (stCode != null) {
                                 fromStationCodeBadge.setText(stCode);
                                 fromStationCodeBadge.setVisibility(View.VISIBLE);
                             }
-                            if(stName !=null){
-                                fromStation.setText(stName,false);
+                            if (stName != null) {
+                                fromStation.setText(stName, false);
                             }
                             toStation.requestFocus();
                         }
@@ -152,17 +166,17 @@ public class Input_From_To_Station extends LinearLayout {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Station_List_Structure selected = null;
-                        if(view != null && view.getTag() instanceof Station_List_Structure){
+                        if (view != null && view.getTag() instanceof Station_List_Structure) {
                             selected = (Station_List_Structure) view.getTag();
                         }
-                        if(selected != null){
+                        if (selected != null) {
                             String stCode = selected.getStation_Code();
                             String stName = selected.getStation_Name();
-                            if(stCode !=null){
+                            if (stCode != null) {
                                 toStationCodeBadge.setText(stCode);
                                 toStationCodeBadge.setVisibility(View.VISIBLE);
                             }
-                            if(stName != null){
+                            if (stName != null) {
                                 toStation.setText(stName);
                             }
                         }
@@ -172,7 +186,7 @@ public class Input_From_To_Station extends LinearLayout {
 //                        toStationCodeBadge.setVisibility(View.VISIBLE);
 //
 //                        toStation.setText(selected.getStation_Name());
-                        InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(toStation.getWindowToken(), 0);
                     }
                 });
@@ -195,12 +209,17 @@ public class Input_From_To_Station extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)) {
+                try (Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)) {
                     ArrayList<Station_List_Structure> myData = new ArrayList<>();
                     myData.clear();
-                    myData.addAll( dbHelper.getDataForPredictiveTextFields(s.toString()));
+                    myData.addAll(dbHelper.getDataForPredictiveTextFields(s.toString()));
                     if (customStationAdapter != null) {
                         customStationAdapter.updateData(myData);
+                    }
+                    if (s.toString().isEmpty()) {
+                        btn_clear_from.setVisibility(View.GONE);
+                    } else {
+                        btn_clear_from.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -219,13 +238,18 @@ public class Input_From_To_Station extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try(Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)){
+                try (Station_List_DB_Helper dbHelper = new Station_List_DB_Helper(context)) {
                     ArrayList<Station_List_Structure> myData = new ArrayList<>();
                     myData.clear();
                     myData.addAll(dbHelper.getDataForPredictiveTextFields(s.toString()));
-                    if(customStationAdapter != null){
+                    if (customStationAdapter != null) {
                         Log.d("customer", "onTextChanged: " + "called");
                         customStationAdapter.updateData(myData);
+                    }
+                    if (s.toString().isEmpty()) {
+                        btn_clear_to.setVisibility(View.GONE);
+                    } else {
+                        btn_clear_to.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -239,25 +263,27 @@ public class Input_From_To_Station extends LinearLayout {
         fromStationCodeBadge = findViewById(R.id.from_station_code_badge);
         toStationCodeBadge = findViewById(R.id.to_station_code_badge);
         btn_swap_stations = findViewById(R.id.btn_swap_stations);
+        btn_clear_from = findViewById(R.id.btn_clear_from);
+        btn_clear_to = findViewById(R.id.btn_clear_to);
     }
 
     private void from_station_to_station_fields() {
 
-        btnFindTrain.setOnClickListener(v ->{
+        btnFindTrain.setOnClickListener(v -> {
             String fromStationCode_value = fromStationCodeBadge.getText().toString().trim();
             String toStationCode_value = toStationCodeBadge.getText().toString().trim();
 
 
-            if(fromStationCode_value.isBlank() || toStationCode_value.isBlank()){
+            if (fromStationCode_value.isBlank() || toStationCode_value.isBlank()) {
                 Toast.makeText(context, "Select a valid station", Toast.LENGTH_SHORT)
                         .show();
                 return;
-            }else{
-                new Thread(() ->{
-                    try(Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context);
-                        Station_List_DB_Helper stDbHelper = new Station_List_DB_Helper(context)){
+            } else {
+                new Thread(() -> {
+                    try (Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context);
+                         Station_List_DB_Helper stDbHelper = new Station_List_DB_Helper(context)) {
                         Input_Field_Last_Search_Structure structureObj = new Input_Field_Last_Search_Structure(
-                                fromStationCode_value,stDbHelper.getStationNameByCode(fromStationCode_value),toStationCode_value,stDbHelper.getStationNameByCode(toStationCode_value)
+                                fromStationCode_value, stDbHelper.getStationNameByCode(fromStationCode_value), toStationCode_value, stDbHelper.getStationNameByCode(toStationCode_value)
                         );
                         db.insertRecentFieldDataInDB(structureObj);
                     }
@@ -273,11 +299,11 @@ public class Input_From_To_Station extends LinearLayout {
 
     }
 
-    private void clearBadge(){
+    private void clearBadge() {
         fromStation.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().isBlank()){
+                if (s.toString().isBlank()) {
                     fromStationCodeBadge.setText("");
                     fromStationCodeBadge.setVisibility(INVISIBLE);
                 }
@@ -297,7 +323,7 @@ public class Input_From_To_Station extends LinearLayout {
         toStation.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().isBlank()){
+                if (s.toString().isBlank()) {
                     toStationCodeBadge.setText("");
                     toStationCodeBadge.setVisibility(INVISIBLE);
                 }

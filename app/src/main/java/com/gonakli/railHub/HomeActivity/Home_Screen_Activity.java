@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +20,10 @@ import com.google.android.material.navigation.NavigationView;
 
 public class Home_Screen_Activity extends AppCompatActivity {
     private long prevTime = 0;
-Toolbar toolbar;
-DrawerLayout drawerLayout;
-NavigationView navigationView;
-FrameLayout frameLayout;
+    Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    FrameLayout frameLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,15 +34,38 @@ FrameLayout frameLayout;
         setUpApplicationToolBar();
         frameLayoutSetUp();
         setActionOnNavigationItems();
+        handleBackPress();
 
 
+    }
 
+    private void handleBackPress() {
+        getOnBackPressedDispatcher().addCallback(Home_Screen_Activity.this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                long currentTime = System.currentTimeMillis();
+
+                if (drawerLayout.isOpen()) {
+                    drawerLayout.close();
+                } else {
+                    if (currentTime - prevTime < 2000) {
+                        finish();
+                    } else {
+                        Toast.makeText(Home_Screen_Activity.this, "Tap back button again to exit", Toast.LENGTH_SHORT).show();
+                        prevTime = currentTime;
+                    }
+
+                }
+
+            }
+        });
     }
 
     private void get_application_theme() {
         ThemeSelectionOnStartUp themeSelector = new ThemeSelectionOnStartUp(Home_Screen_Activity.this);
         themeSelector.show_theme_chooser_dialogue();
     }
+
     private void frameLayoutSetUp() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -54,7 +78,7 @@ FrameLayout frameLayout;
     private void setUpApplicationToolBar() {
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,drawerLayout, toolbar, R.string.open_drawer,R.string.close_drawer);
+                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
@@ -67,31 +91,17 @@ FrameLayout frameLayout;
         frameLayout = findViewById(R.id.home_frame_layout);
     }
 
-    private void setActionOnNavigationItems(){
+    private void setActionOnNavigationItems() {
 
         Drawer_Item drawerItem = new Drawer_Item(Home_Screen_Activity.this, drawerLayout, navigationView);
 
     }
 
 
-    @Override
-    public void onBackPressed() {
-       
-        long currentTime = System.currentTimeMillis();
-
-        if(drawerLayout.isOpen()){
-        drawerLayout.close();
-    }else{
-            if(currentTime - prevTime < 2000)
-            {
-                super.onBackPressed();
-            }else{
-                Toast.makeText(this, "Tap back button again to exit", Toast.LENGTH_SHORT).show();
-                prevTime = currentTime;
-            }
-
-    }
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//
+//    }
 
 }

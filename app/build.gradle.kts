@@ -32,17 +32,18 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.appcompat)
-    implementation(libs.material)
     implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
-    implementation("com.airbnb.android:lottie:6.7.1")
-    implementation("com.google.android.material:material:1.14.0")
-    implementation("com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1")
+    implementation(libs.lottie)
+    implementation(libs.material)
+    implementation(libs.sqliteassethelper)
 }

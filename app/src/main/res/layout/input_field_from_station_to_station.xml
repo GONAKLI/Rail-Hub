@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="14dp"
     android:layout_marginVertical="10dp"
+    app:cardBackgroundColor="@color/card_background"
     app:cardCornerRadius="14dp"
-    app:cardElevation="3dp"
-    app:cardBackgroundColor="@color/card_background">
+    app:cardElevation="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,39 +20,54 @@
             android:id="@+id/from_station"
             android:layout_width="0dp"
             android:layout_height="52dp"
-            android:hint="From Station"
-            android:inputType="text"
-            android:imeOptions="actionNext"
-            android:paddingStart="15dp"
-            android:paddingEnd="48dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_edittext_outlined"
             android:drawableStart="@drawable/ic_station_entry"
             android:drawablePadding="10dp"
-            android:textSize="15sp"
+            android:hint="From Station"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:paddingStart="15dp"
+            android:paddingEnd="48dp"
             android:textColor="@color/card_text_primary"
             android:textColorHint="@color/card_text_secondary"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@id/btn_swap_stations"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="10dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Clear icon anchored to from_station's own bounds, not the whole card -->
+        <ImageView
+            android:id="@+id/btn_clear_from"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Clear from station"
+            android:padding="6dp"
+            android:src="@drawable/cancel_icon"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/from_station"
+            app:layout_constraintEnd_toEndOf="@id/from_station"
+            app:layout_constraintTop_toTopOf="@id/from_station"
+            tools:visibility="visible" />
+
+        <!-- Badge moved out of the field, anchored to parent's right edge (top-right corner, clear of swap button) -->
         <TextView
             android:id="@+id/from_station_code_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_station_code_badge"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp"
-            android:textAllCaps="true"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
             android:visibility="gone"
-            tools:text="NDLS"
-            app:layout_constraintEnd_toEndOf="@id/from_station"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/from_station"
-            app:layout_constraintBottom_toBottomOf="@id/from_station" />
+            tools:text="NDLS" />
 
         <!-- Swap Button -->
         <ImageButton
@@ -61,12 +75,12 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="@drawable/bg_swap_button"
+            android:contentDescription="Swap stations"
             android:padding="9dp"
             android:src="@drawable/ic_swap_updown"
-            android:contentDescription="Swap stations"
-            app:layout_constraintTop_toTopOf="@id/from_station"
             app:layout_constraintBottom_toBottomOf="@id/to_station"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/from_station" />
 
         <!-- To Station -->
         <AutoCompleteTextView
@@ -74,39 +88,54 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="12dp"
-            android:hint="To Station"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:paddingStart="15dp"
-            android:paddingEnd="48dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_edittext_outlined"
             android:drawableStart="@drawable/ic_station_exit"
             android:drawablePadding="10dp"
-            android:textSize="15sp"
+            android:hint="To Station"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingStart="15dp"
+            android:paddingEnd="48dp"
             android:textColor="@color/card_text_primary"
             android:textColorHint="@color/card_text_secondary"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@id/btn_swap_stations"
-            app:layout_constraintTop_toBottomOf="@id/from_station"
-            android:layout_marginEnd="10dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/from_station" />
 
+        <!-- Clear icon anchored to to_station's own bounds, not the whole card -->
+        <ImageView
+            android:id="@+id/btn_clear_to"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Clear to station"
+            android:padding="6dp"
+            android:src="@drawable/cancel_icon"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/to_station"
+            app:layout_constraintEnd_toEndOf="@id/to_station"
+            app:layout_constraintTop_toTopOf="@id/to_station"
+            tools:visibility="visible" />
+
+        <!-- Badge moved out of the field, anchored to parent's right edge (bottom-right corner, clear of swap button) -->
         <TextView
             android:id="@+id/to_station_code_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_station_code_badge"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp"
-            android:textAllCaps="true"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
             android:visibility="gone"
-            tools:text="CDG"
-            app:layout_constraintEnd_toEndOf="@id/to_station"
-            app:layout_constraintTop_toTopOf="@id/to_station"
-            app:layout_constraintBottom_toBottomOf="@id/to_station" />
+            app:layout_constraintBottom_toBottomOf="@id/to_station"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="CDG" />
 
         <!-- Find Trains Button -->
         <androidx.appcompat.widget.AppCompatButton
@@ -114,16 +143,16 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="18dp"
+            android:background="@drawable/bg_button_rounded"
+            android:stateListAnimator="@null"
             android:text="Find Trains"
-            android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:background="@drawable/bg_button_rounded"
-            android:stateListAnimator="@null"
-            app:layout_constraintTop_toBottomOf="@id/to_station"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/to_station" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -70,7 +70,7 @@ public class Show_Trains extends AppCompatActivity {
                 arrTrains = dbHelper.getTrainSearchResult(null);
                 recyclerAdapter = new Train_List_Recycler_Adapter(Show_Trains.this, arrTrains);
                 runOnUiThread(() -> {
-                   stopLoadingAnimation();
+                    stopLoadingAnimation();
                     showTrainRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     showTrainRecyclerView.setAdapter(recyclerAdapter);
                 });

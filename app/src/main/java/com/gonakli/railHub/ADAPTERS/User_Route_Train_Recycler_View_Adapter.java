@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,9 +19,10 @@ import com.gonakli.railHub.R;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
-import com.gonakli.railHub.Utility.Journey_Time_Finder;
-import com.gonakli.railHub.Utility.Time_Converter;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Journey_Time_Finder;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Time_Converter;
+import com.gonakli.railHub.Utility.TrainExtraInfo.RunningDays;
+import com.gonakli.railHub.Utility.TrainExtraInfo.ShowTrainInfoDialog;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -54,7 +54,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         ArrayList<Train_Schedule_Station_Structure> arrStation = arrScheduleList.get(position).getStationList();
         String arrivalTime = "", finalDestinationReachTime = "";
-        String runningDays = "";
+        String runningDays = RunningDays.getTrainRunningDays(arrScheduleList.get(position));
         int startDayCount = Integer.MIN_VALUE;
         int endDayCount = Integer.MIN_VALUE;
 
@@ -85,35 +85,6 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         Log.d("timeTesting", "onBindViewHolder: arr " + arrivalTime);
 
         Log.d("timeTesting", "onBindViewHolder: dest " + finalDestinationReachTime);
-        String runOnMon = arrScheduleList.get(position).getTrainRunsOnMon();
-        String runOnTue = arrScheduleList.get(position).getTrainRunsOnTue();
-        String runOnWed = arrScheduleList.get(position).getTrainRunsOnWed();
-        String runOnThu = arrScheduleList.get(position).getTrainRunsOnThu();
-        String runOnFri = arrScheduleList.get(position).getTrainRunsOnFri();
-        String runOnSat = arrScheduleList.get(position).getTrainRunsOnSat();
-        String runOnSun = arrScheduleList.get(position).getTrainRunsOnSun();
-
-        if (
-                runOnMon.equalsIgnoreCase("Y") &&
-                        runOnTue.equalsIgnoreCase("Y") &&
-                        runOnWed.equalsIgnoreCase("Y") &&
-                        runOnThu.equalsIgnoreCase("Y") &&
-                        runOnFri.equalsIgnoreCase("Y") &&
-                        runOnSat.equalsIgnoreCase("Y") &&
-                        runOnSun.equalsIgnoreCase("Y")
-        ) {
-            runningDays = "Daily";
-        } else {
-            StringBuilder runningDaysBuilder = new StringBuilder();
-            if (runOnMon.equalsIgnoreCase("Y")) runningDaysBuilder.append("Mon ");
-            if (runOnTue.equalsIgnoreCase("Y")) runningDaysBuilder.append("Tue ");
-            if (runOnWed.equalsIgnoreCase("Y")) runningDaysBuilder.append("Wed ");
-            if (runOnThu.equalsIgnoreCase("Y")) runningDaysBuilder.append("Thu ");
-            if (runOnFri.equalsIgnoreCase("Y")) runningDaysBuilder.append("Fri ");
-            if (runOnSat.equalsIgnoreCase("Y")) runningDaysBuilder.append("Sat ");
-            if (runOnSun.equalsIgnoreCase("Y")) runningDaysBuilder.append("Sun");
-            runningDays = runningDaysBuilder.toString().trim();
-        }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -176,42 +147,8 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         });
         final String serviceDays = runningDays;
         holder.itemView.setOnLongClickListener(v -> {
-            TextView infoTrainName, infoTrainNumber, infoTrainService, infoTrainJourneyTime;
-            TextView infoTrainStops, infoTrainTotalDistance, infoTrainStartingPoint, infoTrainEndingPoint;
-            Button btnClose;
-            Log.d("testCrashing", "onBindViewHolder: line 201");
-
-            BottomSheetDialog dialog = new BottomSheetDialog(context);
-            dialog.setContentView(R.layout.user_route_train_info_bottom_sheet);
-
-            infoTrainName = dialog.findViewById(R.id.userRouteBottomDialogueTrainName);
-            infoTrainNumber = dialog.findViewById(R.id.userRouteBottomDialogueTrainNumber);
-            infoTrainService = dialog.findViewById(R.id.userRouteBottomDialogueTrainService);
-            infoTrainJourneyTime = dialog.findViewById(R.id.userRouteBottomDialogueTrainTravelTime);
-            infoTrainStops = dialog.findViewById(R.id.userRouteBottomDialogueTrainTotalStops);
-            infoTrainTotalDistance = dialog.findViewById(R.id.userRouteBottomDialogueTrainTotalDistance);
-            infoTrainStartingPoint = dialog.findViewById(R.id.userRouteBottomDialogueTrainStartingPoint);
-            infoTrainEndingPoint = dialog.findViewById(R.id.userRouteBottomDialogueTrainEndingPoint);
-            btnClose = dialog.findViewById(R.id.btnCloseDialog);
-
-            String[] journeyTime = arrScheduleList.get(position).getDuration().split(":", 2);
-            String formattedJourneyTime = String.format("%s Hours %s Minutes", journeyTime[0], journeyTime[1]);
-
-            infoTrainName.setText(trainName);
-            infoTrainNumber.setText(trainNumber);
-            infoTrainService.setText(serviceDays);
-            infoTrainJourneyTime.setText(formattedJourneyTime);
-            infoTrainStops.setText(String.valueOf(arrStation.size()));
-            infoTrainTotalDistance.setText(String.valueOf(arrStation.get(arrStation.size() - 1).getDistance() + " Km"));
-            infoTrainStartingPoint.setText(arrStation.get(0).getStationName());
-            infoTrainEndingPoint.setText(arrStation.get(arrStation.size() - 1).getStationName());
-
-
-            dialog.show();
-            btnClose.setOnClickListener(x -> {
-                dialog.dismiss();
-            });
-
+            Train_Schedule_Structure myTrainData = arrScheduleList.get(position);
+            ShowTrainInfoDialog.showExtraTrainInfoWithoutDB(myTrainData, context);
             return true;
         });
 

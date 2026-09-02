@@ -16,6 +16,7 @@ import com.gonakli.railHub.R;
 import com.gonakli.railHub.Structure_Class.Train_List_Structure_New;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
+import com.gonakli.railHub.Utility.TrainExtraInfo.ShowTrainInfoDialog;
 
 import java.util.ArrayList;
 
@@ -71,6 +72,11 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
                     context.startActivity(trainTrackingLive);
                 }
             }
+        });
+        holder.itemView.setOnLongClickListener(v -> {
+            String trNum = arrTrainList.get(position).getTrainNumber();
+            ShowTrainInfoDialog.showExtraTrainInfo(trNum, context);
+            return true;
         });
     }
 
