@@ -81,6 +81,9 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                 informationMessage.append(String.format("• %s \n", data.toString().trim()));
             }
         }
+        if (informationMessage.toString().isEmpty()) {
+            holder.pnrStatusInfoMessage.setVisibility(View.GONE);
+        }
 
         if (arrPnrData.get(position).getArrPassengerList() != null) {
             holder.pnrStatusPassengerContainer.removeAllViews();

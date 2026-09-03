@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 
 public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List_Recycler_Adapter.viewHolder> {
     Context context;
+    private SearchView searchView;
     ArrayList<Train_List_Structure_New> arrTrainList;
 
     public Train_List_Recycler_Adapter(Context context, ArrayList<Train_List_Structure_New> arrTrainList) {
@@ -75,7 +78,12 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
         });
         holder.itemView.setOnLongClickListener(v -> {
             String trNum = arrTrainList.get(position).getTrainNumber();
-            ShowTrainInfoDialog.showExtraTrainInfo(trNum, context);
+            if (searchView != null) {
+                searchView.clearFocus();
+            }
+            InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            ShowTrainInfoDialog.showExtraTrainInfo(trNum, null, context);
             return true;
         });
     }
@@ -102,5 +110,9 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
         arrTrainList.clear();
         arrTrainList.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    public void setSearchView(SearchView searchView) {
+        this.searchView = searchView;
     }
 }

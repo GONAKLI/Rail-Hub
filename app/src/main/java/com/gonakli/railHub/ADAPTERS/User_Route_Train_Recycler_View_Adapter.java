@@ -137,7 +137,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             trainTracking.putExtra("toStationCode", toStationCode);
 
             new Thread(() -> {
-                //save user train inhistory for future access
+                //save user train in history for future access
                 User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
                 helper.addHistoryInDB(trNumber, trName, fromStationCode, toStationCode);
                 helper.close();
@@ -145,10 +145,9 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
 
             context.startActivity(trainTracking);
         });
-        final String serviceDays = runningDays;
         holder.itemView.setOnLongClickListener(v -> {
             Train_Schedule_Structure myTrainData = arrScheduleList.get(position);
-            ShowTrainInfoDialog.showExtraTrainInfoWithoutDB(myTrainData, context);
+            ShowTrainInfoDialog.showExtraTrainInfo(null, myTrainData, context);
             return true;
         });
 

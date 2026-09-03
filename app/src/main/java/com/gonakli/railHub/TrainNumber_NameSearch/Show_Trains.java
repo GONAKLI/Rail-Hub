@@ -73,6 +73,7 @@ public class Show_Trains extends AppCompatActivity {
                     stopLoadingAnimation();
                     showTrainRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     showTrainRecyclerView.setAdapter(recyclerAdapter);
+                    recyclerAdapter.setSearchView(showTrainSearchView);
                 });
 
             }
