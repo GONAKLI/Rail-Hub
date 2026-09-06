@@ -22,12 +22,12 @@
         <item name="colorOnSurfaceVariant">#5C5C5C</item>
 
         <!-- Status bar -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">#1B5B35</item>
         <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">default</item>
-        <item name="android:navigationBarColor">#D75839</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:navigationBarColor">#102B2F</item>
+<!--        <item name="android:fitsSystemWindows">true</item>-->
 
 
     </style>

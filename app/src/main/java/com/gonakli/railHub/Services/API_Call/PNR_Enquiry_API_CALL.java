@@ -14,14 +14,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class PNR_Enquiry_API_CALL extends Service {
     String pnrNumber;
     private static String API_URL;
+    public static String PNR_RESPONSE = "PNR_RESPONSE_ACTION";
+    public static String INTERNET_ISSUE = "PNR_INTERNET_ISSUE";
+    public static  String INTERNAL_APPLICATION_ERROR = "INTERNAL_APPLICATION_ERROR";
     //private static final String API_URL = "https://railhub.gonakli.com/pnr-enquiry";
 
 
@@ -56,6 +62,7 @@ public class PNR_Enquiry_API_CALL extends Service {
     }
 
     private void call_pnr_api(Intent intent) {
+        Intent iPnrResponse = new Intent();
         Log.d("PNR_Service", "call_pnr_api: in call_pnr_api()");
 
         try {
@@ -96,26 +103,28 @@ public class PNR_Enquiry_API_CALL extends Service {
 
                 Log.d("pnrWork", "call_pnr_api: " + resData.getTrainName());
                 // Log.d("pnrWork", "call_pnr_api: " + resData.getErrorMessage());
-                Intent iResponse = new Intent("PNR_RESPONSE_ACTION");
-                iResponse.setPackage(getPackageName());
-                iResponse.putExtra("pnrResponse", resData);
+                iPnrResponse.setAction(PNR_RESPONSE);
+                iPnrResponse.setPackage(getPackageName());
+                iPnrResponse.putExtra("pnrResponse", resData);
                 if(intent.hasExtra("isRefresh")){
                     boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
                     if(isRefresh){
-                        iResponse.putExtra("isRefresh", true);
+                        iPnrResponse.putExtra("isRefresh", true);
                     }
                 }
-                sendBroadcast(iResponse);
+                sendBroadcast(iPnrResponse);
                 Log.d("pnrWork", "call_pnr_api: broadcast sent");
 
             }
-
-
-        } catch (Exception e) {
-            Log.d("PNR_Service", "call_pnr_api: error occurred" + e);
+        } catch (UnknownHostException e) {
+            iPnrResponse.setAction(INTERNET_ISSUE);
+            iPnrResponse.setPackage(getPackageName());
+            sendBroadcast(iPnrResponse);
+        } catch (IOException e){
+            iPnrResponse.setAction(INTERNAL_APPLICATION_ERROR);
+            iPnrResponse.setPackage(getPackageName());
+            sendBroadcast(iPnrResponse);
         }
-
-
     }
 
     private Pnr_Api_Response_Structure PnrHandler(HttpURLConnection conn) {

@@ -10,13 +10,16 @@ import androidx.annotation.Nullable;
 import com.gonakli.railHub.Structure_Class.API_Response_Train_Tracking;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -25,6 +28,8 @@ public class Train_Tracking_API_Call extends Service{
 //   private static final String API_URL = "http://10.62.223.99:5015/find-my-train";
      private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
+    public static String INTERNET_ISSUE = "INTERNET_ISSUE";
+    public static String INTERNAL_APPLICATION_ERROR = "INTERNAL_ERROR";
     String trainNumber, startDate;
     @Nullable
     @Override
@@ -52,6 +57,8 @@ public class Train_Tracking_API_Call extends Service{
     }
 
     private void fetch_Train_Location(){
+        Intent iTrainAPi = new Intent();
+
         Log.d("apiTest", "onStartCommand: enter in fetch method");
         try{
             URL url = new URL(API_URL);
@@ -98,21 +105,26 @@ public class Train_Tracking_API_Call extends Service{
                 String actualDeparture = objData.optString("actualDeparture", "");
                 arrTrainApi.add(new API_Response_Train_Tracking(stationCode,platform, actualArrival,actualDeparture));
             }
+            iTrainAPi.setAction(API_TRAIN_DATA);
+            iTrainAPi.putExtra("trainLat", Double.parseDouble(lat));
+            iTrainAPi.putExtra("trainLng", Double.parseDouble(lng));
+            iTrainAPi.putExtra("trainApiStatusMsg", trainApiStatusMsg);
+            iTrainAPi.putExtra("dataLastUpdatedAt", dataLastUpdatedAt);
+            iTrainAPi.putExtra("stationData", arrTrainApi);
 
-            Intent iApiData = new Intent(API_TRAIN_DATA);
-            iApiData.putExtra("trainLat", Double.parseDouble(lat));
-            iApiData.putExtra("trainLng", Double.parseDouble(lng));
-            iApiData.putExtra("trainApiStatusMsg", trainApiStatusMsg);
-            iApiData.putExtra("dataLastUpdatedAt", dataLastUpdatedAt);
-            iApiData.putExtra("stationData", arrTrainApi);
+            iTrainAPi.setPackage(getPackageName());
+            sendBroadcast(iTrainAPi);
 
-            iApiData.setPackage(getPackageName());
-            sendBroadcast(iApiData);
-
-        }catch (Exception e){
-
-            Log.d("apiTest", "onStartCommand: catch block: " + e);
-            System.out.println("error occurred");
+        }catch (UnknownHostException e){
+            iTrainAPi.setAction(INTERNET_ISSUE);
+            iTrainAPi.putExtra("internetIssue", true);
+            iTrainAPi.setPackage(getPackageName());
+            sendBroadcast(iTrainAPi);
+        } catch (IOException | JSONException e){
+            iTrainAPi.setAction(INTERNAL_APPLICATION_ERROR);
+            iTrainAPi.putExtra("internalApplicationIssue", true);
+            iTrainAPi.setPackage(getPackageName());
+            sendBroadcast(iTrainAPi);
         }
 
     }

@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +44,7 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,17 +149,19 @@ public class Train_Tracking extends AppCompatActivity {
                         trackingHeaderStatusInfo.setTextColor(Color.WHITE);
                         trackingHeaderStatusInfo.setBackgroundColor(Color.RED);
                     } else if (trainApiStatusMsg.contains("Train not started yet")) {
-
+                        showSnackBar(trainApiStatusMsg);
                         Log.d("checkStatusmsg", "tracking_upper_header: 2");
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
                         trackingHeaderStatusInfo.setTextColor(Color.BLACK);
                         trackingHeaderStatusInfo.setBackgroundColor(Color.parseColor("#FFF3E0"));
                     } else if (trainApiStatusMsg.contains("Train journey Already ended")) {
+                        showSnackBar(trainApiStatusMsg);
                         Log.d("checkStatusmsg", "tracking_upper_header: 3");
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
                         trackingHeaderStatusInfo.setTextColor(Color.BLACK);
                         trackingHeaderStatusInfo.setBackgroundColor(Color.parseColor("#FFF3E0"));
                     } else if (trainApiStatusMsg.contains("is cancelled")) {
+                        showSnackBar(trainApiStatusMsg);
                         trackingHeaderStatusInfo.setText(trainApiStatusMsg);
                         trackingHeaderStatusInfo.setTextColor(Color.WHITE);
                         trackingHeaderStatusInfo.setBackgroundColor(Color.RED);
@@ -230,10 +232,10 @@ public class Train_Tracking extends AppCompatActivity {
     private void set_insideTrainBtn_action() {
 
         insideTrainBtn.setOnClickListener(v -> {
-              if (isInsideTrain) {
-             final_inside_task();
-                  return;
-                }
+            if (isInsideTrain) {
+                final_inside_task();
+                return;
+            }
             if (permissionCheckPoint()) {
                 final_inside_task();
             }
@@ -246,7 +248,7 @@ public class Train_Tracking extends AppCompatActivity {
         isInsideTrain = !isInsideTrain;
 
         if (isInsideTrain) {
-            if(iLocationService == null) {
+            if (iLocationService == null) {
                 iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
             }
             btnRefreshLiveTracking.setVisibility(View.GONE);
@@ -399,22 +401,13 @@ public class Train_Tracking extends AppCompatActivity {
 
 
     // broadcast receiver
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
-    private final BroadcastReceiver locationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            lat = intent.getDoubleExtra("lat", 0);
-            lng = intent.getDoubleExtra("lng", 0);
-            if (lat == 0 || lng == 0) return;
-            Log.d("Serviceclass", "onReceive: receiver h" + lat);
-            track_user();
-        }
-    };
+            String action = intent.getAction();
 
-    private final BroadcastReceiver apiTrainLocation = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
+            if (Train_Tracking_API_Call.API_TRAIN_DATA.equalsIgnoreCase(action)) {
                 lat = intent.getDoubleExtra("trainLat", 0);
                 lng = intent.getDoubleExtra("trainLng", 0);
                 if (lat == 0 || lng == 0) return;
@@ -424,9 +417,17 @@ public class Train_Tracking extends AppCompatActivity {
                     API_Train_Location(apiData);
                 }
 
+            } else if (Train_Tracking_API_Call.INTERNET_ISSUE.equalsIgnoreCase(action)) {
+                showSnackBar("Sorry, i need internet when you are not inside the train");
+            } else if (Train_Tracking_API_Call.INTERNAL_APPLICATION_ERROR.equalsIgnoreCase(action)) {
+                showSnackBar("Unexpected error occurred, Please try again later");
+            } else if (myLocationServiceClass.ACTION_LOCATION_UPDATE.equalsIgnoreCase(action)) {
+                lat = intent.getDoubleExtra("lat", 0);
+                lng = intent.getDoubleExtra("lng", 0);
+                if (lat == 0 || lng == 0) return;
+                Log.d("Serviceclass", "onReceive: receiver h" + lat);
+                track_user();
             }
-
-
         }
     };
 
@@ -471,30 +472,14 @@ public class Train_Tracking extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(locationReceiver, new IntentFilter(myLocationServiceClass.ACTION_LOCATION_UPDATE), Context.RECEIVER_NOT_EXPORTED);
-            registerReceiver(apiTrainLocation, new IntentFilter(Train_Tracking_API_Call.API_TRAIN_DATA), Context.RECEIVER_NOT_EXPORTED);
-        } else {
-            registerReceiver(locationReceiver, new IntentFilter(myLocationServiceClass.ACTION_LOCATION_UPDATE), Context.RECEIVER_NOT_EXPORTED);
-            registerReceiver(apiTrainLocation, new IntentFilter(Train_Tracking_API_Call.API_TRAIN_DATA), Context.RECEIVER_NOT_EXPORTED);
-        }
-
         if (isInsideTrain && iLocationService != null) {
             startService(iLocationService);
         }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            unregisterReceiver(locationReceiver);
-            unregisterReceiver(apiTrainLocation);
-        } catch (IllegalArgumentException e) {
-            // work here
-        }
-
         if (iLocationService != null) {
             stopService(iLocationService);
         }
@@ -536,8 +521,8 @@ public class Train_Tracking extends AppCompatActivity {
 //        }
 //    }
 
-    public void startLoadingAnimation(){
-        if(liveTrackingLoadingAnimation != null){
+    public void startLoadingAnimation() {
+        if (liveTrackingLoadingAnimation != null) {
             liveTrackingLoadingAnimation.setVisibility(View.VISIBLE);
             liveTrackingLoadingAnimation.setAnimation(R.raw.loading_dots);
             liveTrackingLoadingAnimation.playAnimation();
@@ -545,12 +530,35 @@ public class Train_Tracking extends AppCompatActivity {
             liveTrackingLoadingAnimation.setRepeatMode(LottieDrawable.REVERSE);
         }
     }
-    public void stopLoadingAnimation(){
-        if(liveTrackingLoadingAnimation != null){
+
+    public void stopLoadingAnimation() {
+        if (liveTrackingLoadingAnimation != null) {
             liveTrackingLoadingAnimation.cancelAnimation();
             liveTrackingLoadingAnimation.setVisibility(View.GONE);
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Train_Tracking_API_Call.API_TRAIN_DATA);
+        filter.addAction(Train_Tracking_API_Call.INTERNET_ISSUE);
+        filter.addAction(Train_Tracking_API_Call.INTERNAL_APPLICATION_ERROR);
+        filter.addAction(myLocationServiceClass.ACTION_LOCATION_UPDATE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        }
+    }
 
+    private void showSnackBar(String msg) {
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.ANIMATION_MODE_SLIDE);
+        snackbar.setBackgroundTint(Color.RED);
+        snackbar.setTextColor(Color.WHITE);
+        View snackView = snackbar.getView();
+        TextView snackTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
+        snackTextView.setTextSize(15);
+        snackbar.setAnchorView(live_train_tracking_recycler_view);
+        snackbar.show();
+    }
 }
