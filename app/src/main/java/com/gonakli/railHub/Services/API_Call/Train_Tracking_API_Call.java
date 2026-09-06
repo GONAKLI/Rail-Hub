@@ -111,18 +111,15 @@ public class Train_Tracking_API_Call extends Service{
             iTrainAPi.putExtra("trainApiStatusMsg", trainApiStatusMsg);
             iTrainAPi.putExtra("dataLastUpdatedAt", dataLastUpdatedAt);
             iTrainAPi.putExtra("stationData", arrTrainApi);
-
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);
 
         }catch (UnknownHostException e){
             iTrainAPi.setAction(INTERNET_ISSUE);
-            iTrainAPi.putExtra("internetIssue", true);
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);
         } catch (IOException | JSONException e){
             iTrainAPi.setAction(INTERNAL_APPLICATION_ERROR);
-            iTrainAPi.putExtra("internalApplicationIssue", true);
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);
         }
