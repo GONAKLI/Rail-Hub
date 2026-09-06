@@ -133,73 +133,87 @@ public class Fragment_Pnr_Screen extends Fragment {
     }
 
     private void showSnackBar(String msg) {
-            Snackbar snackbar = Snackbar.make(view, msg, Snackbar.ANIMATION_MODE_SLIDE);
-            snackbar.setDuration(3000);
-            snackbar.setBackgroundTint(Color.RED);
-            snackbar.setTextColor(Color.WHITE);
-            snackbar.setAnchorView(pnrSearchContainerBox);
-            View snackView = snackbar.getView();
-            TextView snackTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
-            snackTextView.setTextSize(15);
-            snackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            snackbar.show();
-            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams) snackView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            snackView.setLayoutParams(params);
-    }
-
-    private void managePnrFromApi(Intent intent){
-        Station_List_DB_Helper db = new Station_List_DB_Helper(getContext());
-        Pnr_Api_Response_Structure resData = (Pnr_Api_Response_Structure) intent.getSerializableExtra("pnrResponse");
-        boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
-        if (resData != null && resData.isSuccess()) {
-            new Thread(() -> {
-                PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
-                if (isRefresh) {
-                    helper.updatePnrDataInDB(resData);
-                } else {
-                    helper.addPnrPassengerInDB(resData);
-                }
-
-                helper.close();
-
-                ArrayList<Pnr_Api_Response_Structure> latestData = new PNR_Data_DB_Helper(getContext()).getPnrDataFromDB();
-                getActivity().runOnUiThread(() -> {
-                    if (adapter == null) {
-                        adapter = new All_Pnr_Data_Recycler_View_Adapter(getContext(), latestData);
-                        allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        allPnrCheckRecyclerView.setAdapter(adapter);
-                    } else {
-                        adapter.refreshAdapter();
-                    }
-
-                    if (isRefresh) {
-                        allPnrCheckRecyclerView.smoothScrollToPosition(0);
-                        Toast.makeText(getContext(), "Pnr refreshed", Toast.LENGTH_SHORT).show();
-                    }
-
-                });
-            }).start();
-            db.close();
-
-
-        } else {
-            if (resData != null && !resData.isSuccess()) {
-                AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                        .setTitle("Something Wrong")
-                        .setMessage(resData.getErrorMessage())
-                        .setIcon(R.drawable.pnr_alert_error)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }
-                        )
-                        .create();
-                alertDialog.show();
+        if (isAdded() && getActivity() != null) {
+            View mySnackView = requireActivity().findViewById(android.R.id.content);
+            if (mySnackView != null) {
+                Snackbar snackbar = Snackbar.make(mySnackView, msg, Snackbar.ANIMATION_MODE_SLIDE);
+                snackbar.setDuration(3000);
+                snackbar.setBackgroundTint(Color.RED);
+                snackbar.setTextColor(Color.WHITE);
+                snackbar.setAnchorView(pnrSearchContainerBox);
+                View snackView = snackbar.getView();
+                TextView snackTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
+                snackTextView.setTextSize(15);
+                snackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snackbar.show();
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                snackView.setLayoutParams(params);
             }
         }
+
+
+    }
+
+    private void managePnrFromApi(Intent intent) {
+        if (isAdded()) {
+            try {
+                Station_List_DB_Helper db = new Station_List_DB_Helper(requireContext().getApplicationContext());
+                Pnr_Api_Response_Structure resData = (Pnr_Api_Response_Structure) intent.getSerializableExtra("pnrResponse");
+                boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
+                if (resData != null && resData.isSuccess()) {
+                    new Thread(() -> {
+                        PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
+                        if (isRefresh) {
+                            helper.updatePnrDataInDB(resData);
+                        } else {
+                            helper.addPnrPassengerInDB(resData);
+                        }
+
+                        helper.close();
+
+                        ArrayList<Pnr_Api_Response_Structure> latestData = new PNR_Data_DB_Helper(getContext()).getPnrDataFromDB();
+                        getActivity().runOnUiThread(() -> {
+                            if (adapter == null) {
+                                adapter = new All_Pnr_Data_Recycler_View_Adapter(getContext(), latestData);
+                                allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                                allPnrCheckRecyclerView.setAdapter(adapter);
+                            } else {
+                                adapter.refreshAdapter();
+                            }
+
+                            if (isRefresh) {
+                                allPnrCheckRecyclerView.smoothScrollToPosition(0);
+                                Toast.makeText(getContext(), "Pnr refreshed", Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                    }).start();
+                    db.close();
+
+
+                } else {
+                    if (resData != null && !resData.isSuccess()) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                                .setTitle("Something Wrong")
+                                .setMessage(resData.getErrorMessage())
+                                .setIcon(R.drawable.pnr_alert_error)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                )
+                                .create();
+                        alertDialog.show();
+                    }
+                }
+            } catch (NullPointerException e) {
+                Log.d("nullPointerinPNR", "managePnrFromApi: " + e.getMessage());
+            }
+        }
+
     }
 
     @Override
