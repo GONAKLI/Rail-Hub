@@ -1,5 +1,7 @@
 package com.gonakli.railHub.TrainTracking;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -80,7 +82,12 @@ public class Train_Tracking extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_train_tracking_combined_main);
-        obj = new Location_Permissions(Train_Tracking.this);
+        if(obj == null){
+            obj = new Location_Permissions(Train_Tracking.this);
+        }
+        if (iLocationService == null) {
+            iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
+        }
         find_all_id();
         get_intent_data();
         set_custom_toolbar();
@@ -222,11 +229,21 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
 
-    private boolean permissionCheckPoint() {
+    private void permissionCheckPoint() {
         boolean isGranted = obj.checkPermission();
-        if (!isGranted) return false;
-        GPS_Req isGPSEnabled = new GPS_Req(Train_Tracking.this);
-        return isGPSEnabled.gpsChecker();
+        if (!isGranted) {
+            //  obj.showSettingDialog();
+            return;
+        }
+        GPS_Req gps_Req = new GPS_Req(Train_Tracking.this);
+        boolean isGPSEnabled = gps_Req.gpsChecker();
+        if (!isGPSEnabled) {
+            return;
+        }
+        if(isGranted && isGPSEnabled){
+            final_inside_task();
+            return;
+        }
     }
 
     private void set_insideTrainBtn_action() {
@@ -236,9 +253,7 @@ public class Train_Tracking extends AppCompatActivity {
                 final_inside_task();
                 return;
             }
-            if (permissionCheckPoint()) {
-                final_inside_task();
-            }
+            permissionCheckPoint();
         });
     }
 
@@ -248,9 +263,7 @@ public class Train_Tracking extends AppCompatActivity {
         isInsideTrain = !isInsideTrain;
 
         if (isInsideTrain) {
-            if (iLocationService == null) {
-                iLocationService = new Intent(Train_Tracking.this, myLocationServiceClass.class);
-            }
+
             btnRefreshLiveTracking.setVisibility(View.GONE);
             trainApiStatusMsg = null;
             // ================= STATE 1: INSIDE TRAIN (ACTIVE / ON) =================
@@ -419,8 +432,10 @@ public class Train_Tracking extends AppCompatActivity {
 
             } else if (Train_Tracking_API_Call.INTERNET_ISSUE.equalsIgnoreCase(action)) {
                 showSnackBar("Sorry, i need internet when you are not inside the train");
+                Train_Finder_Api_Limit.clearCanCallFindTrainAPI();
             } else if (Train_Tracking_API_Call.INTERNAL_APPLICATION_ERROR.equalsIgnoreCase(action)) {
                 showSnackBar("Unexpected error occurred, Please try again later");
+                Train_Finder_Api_Limit.clearCanCallFindTrainAPI();
             } else if (myLocationServiceClass.ACTION_LOCATION_UPDATE.equalsIgnoreCase(action)) {
                 lat = intent.getDoubleExtra("lat", 0);
                 lng = intent.getDoubleExtra("lng", 0);
@@ -472,23 +487,8 @@ public class Train_Tracking extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isInsideTrain && iLocationService != null) {
-            startService(iLocationService);
-        }
+        if(!isInsideTrain) call_API_Service();
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (iLocationService != null) {
-            stopService(iLocationService);
-        }
-        if (iTrainApiService != null) {
-            stopService(iTrainApiService);
-        }
-
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -503,7 +503,7 @@ public class Train_Tracking extends AppCompatActivity {
                         break;
                     }
                 }
-                if (isAllPermissionGranted) final_inside_task();
+                if (isAllPermissionGranted) permissionCheckPoint();
                 else if (obj != null) {
                     obj.handlePermissionResult(requestCode, permissions, grantResults);
                 }
@@ -511,15 +511,16 @@ public class Train_Tracking extends AppCompatActivity {
 
         }
     }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == GPS_Req.REQ_CODE) {
-//            if (resultCode == Activity.RESULT_OK){
-//            }
-//        }
-//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GPS_Req.REQ_CODE) {
+            if (resultCode == Activity.RESULT_OK){
+                permissionCheckPoint();
+            }
+        }
+    }
 
     public void startLoadingAnimation() {
         if (liveTrackingLoadingAnimation != null) {
@@ -538,6 +539,7 @@ public class Train_Tracking extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onStart() {
         super.onStart();
@@ -546,9 +548,29 @@ public class Train_Tracking extends AppCompatActivity {
         filter.addAction(Train_Tracking_API_Call.INTERNET_ISSUE);
         filter.addAction(Train_Tracking_API_Call.INTERNAL_APPLICATION_ERROR);
         filter.addAction(myLocationServiceClass.ACTION_LOCATION_UPDATE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(broadcastReceiver, filter);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isInsideTrain && iLocationService != null) {
+            stopService(iLocationService);
+        }
+        if (iTrainApiService != null) {
+            stopService(iTrainApiService);
+        }
+        Log.d("destroyMyseld", "onDestroy: activity destroyrd");
     }
 
     private void showSnackBar(String msg) {

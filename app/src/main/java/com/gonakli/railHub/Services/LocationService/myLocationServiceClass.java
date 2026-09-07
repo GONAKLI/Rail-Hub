@@ -45,7 +45,7 @@ public class myLocationServiceClass extends Service {
         Log.d("Serviceclass", "onStartCommand: come in fetch_location");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest locationRequest = new LocationRequest.Builder(
-                Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                Priority.PRIORITY_HIGH_ACCURACY,
                 10000
         )
                 .setMinUpdateIntervalMillis(5000)
@@ -55,6 +55,7 @@ public class myLocationServiceClass extends Service {
                     @Override
                     public void onLocationResult(@NonNull LocationResult locationResult) {
                        for(Location location : locationResult.getLocations()){
+                           Log.d("Serviceclass", "onLocationResult: " + location.getLatitude() + location.getLongitude());
                         if(location != null){
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();

@@ -30,7 +30,9 @@ import com.gonakli.railHub.R;
 import com.gonakli.railHub.Services.API_Call.PNR_Enquiry_API_CALL;
 import com.gonakli.railHub.Structure_Class.PassengerList_Structure;
 import com.gonakli.railHub.Structure_Class.Pnr_Api_Response_Structure;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Date_Tense;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -73,6 +75,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         quota = arrPnrData.get(position).getQuota();
         chartStatus = arrPnrData.get(position).getChartStatus();
         journeyDate = dateFormater(arrPnrData.get(position).getDateOfJourney());
+        String responseMsg = Date_Tense.isDate_Past_Present_Future(journeyDate);
         informationMessage = new StringBuilder();
         ticketFare = arrPnrData.get(position).getTicketFare();
         for (Object data : arrPnrData.get(position).getArrInformationMessage()) {
@@ -141,8 +144,19 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         delete_Pnr(holder, pnrNum);
         refresh_pnr(holder, pnrNum);
         copy_Pnr(holder, pnrNum);
+        customize_card_on_journey_date(responseMsg, holder);
 
 
+    }
+
+    private void customize_card_on_journey_date(String responseMsg, viewHolder holder) {
+        if(responseMsg.equalsIgnoreCase("past")){
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFC9C9"));
+        } else if(responseMsg.equalsIgnoreCase("present")) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#99F49C"));
+        }else if (responseMsg.equalsIgnoreCase("future")) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#D4D4D8"));
+        }
     }
 
     private void copy_Pnr(viewHolder holder, String pnrNum) {
@@ -195,6 +209,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
             dateTime = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
             formatted = dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
         }
+        Log.d("pnrFormattedDate", "dateFormater: " + formatted);
         return formatted;
     }
 

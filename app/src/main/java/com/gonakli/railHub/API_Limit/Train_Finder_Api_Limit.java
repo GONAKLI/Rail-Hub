@@ -20,4 +20,8 @@ public class Train_Finder_Api_Limit {
         }
 
     }
+
+    public static void clearCanCallFindTrainAPI(){
+        arrTrainRecords.clear();
+    }
 }
