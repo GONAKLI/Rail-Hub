@@ -93,7 +93,6 @@ public class Train_Tracking extends AppCompatActivity {
         set_custom_toolbar();
         train_finder();
         set_insideTrainBtn_action();
-        call_API_Service();
         Refresh_Live_Tracking();
 
     }
@@ -487,7 +486,16 @@ public class Train_Tracking extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isInsideTrain) call_API_Service();
+        if(!isInsideTrain) {
+            if (Train_Finder_Api_Limit.canCallFindTrainAPI(trainNumber)) {
+                btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(this, R.anim.train_location_refresh_btn));
+                Toast.makeText(this, "Refreshing ...", Toast.LENGTH_SHORT).show();
+                call_API_Service();
+            } else {
+                btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(this, R.anim.train_location_refresh_btn));
+                Toast.makeText(this, "updated a few seconds ago", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

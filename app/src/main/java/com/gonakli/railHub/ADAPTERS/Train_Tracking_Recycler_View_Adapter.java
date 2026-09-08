@@ -22,6 +22,7 @@ import com.gonakli.railHub.Structure_Class.API_Response_Train_Tracking;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Tracking_Structure;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Time_Tense;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -152,6 +153,39 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
                 context.startActivity(iBrowser);
             }
         });
+        if (!arrAt.isEmpty() && !arrAt.equalsIgnoreCase("--") && actualArrAt != null && !actualArrAt.isEmpty()) {
+            customize_Train_Time_On_UI(arrAt, actualArrAt, holder, "ARRIVAL");
+        } else {
+            holder.trainActualArrivalAt.setTextColor(context.getColor(R.color.card_text_primary));
+        }
+        if (!depAt.isEmpty() && !depAt.equalsIgnoreCase("--") && actualDepAt != null && !actualDepAt.isEmpty()) {
+            customize_Train_Time_On_UI(depAt, actualDepAt, holder, "DEPARTURE");
+        } else {
+            holder.trainActualDepartureAt.setTextColor(context.getColor(R.color.card_text_primary));
+        }
+
+    }
+
+    private void customize_Train_Time_On_UI(String scheduleTime, String actualTime, myViewHolder holder, String type) {
+        int res = Time_Tense.check_Train_Time_Tense(scheduleTime, actualTime);
+
+        if (type.equalsIgnoreCase("ARRIVAL")) {
+            if (res == -1) {
+                holder.trainActualArrivalAt.setTextColor(Color.GREEN);
+            } else if (res == 0) {
+                holder.trainActualArrivalAt.setTextColor(context.getColor(R.color.card_text_primary));
+            } else if (res == 1) {
+                holder.trainActualArrivalAt.setTextColor(Color.RED);
+            }
+        } else if (type.equalsIgnoreCase("DEPARTURE")) {
+            if (res == -1) {
+                holder.trainActualDepartureAt.setTextColor(Color.GREEN);
+            } else if (res == 0) {
+                holder.trainActualDepartureAt.setTextColor(context.getColor(R.color.card_text_primary));
+            } else if (res == 1) {
+                holder.trainActualDepartureAt.setTextColor(Color.RED);
+            }
+        }
 
     }
 
@@ -237,7 +271,7 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
 //        new Thread(() ->{
         this.trainLocationData = trainLocationData;
 //        ((Activity) context).runOnUiThread(() -> {
-            notifyDataSetChanged();
+        notifyDataSetChanged();
 //        });
 //        }).start();
 
@@ -245,18 +279,18 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
 
     public void APi_Adapter_Update(Train_Tracking_Structure trainLocationData, ArrayList<API_Response_Train_Tracking> apiRes) {
 //        new Thread(() -> {
-            this.trainLocationData = trainLocationData;
-            for (Train_Schedule_Station_Structure st : this.arrTrainStations) {
-                for (API_Response_Train_Tracking obj : apiRes) {
-                    if (st.getStationCode().equals(obj.getStationCode())) {
-                        st.setPlatform(obj.getPlatform());
-                        st.setActualArrivalTime(obj.getActualArrival());
-                        st.setActualDepartureTime(obj.getActualDeparture());
-                    }
+        this.trainLocationData = trainLocationData;
+        for (Train_Schedule_Station_Structure st : this.arrTrainStations) {
+            for (API_Response_Train_Tracking obj : apiRes) {
+                if (st.getStationCode().equals(obj.getStationCode())) {
+                    st.setPlatform(obj.getPlatform());
+                    st.setActualArrivalTime(obj.getActualArrival());
+                    st.setActualDepartureTime(obj.getActualDeparture());
                 }
             }
+        }
 //            ((Activity) context).runOnUiThread(() -> {
-                notifyDataSetChanged();
+        notifyDataSetChanged();
 //            });
 
 //        }).start();

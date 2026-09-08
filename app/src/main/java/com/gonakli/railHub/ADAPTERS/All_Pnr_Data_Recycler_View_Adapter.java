@@ -151,11 +151,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
     private void customize_card_on_journey_date(String responseMsg, viewHolder holder) {
         if(responseMsg.equalsIgnoreCase("past")){
-            holder.itemView.setBackgroundColor(Color.parseColor("#FFC9C9"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#FF3C28"));
         } else if(responseMsg.equalsIgnoreCase("present")) {
             holder.itemView.setBackgroundColor(Color.parseColor("#99F49C"));
         }else if (responseMsg.equalsIgnoreCase("future")) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#D4D4D8"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffe6f0"));
         }
     }
 
