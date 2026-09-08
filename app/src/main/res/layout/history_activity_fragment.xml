@@ -52,6 +52,7 @@
         android:clipToPadding="false"
         android:layout_marginBottom="?attr/actionBarSize"
         android:scrollbars="none"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        android:paddingBottom="25dp"/>
 
 </LinearLayout>
