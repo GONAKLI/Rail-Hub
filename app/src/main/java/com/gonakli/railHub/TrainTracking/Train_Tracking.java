@@ -42,6 +42,7 @@ import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Tracking_Live_Structure_Class;
 import com.gonakli.railHub.Structure_Class.Train_Tracking_Structure;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Subtract_Days_In_Millis;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -71,18 +72,20 @@ public class Train_Tracking extends AppCompatActivity {
     Train_Tracking_Recycler_View_Adapter adapter;
 
     double lat, lng;
-    Long selectedDateInLong;
+    Long selectedDateInLong, originalSelectdDateInLong;
+    int dayCount = 0;
     boolean isInsideTrain = false;
     String selectedDate;
     String trainApiStatusMsg;
     Train_Schedule_Structure myTrainData;
     RecyclerView live_train_tracking_recycler_view;
+    private boolean isUiLoaded = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_train_tracking_combined_main);
-        if(obj == null){
+        if (obj == null) {
             obj = new Location_Permissions(Train_Tracking.this);
         }
         if (iLocationService == null) {
@@ -239,7 +242,7 @@ public class Train_Tracking extends AppCompatActivity {
         if (!isGPSEnabled) {
             return;
         }
-        if(isGranted && isGPSEnabled){
+        if (isGranted && isGPSEnabled) {
             final_inside_task();
             return;
         }
@@ -310,7 +313,6 @@ public class Train_Tracking extends AppCompatActivity {
     }
 
     private void set_recycler_view() {
-
         if (fromStationCode != null && toStationCode != null) {
             adapter = new Train_Tracking_Recycler_View_Adapter(Train_Tracking.this, myTrainData, fromStationCode, toStationCode);
         } else {
@@ -319,7 +321,8 @@ public class Train_Tracking extends AppCompatActivity {
         stopLoadingAnimation();
         live_train_tracking_recycler_view.setLayoutManager(new LinearLayoutManager(Train_Tracking.this));
         live_train_tracking_recycler_view.setAdapter(adapter);
-
+        call_API_Service();
+        isUiLoaded = true;
     }
 
     private void train_finder() {
@@ -328,10 +331,7 @@ public class Train_Tracking extends AppCompatActivity {
             Train_Schedule_DB_Helper dbHelper = new Train_Schedule_DB_Helper(Train_Tracking.this);
             myTrainData = dbHelper.getTrainDataByTrainNumber(trainNumber);
             dbHelper.close();
-            this.runOnUiThread(() -> {
-                set_recycler_view();
-            });
-
+            this.runOnUiThread(this::set_recycler_view);
         }).start();
 
     }
@@ -342,6 +342,8 @@ public class Train_Tracking extends AppCompatActivity {
         trainName = iTrack.getStringExtra("trainName");
         fromStationCode = iTrack.getStringExtra("fromStationCode");
         toStationCode = iTrack.getStringExtra("toStationCode");
+        selectedDate = iTrack.getStringExtra("trainStartDate");
+        dayCount = iTrack.getIntExtra("dayCount", 0);
     }
 
     private void find_all_id() {
@@ -393,17 +395,14 @@ public class Train_Tracking extends AppCompatActivity {
         constraint.setStart(thirtyDayAgo.getTimeInMillis());
         constraint.setEnd(today.getTimeInMillis());
 
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker
-                .Builder.datePicker().setCalendarConstraints(constraint.build())
-                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                .setSelection(selectedDateInLong == null ? today.getTimeInMillis() : selectedDateInLong)
-                .setTitleText("Choose Train Journey Start Date").build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(constraint.build()).setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR).setSelection(originalSelectdDateInLong == null ? today.getTimeInMillis() : originalSelectdDateInLong).setTitleText("Choose Train Journey Start Date").build();
         datePicker.show(getSupportFragmentManager(), "MY_CALENDER");
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
             @Override
             public void onPositiveButtonClick(Long aLong) {
-                selectedDateInLong = aLong;
-                Date date = new Date(aLong);
+                originalSelectdDateInLong = aLong;
+                selectedDateInLong = Subtract_Days_In_Millis.getSubtractedDaysInMillis(aLong, dayCount);
+                Date date = new Date(selectedDateInLong);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 selectedDate = simpleDateFormat.format(date);
                 call_API_Service();
@@ -486,7 +485,7 @@ public class Train_Tracking extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isInsideTrain) {
+        if (!isInsideTrain && isUiLoaded) {
             if (Train_Finder_Api_Limit.canCallFindTrainAPI(trainNumber)) {
                 btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(this, R.anim.train_location_refresh_btn));
                 Toast.makeText(this, "Refreshing ...", Toast.LENGTH_SHORT).show();
@@ -524,7 +523,7 @@ public class Train_Tracking extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GPS_Req.REQ_CODE) {
-            if (resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 permissionCheckPoint();
             }
         }
@@ -536,7 +535,7 @@ public class Train_Tracking extends AppCompatActivity {
             liveTrackingLoadingAnimation.setAnimation(R.raw.loading_dots);
             liveTrackingLoadingAnimation.playAnimation();
             liveTrackingLoadingAnimation.setRepeatCount(LottieDrawable.INFINITE);
-            liveTrackingLoadingAnimation.setRepeatMode(LottieDrawable.REVERSE);
+            liveTrackingLoadingAnimation.setRepeatMode(LottieDrawable.RESTART);
         }
     }
 

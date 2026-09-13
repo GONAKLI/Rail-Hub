@@ -47,15 +47,16 @@ public class User_Route_Train_List extends AppCompatActivity {
     }
 
     private void startLoadingAnimation() {
-        if(trainLoadingWaitTimeLottieAnimation != null){
+        if (trainLoadingWaitTimeLottieAnimation != null) {
             trainLoadingWaitTimeLottieAnimation.setAnimation(R.raw.loading_panda);
             trainLoadingWaitTimeLottieAnimation.playAnimation();
             trainLoadingWaitTimeLottieAnimation.setRepeatCount(LottieDrawable.INFINITE);
             trainLoadingWaitTimeLottieAnimation.setRepeatMode(LottieDrawable.RESTART);
         }
     }
-    private void stopLoadingAnimation(){
-        if(trainLoadingWaitTimeLottieAnimation != null){
+
+    private void stopLoadingAnimation() {
+        if (trainLoadingWaitTimeLottieAnimation != null) {
             trainLoadingWaitTimeLottieAnimation.cancelAnimation();
             trainLoadingWaitTimeLottieAnimation.setVisibility(View.GONE);
         }

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Rail Radar"
+rootProject.name = "Rail Hub"
 include(":app")
  

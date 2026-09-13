@@ -4,6 +4,8 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
@@ -22,5 +24,11 @@ public class Time_Converter {
         return timeIn12Hours;
 
 
+    }
+
+    public static long getTimeInMillis(String dateAndTime){
+        LocalDate date = LocalDate.parse(dateAndTime);
+        long timeInMillis = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return timeInMillis;
     }
 }

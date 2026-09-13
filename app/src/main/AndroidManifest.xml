@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RailRadar"
+        android:theme="@style/Theme.railHub"
         android:usesCleartextTraffic="true">
 
         <activity android:name=".HomeActivity.Home_Screen_Activity"

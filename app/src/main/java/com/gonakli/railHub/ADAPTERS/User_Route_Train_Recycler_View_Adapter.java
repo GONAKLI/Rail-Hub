@@ -19,16 +19,15 @@ import com.gonakli.railHub.R;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Day_Of_Week;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Journey_Time_Finder;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Time_Converter;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Train_Journey_Date_Selector;
 import com.gonakli.railHub.Utility.TrainExtraInfo.RunningDays;
 import com.gonakli.railHub.Utility.TrainExtraInfo.ShowTrainInfoDialog;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter<User_Route_Train_Recycler_View_Adapter.viewHolder> {
     Context context;
@@ -88,12 +87,12 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDate date = LocalDate.now();
-            String day = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+
+            String day = Day_Of_Week.getDayOfWeek(startDayCount);
             if (!runningDays.equalsIgnoreCase("daily") && !runningDays.toLowerCase().contains(day.toLowerCase())) {
                 holder.itemView.setBackgroundColor(Color.GRAY);
                 holder.trainScheduleRunningDays.setTextColor(Color.parseColor("#54D12E"));
-                holder.trainScheduleJourneyDuration.setTextColor(Color.parseColor("#FAA18F"));
+                holder.trainScheduleJourneyDuration.setTextColor(ContextCompat.getColor(context, R.color.card_text_primary));
                 holder.otherWarning.setText("Train is not running Today");
                 holder.otherWarning.setTextColor(Color.RED);
                 holder.otherWarning.setVisibility(View.VISIBLE);
@@ -127,7 +126,12 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         holder.trainScheduleFinalDestinationReachTime.setText(finalDestinationReachTime);
         holder.trainScheduleRunningDays.setText(runningDays);
 
+        int finalStartDayCount = startDayCount;
         holder.itemView.setOnClickListener(v -> {
+            String trainStartDate = null;
+            if (finalStartDayCount > 1) {
+                trainStartDate = Train_Journey_Date_Selector.getDefaultDate(finalStartDayCount);
+            }
             String trNumber = holder.trainScheduleTrainNumber.getText().toString();
             String trName = holder.trainScheduleTrainName.getText().toString();
             Intent trainTracking = new Intent(context.getApplicationContext(), Train_Tracking.class);
@@ -135,6 +139,8 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             trainTracking.putExtra("trainName", trName);
             trainTracking.putExtra("fromStationCode", fromStationCode);
             trainTracking.putExtra("toStationCode", toStationCode);
+            trainTracking.putExtra("trainStartDate", trainStartDate);
+            trainTracking.putExtra("dayCount", finalStartDayCount);
 
             new Thread(() -> {
                 //save user train in history for future access
@@ -146,6 +152,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             context.startActivity(trainTracking);
         });
         holder.itemView.setOnLongClickListener(v -> {
+
             Train_Schedule_Structure myTrainData = arrScheduleList.get(position);
             ShowTrainInfoDialog.showExtraTrainInfo(null, myTrainData, context);
             return true;

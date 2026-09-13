@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.gonakli.railradar", appContext.getPackageName());
+        assertEquals("com.gonakli.railHub", appContext.getPackageName());
     }
 }

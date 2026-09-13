@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.RailRadar" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.railHub" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Brand -->
         <item name="colorPrimary">#1E3A8A</item>
@@ -27,7 +27,7 @@
 
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">default</item>
         <item name="android:navigationBarColor">#102B2F</item>
-<!--        <item name="android:fitsSystemWindows">true</item>-->
+        <item name="android:fitsSystemWindows">true</item>
 
 
     </style>

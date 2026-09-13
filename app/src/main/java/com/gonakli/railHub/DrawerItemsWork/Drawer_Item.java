@@ -107,12 +107,12 @@ public class Drawer_Item {
         else if (item.getItemId() == R.id.applicationRateUs) {
             // Rate on play Store
             try{
-                Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.gonakli.railradar"));
+                Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.gonakli.railHub"));
                 play.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(play);
                 Toast.makeText(context, "⇣ ⇣  Scroll Down To Rate Us ⇣ ⇣ ", Toast.LENGTH_SHORT).show();
             } catch (android.content.ActivityNotFoundException e){
-                Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.gonakli.railradar"));
+                Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.gonakli.railHub"));
                 play.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(play);
                 Toast.makeText(context, "⇣ ⇣  Scroll Down To Rate Us ⇣ ⇣ ", Toast.LENGTH_SHORT).show();
