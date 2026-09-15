@@ -32,4 +32,8 @@
 
     </style>
 
+<!--    <style name="historyListView" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        <item name="background"> @drawable/bg_history_items</item>-->
+<!--    </style>-->
+
 </resources>

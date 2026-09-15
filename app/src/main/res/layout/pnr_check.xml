@@ -52,6 +52,13 @@
     </LinearLayout>
 
     <!-- PNR List -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allPnrCheckRecyclerView"
         android:layout_width="match_parent"
@@ -62,5 +69,12 @@
         android:paddingBottom="12dp"
         android:overScrollMode="never"
         android:scrollbars="none" />
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pnrLoadingAnimation"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+    </FrameLayout>
 </LinearLayout>

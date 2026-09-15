@@ -31,4 +31,9 @@
 
     </style>
 
+<!--    <style name="historyListView" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        <item name="background"> @color/card_background</item>-->
+<!--        <item name="android:textColor">@color/card_text_primary</item>-->
+<!--    </style>-->
+
 </resources>

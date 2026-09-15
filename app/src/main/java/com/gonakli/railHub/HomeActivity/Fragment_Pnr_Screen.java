@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.All_Pnr_Data_Recycler_View_Adapter;
 import com.gonakli.railHub.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
@@ -46,6 +48,7 @@ public class Fragment_Pnr_Screen extends Fragment {
     All_Pnr_Data_Recycler_View_Adapter adapter;
     Intent iPnrApiService;
     Context context;
+    LottieAnimationView LoadingAnimationView;
 
     @Nullable
     @Override
@@ -60,6 +63,7 @@ public class Fragment_Pnr_Screen extends Fragment {
     }
 
     private void recyclerView_setup() {
+        startAnimation();
         new Thread(() -> {
             PNR_Data_DB_Helper helper = new PNR_Data_DB_Helper(getContext());
             ArrayList<Pnr_Api_Response_Structure> arrPnrData = helper.getPnrDataFromDB();
@@ -69,6 +73,7 @@ public class Fragment_Pnr_Screen extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     allPnrCheckRecyclerView.setAdapter(adapter);
                     allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    stopAnimation();
                 });
 
             }
@@ -84,6 +89,7 @@ public class Fragment_Pnr_Screen extends Fragment {
         btnFindPnr = view.findViewById(R.id.btn_find_pnr);
         allPnrCheckRecyclerView = view.findViewById(R.id.allPnrCheckRecyclerView);
         pnrSearchContainerBox = view.findViewById(R.id.pnrSearchContainerBox);
+        LoadingAnimationView = view.findViewById(R.id.pnrLoadingAnimation);
     }
 
     protected void onSubmitAction() {
@@ -100,6 +106,7 @@ public class Fragment_Pnr_Screen extends Fragment {
             pnrSearchField.setText("");
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(pnrSearchField.getWindowToken(), 0);
+            startAnimation();
         });
     }
 
@@ -107,6 +114,7 @@ public class Fragment_Pnr_Screen extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            stopAnimation();
             String action = intent.getAction();
             if (PNR_Enquiry_API_CALL.PNR_RESPONSE.equalsIgnoreCase(action)) {
                 managePnrFromApi(intent);
@@ -212,6 +220,24 @@ public class Fragment_Pnr_Screen extends Fragment {
             } catch (NullPointerException e) {
                 Log.d("nullPointerinPNR", "managePnrFromApi: " + e.getMessage());
             }
+        }
+
+    }
+
+    private void startAnimation() {
+        if (LoadingAnimationView != null) {
+            LoadingAnimationView.setVisibility(View.VISIBLE);
+            LoadingAnimationView.setRepeatMode(LottieDrawable.RESTART);
+            LoadingAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+            LoadingAnimationView.setAnimation(R.raw.loading_color_dots);
+            LoadingAnimationView.playAnimation();
+        }
+    }
+
+    private void stopAnimation() {
+        if (LoadingAnimationView != null) {
+            LoadingAnimationView.cancelAnimation();
+            LoadingAnimationView.setVisibility(View.GONE);
         }
 
     }

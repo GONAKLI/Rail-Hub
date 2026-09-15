@@ -538,7 +538,7 @@ public class Train_Tracking extends AppCompatActivity {
     public void startLoadingAnimation() {
         if (liveTrackingLoadingAnimation != null) {
             liveTrackingLoadingAnimation.setVisibility(View.VISIBLE);
-            liveTrackingLoadingAnimation.setAnimation(R.raw.loading_dots);
+            liveTrackingLoadingAnimation.setAnimation(R.raw.loading_color_dots);
             liveTrackingLoadingAnimation.playAnimation();
             liveTrackingLoadingAnimation.setRepeatCount(LottieDrawable.INFINITE);
             liveTrackingLoadingAnimation.setRepeatMode(LottieDrawable.RESTART);
