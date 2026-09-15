@@ -73,7 +73,7 @@ public class Train_Tracking extends AppCompatActivity {
 
     double lat, lng;
     Long selectedDateInLong, originalSelectdDateInLong;
-    int dayCount = 0;
+    int dayCount = 1;
     boolean isInsideTrain = false;
     String selectedDate;
     String trainApiStatusMsg;
@@ -121,6 +121,7 @@ public class Train_Tracking extends AppCompatActivity {
             iTrainApiService.putExtra("startDate", selectedDate);
         }
         startService(iTrainApiService);
+        startLoadingAnimation();
     }
 
     private void tracking_upper_header(Train_Tracking_Structure trainLocationData) {
@@ -323,6 +324,8 @@ public class Train_Tracking extends AppCompatActivity {
         live_train_tracking_recycler_view.setAdapter(adapter);
         call_API_Service();
         isUiLoaded = true;
+        btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(Train_Tracking.this, R.anim.train_location_refresh_btn));
+        Toast.makeText(Train_Tracking.this, "Refreshing ...", Toast.LENGTH_SHORT).show();
     }
 
     private void train_finder() {
@@ -343,7 +346,7 @@ public class Train_Tracking extends AppCompatActivity {
         fromStationCode = iTrack.getStringExtra("fromStationCode");
         toStationCode = iTrack.getStringExtra("toStationCode");
         selectedDate = iTrack.getStringExtra("trainStartDate");
-        dayCount = iTrack.getIntExtra("dayCount", 0);
+        dayCount = iTrack.getIntExtra("dayCount", 1);
     }
 
     private void find_all_id() {
@@ -406,6 +409,9 @@ public class Train_Tracking extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 selectedDate = simpleDateFormat.format(date);
                 call_API_Service();
+                btnRefreshLiveTracking.startAnimation(AnimationUtils.loadAnimation(Train_Tracking.this, R.anim.train_location_refresh_btn));
+                Toast.makeText(Train_Tracking.this, "Refreshing ...", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -417,7 +423,7 @@ public class Train_Tracking extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
+            stopLoadingAnimation();
             if (Train_Tracking_API_Call.API_TRAIN_DATA.equalsIgnoreCase(action)) {
                 lat = intent.getDoubleExtra("trainLat", 0);
                 lng = intent.getDoubleExtra("trainLng", 0);

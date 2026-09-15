@@ -15,11 +15,12 @@ import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railHub.R;
 import com.gonakli.railHub.Structure_Class.User_History_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
+import com.gonakli.railHub.Utility.DateAndTimeRelated.Train_Journey_Date_Selector;
 
 import java.util.ArrayList;
 
 public class User_History_ListView_Adapter extends ArrayAdapter<User_History_Structure> {
-    public static  class viewHolder{
+    public static class viewHolder {
         TextView trNumber;
         TextView trName;
         TextView sourceStation;
@@ -30,12 +31,13 @@ public class User_History_ListView_Adapter extends ArrayAdapter<User_History_Str
     ArrayList<User_History_Structure> userHistory;
 
     public User_History_ListView_Adapter(@NonNull Context context, ArrayList<User_History_Structure> userHistory) {
-        super(context,0);
+        super(context, 0);
         this.context = context;
         this.userHistory = userHistory;
     }
+
     public User_History_ListView_Adapter(@NonNull Context context) {
-        super(context,0);
+        super(context, 0);
         this.context = context;
     }
 
@@ -43,7 +45,7 @@ public class User_History_ListView_Adapter extends ArrayAdapter<User_History_Str
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         viewHolder holder = new viewHolder();
-        convertView = LayoutInflater.from(context).inflate(R.layout.layout_list_view_history_activity, parent,false);
+        convertView = LayoutInflater.from(context).inflate(R.layout.layout_list_view_history_activity, parent, false);
 
         holder.trNumber = convertView.findViewById(R.id.historyTrainNumber);
         holder.trName = convertView.findViewById(R.id.historyTrainName);
@@ -55,21 +57,28 @@ public class User_History_ListView_Adapter extends ArrayAdapter<User_History_Str
         holder.sourceStation.setText(userHistory.get(position).getTrainSource());
         holder.destinationStation.setText(userHistory.get(position).getTrainDestination());
 
-        convertView.setOnClickListener(v ->{
+        convertView.setOnClickListener(v -> {
+            int dayCount = userHistory.get(position).getDayCount();
             Intent iTracking = new Intent(getContext(), Train_Tracking.class);
             String trainNumber = holder.trNumber.getText().toString();
             String trainName = holder.trName.getText().toString();
             String sourceStation = holder.sourceStation.getText().toString();
             String destinationStation = holder.destinationStation.getText().toString();
-            iTracking.putExtra("trainNumber", trainNumber );
+            iTracking.putExtra("trainNumber", trainNumber);
             iTracking.putExtra("trainName", trainName);
-            if(!sourceStation.isBlank() && !destinationStation.isBlank()){
-                iTracking.putExtra("fromStationCode", sourceStation );
-                iTracking.putExtra("toStationCode", destinationStation );
+            iTracking.putExtra("dayCount", dayCount);
+            String trainStartDate = null;
+            if (dayCount > 1) {
+                trainStartDate = Train_Journey_Date_Selector.getDefaultDate(dayCount);
+            }
+            iTracking.putExtra("trainStartDate", trainStartDate);
+            if (!sourceStation.isBlank() && !destinationStation.isBlank()) {
+                iTracking.putExtra("fromStationCode", sourceStation);
+                iTracking.putExtra("toStationCode", destinationStation);
             }
             new Thread(() -> {
-                try(User_Routes_History_DB_Helper dbHelper = new User_Routes_History_DB_Helper(context)){
-                    dbHelper.updateHistory(trainNumber,sourceStation,destinationStation);
+                try (User_Routes_History_DB_Helper dbHelper = new User_Routes_History_DB_Helper(context)) {
+                    dbHelper.updateHistory(trainNumber, sourceStation, destinationStation);
                 }
 
             }).start();

@@ -69,7 +69,7 @@ public class Train_List_Recycler_Adapter extends RecyclerView.Adapter<Train_List
 
                         // to save train in history section for future access
                         User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
-                        helper.addHistoryInDB(trNumber, trName, srStationCode, destStationCode);
+                        helper.addHistoryInDB(trNumber, trName, srStationCode, destStationCode, 1);
                         helper.close();
                     }).start();
                     context.startActivity(trainTrackingLive);

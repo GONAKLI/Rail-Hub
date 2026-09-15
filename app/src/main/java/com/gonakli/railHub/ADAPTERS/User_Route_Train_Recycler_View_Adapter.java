@@ -145,7 +145,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
             new Thread(() -> {
                 //save user train in history for future access
                 User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(context);
-                helper.addHistoryInDB(trNumber, trName, fromStationCode, toStationCode);
+                helper.addHistoryInDB(trNumber, trName, fromStationCode, toStationCode, finalStartDayCount);
                 helper.close();
             }).start();
 
