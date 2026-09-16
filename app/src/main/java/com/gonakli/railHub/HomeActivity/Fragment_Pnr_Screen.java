@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.All_Pnr_Data_Recycler_View_Adapter;
+import com.gonakli.railHub.API_Limit.Pnr_Check_Api_Limit;
 import com.gonakli.railHub.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railHub.R;
@@ -74,6 +75,7 @@ public class Fragment_Pnr_Screen extends Fragment {
                     allPnrCheckRecyclerView.setAdapter(adapter);
                     allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     stopAnimation();
+                    adapter.setExtraRefForAnimation(LoadingAnimationView);
                 });
 
             }
@@ -116,12 +118,17 @@ public class Fragment_Pnr_Screen extends Fragment {
         public void onReceive(Context context, Intent intent) {
             stopAnimation();
             String action = intent.getAction();
+            String pnrNumber = intent.getStringExtra("pnrNumber");
             if (PNR_Enquiry_API_CALL.PNR_RESPONSE.equalsIgnoreCase(action)) {
                 managePnrFromApi(intent);
             } else if (PNR_Enquiry_API_CALL.INTERNET_ISSUE.equalsIgnoreCase(action)) {
                 showSnackBar("Check your internet connection and then try again");
+                if (pnrNumber != null && !pnrNumber.isEmpty())
+                    Pnr_Check_Api_Limit.resetCanCallPnrAPI(pnrNumber);
             } else if (PNR_Enquiry_API_CALL.INTERNAL_APPLICATION_ERROR.equalsIgnoreCase(action)) {
                 showSnackBar("Something went wrong, please try again later");
+                if (pnrNumber != null && !pnrNumber.isEmpty())
+                    Pnr_Check_Api_Limit.resetCanCallPnrAPI(pnrNumber);
             }
         }
     };

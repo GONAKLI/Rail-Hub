@@ -23,6 +23,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.API_Limit.Pnr_Check_Api_Limit;
 import com.gonakli.railHub.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
@@ -42,6 +44,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     Intent iPnrApiService;
 
     Context context;
+    LottieAnimationView LoadingAnimationView;
 
     public All_Pnr_Data_Recycler_View_Adapter(Context context, ArrayList<Pnr_Api_Response_Structure> arrPnrData) {
         this.context = context;
@@ -168,6 +171,20 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         });
     }
 
+    public void setExtraRefForAnimation(LottieAnimationView LoadingAnimationView){
+        this.LoadingAnimationView = LoadingAnimationView;
+    }
+
+    private void startAnimation() {
+        if (LoadingAnimationView != null) {
+            LoadingAnimationView.setVisibility(View.VISIBLE);
+            LoadingAnimationView.setRepeatMode(LottieDrawable.RESTART);
+            LoadingAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+            LoadingAnimationView.setAnimation(R.raw.loading_color_dots);
+            LoadingAnimationView.playAnimation();
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -257,6 +274,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                 context.startService(iPnrApiService);
                 Animation animation = AnimationUtils.loadAnimation(context, R.anim.pnr_refresh_rotation);
                 holder.btnRefreshPnr.startAnimation(animation);
+                startAnimation();
             } else {
                 Animation animation = AnimationUtils.loadAnimation(context, R.anim.pnr_refresh_rotation);
                 holder.btnRefreshPnr.startAnimation(animation);

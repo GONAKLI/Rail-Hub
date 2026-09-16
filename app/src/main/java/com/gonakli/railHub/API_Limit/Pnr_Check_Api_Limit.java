@@ -20,4 +20,8 @@ public class Pnr_Check_Api_Limit {
             return false;
         }
     }
+    public static void resetCanCallPnrAPI(String pnrNum){
+       boolean isPnrExistsInAPI = arrPnrRecords.containsKey(pnrNum);
+        if(isPnrExistsInAPI) arrPnrRecords.remove(pnrNum);
+    }
 }

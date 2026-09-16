@@ -119,10 +119,12 @@ public class PNR_Enquiry_API_CALL extends Service {
         } catch (UnknownHostException e) {
             iPnrResponse.setAction(INTERNET_ISSUE);
             iPnrResponse.setPackage(getPackageName());
+            iPnrResponse.putExtra("pnrNumber", pnrNumber);
             sendBroadcast(iPnrResponse);
         } catch (IOException e){
             iPnrResponse.setAction(INTERNAL_APPLICATION_ERROR);
             iPnrResponse.setPackage(getPackageName());
+            iPnrResponse.putExtra("pnrNumber", pnrNumber);
             sendBroadcast(iPnrResponse);
         }
     }
