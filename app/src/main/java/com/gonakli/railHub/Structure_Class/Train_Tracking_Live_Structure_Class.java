@@ -35,8 +35,8 @@ public class Train_Tracking_Live_Structure_Class {
         this.arrStationsList = arrStationsList;
         this.arrPolylinePoints = arrPolylinePoints;
         this.sourceStation = arrStationsList.get(0).getStationName();
-        this.destinationStation = arrStationsList.get(arrStationsList.size()-1).getStationName();
-        this.totalTrainJourney = arrStationsList.get(arrStationsList.size()-1).getDistance();
+        this.destinationStation = arrStationsList.get(arrStationsList.size() - 1).getStationName();
+        this.totalTrainJourney = arrStationsList.get(arrStationsList.size() - 1).getDistance();
     }
 
     public void trackMyUserTrain() {
@@ -267,17 +267,46 @@ public class Train_Tracking_Live_Structure_Class {
                 + "\nprogress: " + stationCoveredPercentage + "% | journeyKm: " + totalJourneyCovered);
     }
 
-    public String getStatusMessage() { return statusMessage; }
-    public boolean isAtStation() { return isAtStation; }
-    public boolean isOnRoute() { return isOnRoute; }
-    public Train_Schedule_Station_Structure getPreviousStation() { return previousStation; }
-    public Train_Schedule_Station_Structure getNextStation() { return nextStation; }
-    public Train_Schedule_Station_Structure getCurrentStation() { return currentStation; }
-    public int getStationCoveredPercentage() { return stationCoveredPercentage; }
-    public int getTotalJourneyCovered() { return totalJourneyCovered; }
+    public String getStatusMessage() {
+        return statusMessage;
+    }
 
-    public int getTotalJourneyCoveredPercentage(){ return ((totalJourneyCovered/ Integer.parseInt(totalTrainJourney)) *100);}
-    public int getTotalTrainJourney() { return Integer.parseInt(totalTrainJourney);}
+    public boolean isAtStation() {
+        return isAtStation;
+    }
+
+    public boolean isOnRoute() {
+        return isOnRoute;
+    }
+
+    public Train_Schedule_Station_Structure getPreviousStation() {
+        return previousStation;
+    }
+
+    public Train_Schedule_Station_Structure getNextStation() {
+        return nextStation;
+    }
+
+    public Train_Schedule_Station_Structure getCurrentStation() {
+        return currentStation;
+    }
+
+    public int getStationCoveredPercentage() {
+        return stationCoveredPercentage;
+    }
+
+    public int getTotalJourneyCovered() {
+        return totalJourneyCovered;
+    }
+
+    public int getTotalJourneyCoveredPercentage() {
+        return ((totalJourneyCovered / Integer.parseInt(totalTrainJourney)) * 100);
+    }
+
+    public int getTotalTrainJourney() {
+        return Integer.parseInt(totalTrainJourney);
+    }
+
     public String getDestinationStation() {
         return destinationStation;
     }
@@ -286,12 +315,12 @@ public class Train_Tracking_Live_Structure_Class {
         return sourceStation;
     }
 
-    public Train_Tracking_Structure getReport(){
+    public Train_Tracking_Structure getReport() {
         return new Train_Tracking_Structure(
                 getPreviousStation(), getCurrentStation(), getNextStation(),
-                getStatusMessage(),isOnRoute(),isAtStation(),getStationCoveredPercentage(),
-                getTotalJourneyCovered(), getTotalJourneyCoveredPercentage(),getTotalTrainJourney(),
-                getSourceStation(),getDestinationStation()
-                );
+                getStatusMessage(), isOnRoute(), isAtStation(), getStationCoveredPercentage(),
+                getTotalJourneyCovered(), getTotalJourneyCoveredPercentage(), getTotalTrainJourney(),
+                getSourceStation(), getDestinationStation()
+        );
     }
 }

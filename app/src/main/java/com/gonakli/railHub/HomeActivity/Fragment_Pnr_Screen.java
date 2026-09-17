@@ -78,6 +78,8 @@ public class Fragment_Pnr_Screen extends Fragment {
                     adapter.setExtraRefForAnimation(LoadingAnimationView);
                 });
 
+            } else {
+                requireActivity().runOnUiThread(this::stopAnimation);
             }
 
         }).start();

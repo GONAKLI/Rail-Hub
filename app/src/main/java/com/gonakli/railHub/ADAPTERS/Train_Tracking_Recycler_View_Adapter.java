@@ -68,9 +68,9 @@ public class Train_Tracking_Recycler_View_Adapter extends RecyclerView.Adapter<T
         String toStCode = arrTrainStations.get(position).getStationCode();
         holder.trainStationName.setTextColor(ContextCompat.getColor(context, R.color.card_text_primary));
         if (fromStationCode != null && fromStationCode.equalsIgnoreCase(fromStCode)) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#9DC775"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#5C7D11"));
         } else if (toStationCode != null && toStationCode.equalsIgnoreCase(toStCode)) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#E6A5A5"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#ED4F34"));
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.card_background));
         }

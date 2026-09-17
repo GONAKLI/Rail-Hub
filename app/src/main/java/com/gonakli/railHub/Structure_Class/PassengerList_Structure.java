@@ -3,12 +3,12 @@ package com.gonakli.railHub.Structure_Class;
 import java.io.Serializable;
 
 public class PassengerList_Structure implements Serializable {
-    private String passengerSerialNumber, passengerAge,passengerBerthChoice,passengerNationality;
-    private String bookingStatus, bookingCoachId,bookingBerthNo,bookingBerthCode,bookingStatusDetails;
-    private String currentStatus,currentBerthNo,psgnwlType;
-    private String currentStatusIndex,currentStatusDetails;
+    private String passengerSerialNumber, passengerAge, passengerBerthChoice, passengerNationality;
+    private String bookingStatus, bookingCoachId, bookingBerthNo, bookingBerthCode, bookingStatusDetails;
+    private String currentStatus, currentBerthNo, psgnwlType;
+    private String currentStatusIndex, currentStatusDetails;
 
-    public PassengerList_Structure(String passengerSerialNumber, String passengerAge, String passengerBerthChoice, String passengerNationality, String bookingStatus, String bookingCoachId, String bookingBerthNo, String bookingBerthCode, String bookingStatusDetails, String currentStatus, String currentBerthNo, String psgnwlType,String currentStatusIndex,String currentStatusDetails) {
+    public PassengerList_Structure(String passengerSerialNumber, String passengerAge, String passengerBerthChoice, String passengerNationality, String bookingStatus, String bookingCoachId, String bookingBerthNo, String bookingBerthCode, String bookingStatusDetails, String currentStatus, String currentBerthNo, String psgnwlType, String currentStatusIndex, String currentStatusDetails) {
         this.passengerSerialNumber = passengerSerialNumber;
         this.passengerAge = passengerAge;
         this.passengerBerthChoice = passengerBerthChoice;
@@ -26,7 +26,7 @@ public class PassengerList_Structure implements Serializable {
 
     }
 
-    public  PassengerList_Structure(){
+    public PassengerList_Structure() {
 
     }
 

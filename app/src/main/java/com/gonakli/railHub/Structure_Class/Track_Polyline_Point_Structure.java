@@ -9,6 +9,11 @@ public class Track_Polyline_Point_Structure {
         this.lng = lng;
     }
 
-    public double getLat() { return lat; }
-    public double getLng() { return lng; }
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
 }

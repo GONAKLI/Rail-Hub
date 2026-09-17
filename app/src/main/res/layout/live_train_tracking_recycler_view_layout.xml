@@ -50,11 +50,11 @@
     <!-- ===== LIVE TRAIN ICON (Z-Index Fix) ===== -->
     <ImageView
         android:id="@+id/liveTrainIcon"
-        android:layout_width="58dp"
-        android:layout_height="61dp"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:contentDescription="Live train position"
         android:elevation="24dp"
-        android:src="@drawable/train_icon_photoroom"
+        android:src="@drawable/app_train_icon"
         android:translationZ="24dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/timelineDot"

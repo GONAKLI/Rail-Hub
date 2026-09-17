@@ -31,7 +31,7 @@ public class Drawer_Item {
     RadioGroup modalThemeRadioGroup;
 
 
-    public Drawer_Item(Context context, DrawerLayout drawerLayout, NavigationView navigationView){
+    public Drawer_Item(Context context, DrawerLayout drawerLayout, NavigationView navigationView) {
         this.context = context;
         this.drawerLayout = drawerLayout;
         this.navigationView = navigationView;
@@ -42,7 +42,7 @@ public class Drawer_Item {
     public void entryPoint() {
 
 
-        navigationView.setNavigationItemSelectedListener(item ->{
+        navigationView.setNavigationItemSelectedListener(item -> {
             drawerLayout.close();
             Work_On_Nav_Item_Click(item);
 
@@ -52,7 +52,7 @@ public class Drawer_Item {
 
     private void Work_On_Nav_Item_Click(MenuItem item) {
 
-        if(item.getItemId() == R.id.applicationTheme){
+        if (item.getItemId() == R.id.applicationTheme) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("applicationTheme", Context.MODE_PRIVATE);
             Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.change_theme_modal);
@@ -60,7 +60,7 @@ public class Drawer_Item {
             darkRadio = dialog.findViewById(R.id.modalThemeDarkRadio);
             lightRadio = dialog.findViewById(R.id.modalThemeLightRadio);
             systemRadio = dialog.findViewById(R.id.modalThemeSystemRadio);
-            if(sharedPreferences.getBoolean("isDark", false)){
+            if (sharedPreferences.getBoolean("isDark", false)) {
                 darkRadio.setChecked(true);
             } else if (sharedPreferences.getBoolean("isLight", false)) {
                 lightRadio.setChecked(true);
@@ -84,7 +84,7 @@ public class Drawer_Item {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 int selectedRadio = modalThemeRadioGroup.getCheckedRadioButtonId();
 
-                if(selectedRadio == R.id.modalThemeLightRadio){
+                if (selectedRadio == R.id.modalThemeLightRadio) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     editor.putBoolean("isLight", true);
                     editor.putBoolean("isDark", false);
@@ -106,12 +106,12 @@ public class Drawer_Item {
         } //application theme If statement ends here
         else if (item.getItemId() == R.id.applicationRateUs) {
             // Rate on play Store
-            try{
+            try {
                 Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.gonakli.railHub"));
                 play.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(play);
                 Toast.makeText(context, "⇣ ⇣  Scroll Down To Rate Us ⇣ ⇣ ", Toast.LENGTH_SHORT).show();
-            } catch (android.content.ActivityNotFoundException e){
+            } catch (android.content.ActivityNotFoundException e) {
                 Intent play = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.gonakli.railHub"));
                 play.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(play);
@@ -130,9 +130,9 @@ public class Drawer_Item {
                 helper.deleteHistory();
                 helper.close();
 
-                new Handler(Looper.getMainLooper()).post(() ->{
+                new Handler(Looper.getMainLooper()).post(() -> {
                     Fragment currentFragment = ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.frameLayout1);
-                    if(currentFragment instanceof Fragment_History_Screen){
+                    if (currentFragment instanceof Fragment_History_Screen) {
                         ((Fragment_History_Screen) currentFragment).refreshData();
                     }
 
