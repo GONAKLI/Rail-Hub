@@ -45,6 +45,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
     Context context;
     LottieAnimationView LoadingAnimationView;
+    LinearLayout emptyStateContainer;
 
     public All_Pnr_Data_Recycler_View_Adapter(Context context, ArrayList<Pnr_Api_Response_Structure> arrPnrData) {
         this.context = context;
@@ -172,7 +173,14 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     public void setExtraRefForAnimation(LottieAnimationView LoadingAnimationView){
+        Log.d("pnrCount", "manageEmptyStateContainer: animation vala call hua h");
+
         this.LoadingAnimationView = LoadingAnimationView;
+    }
+    public void setEmptyPnrLinearLayout(LinearLayout emptyStateContainer){
+        Log.d("pnrCount", "manageEmptyStateContainer: function " + emptyStateContainer);
+
+        this.emptyStateContainer = emptyStateContainer;
     }
 
     private void startAnimation() {
@@ -293,11 +301,24 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
             ((Activity) context).runOnUiThread(() -> {
                 this.arrPnrData.clear();
                 this.arrPnrData.addAll(latestData);
+                this.manageEmptyStateContainer(this.arrPnrData.size());
                 this.notifyDataSetChanged();
             });
         }).start();
 
 
+    }
+
+    private void manageEmptyStateContainer(int pnrCount){
+        Log.d("pnrCount", "manageEmptyStateContainer: " + pnrCount + " " + emptyStateContainer);
+        if(emptyStateContainer != null) {
+
+            if (pnrCount > 0) {
+                emptyStateContainer.setVisibility(View.GONE);
+            } else {
+                emptyStateContainer.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

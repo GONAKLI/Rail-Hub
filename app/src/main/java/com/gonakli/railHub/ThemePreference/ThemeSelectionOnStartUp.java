@@ -1,5 +1,6 @@
 package com.gonakli.railHub.ThemePreference;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.gonakli.railHub.HomeActivity.Home_Screen_Activity;
 import com.gonakli.railHub.R;
+import com.gonakli.railHub.StartupPermissions.StartupLocationPermission;
 
 public class ThemeSelectionOnStartUp {
     Context context;
@@ -33,6 +36,12 @@ public class ThemeSelectionOnStartUp {
         if (isNewUser) {
             dialog = new Dialog(context);
             dialog.setContentView(R.layout.change_theme_modal);
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    obtain_Startup_Permissions();
+                }
+            });
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
@@ -76,5 +85,10 @@ public class ThemeSelectionOnStartUp {
                 editor.apply();
             });
         }
+    }
+
+    private void obtain_Startup_Permissions() {
+        StartupLocationPermission startupLocationPermission = new StartupLocationPermission();
+        startupLocationPermission.getStartupLocationPermission((Activity) context);
     }
 }

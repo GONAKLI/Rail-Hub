@@ -44,7 +44,7 @@ public class Fragment_Pnr_Screen extends Fragment {
     View view;
     AppCompatEditText pnrSearchField;
     AppCompatButton btnFindPnr;
-    LinearLayout pnrSearchContainerBox;
+    LinearLayout pnrSearchContainerBox, emptyStateContainer;
     RecyclerView allPnrCheckRecyclerView;
     All_Pnr_Data_Recycler_View_Adapter adapter;
     Intent iPnrApiService;
@@ -75,11 +75,18 @@ public class Fragment_Pnr_Screen extends Fragment {
                     allPnrCheckRecyclerView.setAdapter(adapter);
                     allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     stopAnimation();
+                    emptyStateContainer.setVisibility(View.GONE);
                     adapter.setExtraRefForAnimation(LoadingAnimationView);
+                    Log.d("pnrCount", "manageEmptyStateContainer: in main branch " + emptyStateContainer);
+                    adapter.setEmptyPnrLinearLayout(emptyStateContainer);
                 });
 
             } else {
-                requireActivity().runOnUiThread(this::stopAnimation);
+                requireActivity().runOnUiThread(()->{
+                    stopAnimation();
+                    emptyStateContainer.setVisibility(View.VISIBLE);
+
+                });
             }
 
         }).start();
@@ -94,6 +101,7 @@ public class Fragment_Pnr_Screen extends Fragment {
         allPnrCheckRecyclerView = view.findViewById(R.id.allPnrCheckRecyclerView);
         pnrSearchContainerBox = view.findViewById(R.id.pnrSearchContainerBox);
         LoadingAnimationView = view.findViewById(R.id.pnrLoadingAnimation);
+        emptyStateContainer = view.findViewById(R.id.emptyStateContainer);
     }
 
     protected void onSubmitAction() {
@@ -195,6 +203,8 @@ public class Fragment_Pnr_Screen extends Fragment {
                                 adapter = new All_Pnr_Data_Recycler_View_Adapter(getContext(), latestData);
                                 allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                 allPnrCheckRecyclerView.setAdapter(adapter);
+                                emptyStateContainer.setVisibility(View.GONE);
+                                adapter.setEmptyPnrLinearLayout(emptyStateContainer);
                             } else {
                                 adapter.refreshAdapter();
                             }

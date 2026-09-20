@@ -1,5 +1,6 @@
 package com.gonakli.railHub.HomeActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -15,8 +16,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.gonakli.railHub.DrawerItemsWork.Drawer_Item;
 import com.gonakli.railHub.R;
+import com.gonakli.railHub.StartupPermissions.StartupLocationPermission;
 import com.gonakli.railHub.ThemePreference.ThemeSelectionOnStartUp;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.shadow.ShadowRenderer;
 
 public class Home_Screen_Activity extends AppCompatActivity {
     private long prevTime = 0;
@@ -38,6 +41,8 @@ public class Home_Screen_Activity extends AppCompatActivity {
 
 
     }
+
+
 
     private void handleBackPress() {
         getOnBackPressedDispatcher().addCallback(Home_Screen_Activity.this, new OnBackPressedCallback(true) {
@@ -64,6 +69,7 @@ public class Home_Screen_Activity extends AppCompatActivity {
     private void get_application_theme() {
         ThemeSelectionOnStartUp themeSelector = new ThemeSelectionOnStartUp(Home_Screen_Activity.this);
         themeSelector.show_theme_chooser_dialogue();
+
     }
 
     private void frameLayoutSetUp() {
