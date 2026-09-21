@@ -187,103 +187,86 @@ public class NearBy_Station_Activity extends AppCompatActivity {
         nearbyListRefreshBtn.setText("Loading ...");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                nearbyStationProgressBar.setVisibility(View.VISIBLE);
             startLoadingAnimation();
-            //   LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    FusedLocationProviderClient fClient = LocationServices.getFusedLocationProviderClient(NearBy_Station_Activity.this);
-                    fClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null)
-                            .addOnSuccessListener(location -> {
-                                        if (location != null) {
-                                            latitude = location.getLatitude();
-                                            longitude = location.getLongitude();
-                                            findNearByStations();
-                                        }
-//                    locationManager.getCurrentLocation(
-//                            LocationManager.NETWORK_PROVIDER,
-//                            null,
-//                            getMainExecutor(),
-//                            location -> {
-//                                if(location != null){
-//                                    latitude = location.getLatitude();
-//                                    longitude = location.getLongitude();
-//                                    findNearByStations();
-//                                }
-                                        else {
-                                            Toast.makeText(this, "GPS signals Weak, Please Wait", Toast.LENGTH_SHORT).show();
-                                            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-                                            fusedLocationProviderClient.getLastLocation()
-                                                    .addOnSuccessListener(location1 -> {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                FusedLocationProviderClient fClient = LocationServices.getFusedLocationProviderClient(NearBy_Station_Activity.this);
+                fClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null)
+                        .addOnSuccessListener(location -> {
+
+                                    if (location != null) {
+                                        latitude = location.getLatitude();
+                                        longitude = location.getLongitude();
+                                        findNearByStations();
+                                    } else {
+                                        Toast.makeText(this, "GPS signals Weak, Please Wait", Toast.LENGTH_SHORT).show();
+                                        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                                        fusedLocationProviderClient.getLastLocation()
+                                                .addOnSuccessListener(location1 -> {
+                                                    try {
                                                         if (location1 != null) {
                                                             latitude = location1.getLatitude();
                                                             longitude = location1.getLongitude();
                                                             findNearByStations();
                                                         } else {
-//                                                    nearbyStationProgressBar.setVisibility(View.GONE);
                                                             stopLoadingAnimation();
                                                             nearbyListRefreshBtn.setEnabled(true);
                                                             nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                                                             nearbyListRefreshBtn.setText("Refresh Stations");
+                                                            throw new RuntimeException("Unable to get user location, Location is null");
                                                         }
+                                                    } catch (RuntimeException ex) {
+                                                        showExceptionError(ex);
+                                                    }
 
-                                                    });
-
-                                        }
+                                                });
 
                                     }
-                            );
-                } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "! Unexpected error, try again !!", Snackbar.ANIMATION_MODE_SLIDE);
-                    snackbar.setDuration(Snackbar.LENGTH_LONG);
-                    snackbar.setBackgroundTint(Color.RED);
-                    snackbar.setTextColor(Color.BLUE);
-                    snackbar.show();
-//                        nearbyStationProgressBar.setVisibility(View.GONE);
-                    stopLoadingAnimation();
-                    nearbyListRefreshBtn.setEnabled(true);
-                    nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
-                    nearbyListRefreshBtn.setText("Refresh Stations");
-                }
+                                }
+                        );
 
             }
         } else {
-            try {
-
-
-                FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    try {
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                             findNearByStations();
 
                         } else {
-//                                nearbyStationProgressBar.setVisibility(View.GONE);
                             stopLoadingAnimation();
                             nearbyListRefreshBtn.setEnabled(true);
                             nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
                             nearbyListRefreshBtn.setText("Refresh Stations");
+                            throw new RuntimeException("Unable to get user location, Location is null");
                         }
-
+                    } catch (RuntimeException ex) {
+                        showExceptionError(ex);
                     }
-                });
-            } catch (Exception e) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "! Unexpected error, try again !!", Snackbar.ANIMATION_MODE_SLIDE);
-                snackbar.setBackgroundTint(Color.RED);
-                snackbar.setTextColor(Color.BLUE);
-                snackbar.show();
-//                    nearbyStationProgressBar.setVisibility(View.GONE);
-                stopLoadingAnimation();
-                nearbyListRefreshBtn.setEnabled(true);
-                nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
-                nearbyListRefreshBtn.setText("Refresh Stations");
-            }
+
+                }
+            });
         }
 
+    }
+
+    private void showExceptionError(RuntimeException ex) {
+        Log.d("showExceptionError", "showExceptionError: " + ex.getMessage());
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "! Unexpected error, try again !!", Snackbar.ANIMATION_MODE_SLIDE);
+        snackbar.setBackgroundTint(Color.RED);
+        snackbar.setTextColor(Color.BLUE);
+        snackbar.setDuration(Snackbar.LENGTH_LONG);
+        snackbar.show();
+
+        stopLoadingAnimation();
+        nearbyListRefreshBtn.setEnabled(true);
+        nearbyListRefreshBtn.setBackgroundResource(android.R.drawable.btn_default);
+        nearbyListRefreshBtn.setText("Refresh Stations");
     }
 
     @Override

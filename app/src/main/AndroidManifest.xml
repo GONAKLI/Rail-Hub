@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gonakli.railHub"
-    xmlns:tools="http://schemas.android.com/tools">
-    
+    package="com.gonakli.railHub">
+
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -22,25 +21,26 @@
         android:theme="@style/Theme.railHub"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".HomeActivity.Home_Screen_Activity"
+        <activity
+            android:name=".HomeActivity.Home_Screen_Activity"
             android:exported="true">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
 
         <activity android:name=".UserRouteTrains.User_Route_Train_List" />
-        <activity android:name=".TrainNumber_NameSearch.Show_Trains"/>
+        <activity android:name=".TrainNumber_NameSearch.Show_Trains" />
         <activity android:name=".ExtraOptions.NearBy_Station_Activity" />
         <activity android:name=".TrainTracking.Train_Tracking" />
 
-        <service android:name=".Services.LocationService.myLocationServiceClass"
+        <service
+            android:name=".Services.LocationService.myLocationServiceClass"
             android:exported="false"
-            android:foregroundServiceType="location"
-            />
-        <service android:name=".Services.API_Call.Train_Tracking_API_Call"/>
+            android:foregroundServiceType="location" />
+        <service android:name=".Services.API_Call.Train_Tracking_API_Call" />
         <service android:name=".Services.API_Call.PNR_Enquiry_API_CALL" />
     </application>
 

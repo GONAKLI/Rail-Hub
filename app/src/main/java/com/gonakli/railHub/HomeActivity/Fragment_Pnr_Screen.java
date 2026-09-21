@@ -54,7 +54,7 @@ public class Fragment_Pnr_Screen extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("PNR Status");
+        requireActivity().setTitle("PNR Status");
         view = LayoutInflater.from(getActivity()).inflate(R.layout.pnr_check, container, false);
         find_all_id();
         context = getContext();
@@ -116,7 +116,7 @@ public class Fragment_Pnr_Screen extends Fragment {
             if (context != null) context.startService(iPnrApiService);
             pnrSearchField.clearFocus();
             pnrSearchField.setText("");
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(pnrSearchField.getWindowToken(), 0);
             startAnimation();
         });
@@ -197,8 +197,8 @@ public class Fragment_Pnr_Screen extends Fragment {
 
                         helper.close();
 
-                        ArrayList<Pnr_Api_Response_Structure> latestData = new PNR_Data_DB_Helper(getContext()).getPnrDataFromDB();
-                        getActivity().runOnUiThread(() -> {
+                        ArrayList<Pnr_Api_Response_Structure> latestData = new PNR_Data_DB_Helper(requireContext()).getPnrDataFromDB();
+                        requireActivity().runOnUiThread(() -> {
                             if (adapter == null) {
                                 adapter = new All_Pnr_Data_Recycler_View_Adapter(getContext(), latestData);
                                 allPnrCheckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
