@@ -56,7 +56,30 @@ public class Input_From_To_Station extends LinearLayout {
         clearBadge();
         clearFieldData();
         get_Recent_Field_Data_From_DB();
+        hide_show_cross_icon();
+        manage_code_badge();
 
+    }
+
+    private void manage_code_badge() {
+        if (fromStation.getText().toString().isEmpty())
+            fromStationCodeBadge.setVisibility(View.GONE);
+        if (toStation.getText().toString().isEmpty()) toStationCodeBadge.setVisibility(View.GONE);
+    }
+
+
+    private void hide_show_cross_icon() {
+        if (fromStation.getText().toString().isEmpty()) {
+            btn_clear_from.setVisibility(View.GONE);
+        } else {
+            btn_clear_from.setVisibility(View.VISIBLE);
+        }
+
+        if (toStation.getText().toString().isEmpty()) {
+            btn_clear_to.setVisibility(View.GONE);
+        } else {
+            btn_clear_to.setVisibility(View.VISIBLE);
+        }
     }
 
     private void clearFieldData() {
@@ -270,11 +293,11 @@ public class Input_From_To_Station extends LinearLayout {
     private void from_station_to_station_fields() {
 
         btnFindTrain.setOnClickListener(v -> {
-            String fromStationCode_value = fromStationCodeBadge.getText().toString().trim();
-            String toStationCode_value = toStationCodeBadge.getText().toString().trim();
+            String fromStationBadge_value = fromStationCodeBadge.getText().toString().trim();
+            String toStationBadge_value = toStationCodeBadge.getText().toString().trim();
 
 
-            if (fromStationCode_value.isBlank() || toStationCode_value.isBlank()) {
+            if (fromStationBadge_value.isBlank() || toStationBadge_value.isBlank()) {
                 Toast.makeText(context, "Select a valid station", Toast.LENGTH_SHORT)
                         .show();
                 return;
@@ -283,14 +306,14 @@ public class Input_From_To_Station extends LinearLayout {
                     try (Input_Field_Last_Search_DB_Helper db = new Input_Field_Last_Search_DB_Helper(context);
                          Station_List_DB_Helper stDbHelper = new Station_List_DB_Helper(context)) {
                         Input_Field_Last_Search_Structure structureObj = new Input_Field_Last_Search_Structure(
-                                fromStationCode_value, stDbHelper.getStationNameByCode(fromStationCode_value), toStationCode_value, stDbHelper.getStationNameByCode(toStationCode_value)
+                                fromStationBadge_value, stDbHelper.getStationNameByCode(fromStationBadge_value), toStationBadge_value, stDbHelper.getStationNameByCode(toStationBadge_value)
                         );
                         db.insertRecentFieldDataInDB(structureObj);
                     }
                 }).start();
                 Intent iUserRouteTrainList = new Intent(context, User_Route_Train_List.class);
-                iUserRouteTrainList.putExtra("fromStation", fromStationCode_value);
-                iUserRouteTrainList.putExtra("toStation", toStationCode_value);
+                iUserRouteTrainList.putExtra("fromStation", fromStationBadge_value);
+                iUserRouteTrainList.putExtra("toStation", toStationBadge_value);
                 context.startActivity(iUserRouteTrainList);
             }
 
@@ -303,7 +326,7 @@ public class Input_From_To_Station extends LinearLayout {
         fromStation.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().isBlank()) {
+                if (s.toString().isEmpty()) {
                     fromStationCodeBadge.setText("");
                     fromStationCodeBadge.setVisibility(INVISIBLE);
                 }
@@ -323,7 +346,7 @@ public class Input_From_To_Station extends LinearLayout {
         toStation.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().isBlank()) {
+                if (s.toString().isEmpty()) {
                     toStationCodeBadge.setText("");
                     toStationCodeBadge.setVisibility(INVISIBLE);
                 }
