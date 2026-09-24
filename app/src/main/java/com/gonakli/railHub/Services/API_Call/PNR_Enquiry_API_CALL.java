@@ -17,7 +17,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class PNR_Enquiry_API_CALL extends Service {
     private static String API_URL;
     public static String PNR_RESPONSE = "PNR_RESPONSE_ACTION";
     public static String INTERNET_ISSUE = "PNR_INTERNET_ISSUE";
-    public static  String INTERNAL_APPLICATION_ERROR = "INTERNAL_APPLICATION_ERROR";
+    public static String INTERNAL_APPLICATION_ERROR = "INTERNAL_APPLICATION_ERROR";
     //private static final String API_URL = "https://railhub.gonakli.com/pnr-enquiry";
 
 
@@ -40,7 +39,7 @@ public class PNR_Enquiry_API_CALL extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("PNR_Service", "call_pnr_api: come in onStartCommand");
-        if(intent == null){
+        if (intent == null) {
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -48,11 +47,10 @@ public class PNR_Enquiry_API_CALL extends Service {
         if (intent.hasExtra("pnrNumber")) {
             pnrNumber = intent.getStringExtra("pnrNumber");
             API_URL = String.format("https://www.irctc.co.in/eticketing/protected/mapps1/pnrenq/%s?pnrEnqType=E", pnrNumber);
-            Log.d("PNR_Service", "onStartCommand: " + API_URL);
-            new Thread(() ->{
+            new Thread(() -> {
                 call_pnr_api(intent);
             }).start();
-        }else{
+        } else {
             stopSelf();
         }
 
@@ -84,36 +82,20 @@ public class PNR_Enquiry_API_CALL extends Service {
             conn.setRequestProperty("Sec-Fetch-Site", "same-origin");
             conn.setRequestProperty("Priority", "u=0");
             conn.setRequestMethod("GET");
-//            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-//            conn.setRequestProperty("Accept", "application/json");
-           // conn.setDoOutput(true);
-//            String query = String.format("{\"pnrNumber\":\"%s\"}", pnrNumber);
-//            Log.d("PNR_Service", "call_pnr_api: " + query);
-//
-//            OutputStream os = conn.getOutputStream();
-//            os.write(query.getBytes());
-//            os.flush();
-//            os.close();
 
-            Log.d("PNR_Service", "call_pnr_api: " + conn.getResponseCode());
             if (conn.getResponseCode() == 200) {
                 Pnr_Api_Response_Structure resData = PnrHandler(conn);
 
-                Log.d("pnrWork", "call_pnr_api: " + resData.isSuccess());
-
-                Log.d("pnrWork", "call_pnr_api: " + resData.getTrainName());
-                // Log.d("pnrWork", "call_pnr_api: " + resData.getErrorMessage());
                 iPnrResponse.setAction(PNR_RESPONSE);
                 iPnrResponse.setPackage(getPackageName());
                 iPnrResponse.putExtra("pnrResponse", resData);
-                if(intent.hasExtra("isRefresh")){
+                if (intent.hasExtra("isRefresh")) {
                     boolean isRefresh = intent.getBooleanExtra("isRefresh", false);
-                    if(isRefresh){
+                    if (isRefresh) {
                         iPnrResponse.putExtra("isRefresh", true);
                     }
                 }
                 sendBroadcast(iPnrResponse);
-                Log.d("pnrWork", "call_pnr_api: broadcast sent");
 
             }
         } catch (UnknownHostException e) {
@@ -121,7 +103,7 @@ public class PNR_Enquiry_API_CALL extends Service {
             iPnrResponse.setPackage(getPackageName());
             iPnrResponse.putExtra("pnrNumber", pnrNumber);
             sendBroadcast(iPnrResponse);
-        } catch (IOException e){
+        } catch (IOException e) {
             iPnrResponse.setAction(INTERNAL_APPLICATION_ERROR);
             iPnrResponse.setPackage(getPackageName());
             iPnrResponse.putExtra("pnrNumber", pnrNumber);
@@ -134,20 +116,21 @@ public class PNR_Enquiry_API_CALL extends Service {
         try {
             StringBuilder data = new StringBuilder();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            String line = bufferedReader.readLine();
+            while (line != null) {
                 data.append(line);
+                line = bufferedReader.readLine();
             }
             JSONObject jsonObject = new JSONObject(data.toString());
 
             if (jsonObject.has("errorMessage")) {
                 String errorMessage = jsonObject.optString("errorMessage");
-                resStruct = new Pnr_Api_Response_Structure(false,errorMessage);
+                resStruct = new Pnr_Api_Response_Structure(false, errorMessage);
 
             } else if (jsonObject.has("pnrNumber")) {
-                String dateOfJourney, trainStartDate, trainNumber, trainName,sourceStation, pnrNumber;
-                String destinationStation, reservationUpto,boardingPoint,journeyClass,numberOfpassenger;
-                String chartStatus,bookingFare,quota,ticketFare;
+                String dateOfJourney, trainStartDate, trainNumber, trainName, sourceStation, pnrNumber;
+                String destinationStation, reservationUpto, boardingPoint, journeyClass, numberOfpassenger;
+                String chartStatus, bookingFare, quota, ticketFare;
                 String bookingDate, ticketType;
                 ArrayList<Object> arrInformationMessage = new ArrayList<>();
                 ArrayList<PassengerList_Structure> arrPassengerList = new ArrayList<>();
@@ -172,12 +155,12 @@ public class PNR_Enquiry_API_CALL extends Service {
 
 
                 JSONArray arrPassList = jsonObject.optJSONArray("passengerList");
-                for(int j =0; j < arrPassList.length(); j++){
+                for (int j = 0; j < arrPassList.length(); j++) {
                     // passengerList
-                    String currentStatus,currentBerthNo,psgnwlType;
-                    String passengerSerialNumber, passengerAge,passengerBerthChoice,passengerNationality;
-                    String bookingStatus, bookingCoachId,bookingBerthNo,bookingBerthCode,bookingStatusDetails;
-                    String currentStatusIndex,currentStatusDetails;
+                    String currentStatus, currentBerthNo, psgnwlType;
+                    String passengerSerialNumber, passengerAge, passengerBerthChoice, passengerNationality;
+                    String bookingStatus, bookingCoachId, bookingBerthNo, bookingBerthCode, bookingStatusDetails;
+                    String currentStatusIndex, currentStatusDetails;
                     JSONObject objPassList = arrPassList.optJSONObject(j);
                     currentStatus = objPassList.optString("currentStatus");
                     currentBerthNo = objPassList.optString("currentBerthNo");
@@ -191,37 +174,37 @@ public class PNR_Enquiry_API_CALL extends Service {
                     bookingBerthNo = objPassList.optString("bookingBerthNo");
                     bookingBerthCode = objPassList.optString("bookingBerthCode");
                     bookingStatusDetails = objPassList.optString("bookingStatusDetails");
-                    currentStatusIndex =  objPassList.optString("currentStatusIndex");
-                    currentStatusDetails =  objPassList.optString("currentStatusDetails");
+                    currentStatusIndex = objPassList.optString("currentStatusIndex");
+                    currentStatusDetails = objPassList.optString("currentStatusDetails");
 
 
                     arrPassengerList.add(new PassengerList_Structure(passengerSerialNumber, passengerAge,
-                            passengerBerthChoice,passengerNationality,bookingStatus,bookingCoachId,bookingBerthNo,bookingBerthCode,
-                            bookingStatusDetails,currentStatus,currentBerthNo,psgnwlType, currentStatusIndex,currentStatusDetails));
+                            passengerBerthChoice, passengerNationality, bookingStatus, bookingCoachId, bookingBerthNo, bookingBerthCode,
+                            bookingStatusDetails, currentStatus, currentBerthNo, psgnwlType, currentStatusIndex, currentStatusDetails));
                 }
 
 
                 JSONArray infoJson = jsonObject.optJSONArray("informationMessage");
-                for(int i=0; i<infoJson.length(); i++){
-                    if(!infoJson.isNull(i)){
+                for (int i = 0; i < infoJson.length(); i++) {
+                    if (!infoJson.isNull(i)) {
                         Object value = infoJson.opt(i);
                         arrInformationMessage.add(value);
                     }
 
                 }
 
-                resStruct = new Pnr_Api_Response_Structure(true,pnrNumber, dateOfJourney,
+                resStruct = new Pnr_Api_Response_Structure(true, pnrNumber, dateOfJourney,
                         trainStartDate, trainNumber, trainName, sourceStation, destinationStation,
                         reservationUpto, boardingPoint, journeyClass,
                         numberOfpassenger, chartStatus, bookingFare, quota,
-                        arrInformationMessage,arrPassengerList, ticketFare,bookingDate,ticketType);
+                        arrInformationMessage, arrPassengerList, ticketFare, bookingDate, ticketType);
             }
 
             return resStruct;
 
         } catch (Exception e) {
-            Log.d("PNR_Service", "call_pnr_api: error occurred in pnrHandler" + e);
-         return null;
+            Log.e("API", "PnrHandler: Something went wrong in Pnr API Call: " + e.getMessage());
+            return null;
         }
     }
 }

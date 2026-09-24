@@ -37,6 +37,7 @@ public class User_Routes_History_DB_Helper extends SQLiteOpenHelper {
                         " %s text, %s text, %s text, %s text, %s text, %s INTEGER, %s text PRIMARY KEY)", TABLE_NAME, TABLE_COLUMN_TRAIN_NUMBER,
                 TABLE_COLUMN_TRAIN_NAME, TABLE_COLUMN_SOURCE_STATION_CODE, TABLE_COLUMN_DESTINATION_STATION_CODE,
                 TABLE_COLUMN_ADDED_ON, TABLE_COLUMN_DAY_COUNT, TABLE_COLUMN_UNIQUE_ID);
+        
         db.execSQL(sqlQuery);
 
     }

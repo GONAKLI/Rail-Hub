@@ -41,6 +41,7 @@ public class Fragment_History_Screen extends Fragment {
             arrHistoryData = fetchHistory();
            if(isAdded() && getActivity() != null) {
                requireActivity().runOnUiThread(() -> {
+                   if(!isAdded() || getContext() == null) return;
                    if (arrHistoryData.isEmpty()) {
                        emptyStateContainer.setVisibility(View.VISIBLE);
                    } else {
@@ -70,8 +71,11 @@ public class Fragment_History_Screen extends Fragment {
     }
 
     private ArrayList<User_History_Structure> fetchHistory() {
-        User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());
-        return helper.getHistory();
+        try(User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());){
+            return helper.getHistory();
+        }
+
+
     }
 
 }

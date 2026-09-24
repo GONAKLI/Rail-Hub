@@ -39,7 +39,7 @@ public class Train_Tracking_API_Call extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("apiTest", "onStartCommand: enter here");
+        Log.d("apiTest", "1 - enter in onStartCommand method");
         if(intent == null){
             stopSelf();
             return START_NOT_STICKY;
@@ -49,6 +49,8 @@ public class Train_Tracking_API_Call extends Service{
             if(intent.hasExtra("startDate")){
                 startDate = intent.getStringExtra("startDate");
             }
+            Log.d("apiTest", "2 - checking train number and date: " + trainNumber + "  " + startDate);
+
             new Thread(this::fetch_Train_Location).start();
         }else {
             stopSelf();
@@ -58,8 +60,6 @@ public class Train_Tracking_API_Call extends Service{
 
     private void fetch_Train_Location(){
         Intent iTrainAPi = new Intent();
-
-        Log.d("apiTest", "onStartCommand: enter in fetch method");
         try{
             URL url = new URL(API_URL);
             HttpURLConnection conn =(HttpURLConnection) url.openConnection();
@@ -77,9 +77,13 @@ public class Train_Tracking_API_Call extends Service{
             os.write(dataForAPI.toString().getBytes());
             os.flush();
             os.close();
+            Log.d("apiTest", "3 - post request sent to the server ");
+
 
 
             int statusCode = conn.getResponseCode();
+            Log.d("apiTest", "4 - response came and status code is: " + statusCode);
+
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             String line;
@@ -87,9 +91,9 @@ public class Train_Tracking_API_Call extends Service{
                 sb.append(line.trim());
             }
             JSONObject trainTracking = new JSONObject(sb.toString());
-            Log.d("trackmyAPI", "fetch_Train_Location: lat  " + trainTracking.optString("trainLat"));
+            Log.d("apiTest", "fetch_Train_Location: lat  " + trainTracking.optString("trainLat"));
 
-            Log.d("trackmyAPI", "fetch_Train_Location: lng " + trainTracking.optString("trainLng"));
+            Log.d("apiTest", "fetch_Train_Location: lng " + trainTracking.optString("trainLng"));
             String lat = trainTracking.optString("trainLat");
             String lng = trainTracking.optString("trainLng");
             String trainApiStatusMsg = trainTracking.optString("statusMsg");
