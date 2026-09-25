@@ -23,14 +23,15 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class Train_Tracking_API_Call extends Service{
+public class Train_Tracking_API_Call extends Service {
 
-//   private static final String API_URL = "http://10.62.223.99:5015/find-my-train";
-     private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
+    //   private static final String API_URL = "http://10.62.223.99:5015/find-my-train";
+    private static final String API_URL = "https://railhub.gonakli.com/find-my-train";
     public static String API_TRAIN_DATA = "API_TRAIN_DATA";
     public static String INTERNET_ISSUE = "INTERNET_ISSUE";
     public static String INTERNAL_APPLICATION_ERROR = "INTERNAL_ERROR";
     String trainNumber, startDate;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -40,29 +41,29 @@ public class Train_Tracking_API_Call extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("apiTest", "1 - enter in onStartCommand method");
-        if(intent == null){
+        if (intent == null) {
             stopSelf();
             return START_NOT_STICKY;
         }
-        if(intent != null && intent.hasExtra("trainNumber")){
+        if (intent != null && intent.hasExtra("trainNumber")) {
             trainNumber = intent.getStringExtra("trainNumber");
-            if(intent.hasExtra("startDate")){
+            if (intent.hasExtra("startDate")) {
                 startDate = intent.getStringExtra("startDate");
             }
             Log.d("apiTest", "2 - checking train number and date: " + trainNumber + "  " + startDate);
 
             new Thread(this::fetch_Train_Location).start();
-        }else {
+        } else {
             stopSelf();
         }
         return START_NOT_STICKY;
     }
 
-    private void fetch_Train_Location(){
+    private void fetch_Train_Location() {
         Intent iTrainAPi = new Intent();
-        try{
+        try {
             URL url = new URL(API_URL);
-            HttpURLConnection conn =(HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -71,7 +72,7 @@ public class Train_Tracking_API_Call extends Service{
             OutputStream os = conn.getOutputStream();
             JSONObject dataForAPI = new JSONObject();
             dataForAPI.put("trainNumber", trainNumber);
-            if(startDate !=null){
+            if (startDate != null) {
                 dataForAPI.put("startDate", startDate);
             }
             os.write(dataForAPI.toString().getBytes());
@@ -80,14 +81,13 @@ public class Train_Tracking_API_Call extends Service{
             Log.d("apiTest", "3 - post request sent to the server ");
 
 
-
             int statusCode = conn.getResponseCode();
             Log.d("apiTest", "4 - response came and status code is: " + statusCode);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             String line;
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line.trim());
             }
             JSONObject trainTracking = new JSONObject(sb.toString());
@@ -101,13 +101,13 @@ public class Train_Tracking_API_Call extends Service{
             JSONArray jsonArray = trainTracking.optJSONArray("stationData");
 
             ArrayList<API_Response_Train_Tracking> arrTrainApi = new ArrayList<>();
-            for(int i=0; i< jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject objData = jsonArray.getJSONObject(i);
                 String stationCode = objData.optString("stationCode", "");
                 String platform = objData.optString("platform", "");
                 String actualArrival = objData.optString("actualArrival", "");
                 String actualDeparture = objData.optString("actualDeparture", "");
-                arrTrainApi.add(new API_Response_Train_Tracking(stationCode,platform, actualArrival,actualDeparture));
+                arrTrainApi.add(new API_Response_Train_Tracking(stationCode, platform, actualArrival, actualDeparture));
             }
             iTrainAPi.setAction(API_TRAIN_DATA);
             iTrainAPi.putExtra("trainLat", Double.parseDouble(lat));
@@ -118,11 +118,11 @@ public class Train_Tracking_API_Call extends Service{
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);
 
-        }catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             iTrainAPi.setAction(INTERNET_ISSUE);
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);
-        } catch (IOException | JSONException e){
+        } catch (IOException | JSONException e) {
             iTrainAPi.setAction(INTERNAL_APPLICATION_ERROR);
             iTrainAPi.setPackage(getPackageName());
             sendBroadcast(iTrainAPi);

@@ -67,27 +67,21 @@
             android:paddingBottom="12dp"
             android:scrollbars="none" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/pnrLoadingAnimation"
-            android:layout_width="200dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
         <LinearLayout
             android:id="@+id/emptyStateContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/img_no_pnr_found"
                 android:layout_width="220dp"
                 android:layout_height="160dp"
-                android:src="@drawable/empty_pnr"
+                android:alpha="0.85"
                 android:contentDescription="No pnr Exist"
-                android:alpha="0.85" />
+                android:src="@drawable/empty_pnr" />
 
             <TextView
                 android:id="@+id/tv_no_pnr_found"
@@ -95,20 +89,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="No active PNR"
+                android:textColor="#444444"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#444444" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Enter a 10-digit PNR above to see booking status, berth and chart details."
                 android:lineHeight="25dp"
+                android:text="Enter a 10-digit PNR above to see booking status, berth and chart details."
                 android:textAlignment="center"
-                android:textSize="14sp"
-                android:textColor="#888888" />
+                android:textColor="#888888"
+                android:textSize="14sp" />
         </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pnrLoadingAnimation"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
     </FrameLayout>
 </LinearLayout>
