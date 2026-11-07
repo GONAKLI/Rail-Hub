@@ -1,4 +1,4 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.Pojo_Classes;
 
 public class User_History_Structure {
    private final String trainNumber, trainName, trainSource, trainDestination;

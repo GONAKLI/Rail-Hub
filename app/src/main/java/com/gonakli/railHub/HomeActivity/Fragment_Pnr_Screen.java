@@ -35,7 +35,7 @@ import com.gonakli.railHub.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railHub.R;
 import com.gonakli.railHub.Services.API_Call.PNR_Enquiry_API_CALL;
-import com.gonakli.railHub.Structure_Class.Pnr_Api_Response_Structure;
+import com.gonakli.railHub.Pojo_Classes.Pnr_Api_Response_Structure;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;

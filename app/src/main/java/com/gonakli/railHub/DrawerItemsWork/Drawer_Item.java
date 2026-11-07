@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railHub.HomeActivity.Fragment_History_Screen;
 import com.gonakli.railHub.R;
+import com.gonakli.railHub.Utility.VibrationEffect.Get_Vibration;
 import com.google.android.material.navigation.NavigationView;
 
 public class Drawer_Item {
@@ -98,6 +99,7 @@ public class Drawer_Item {
                     editor.putBoolean("isLight", false);
                 }
                 editor.apply();
+                produceVibration(85L,75, this.context);
                 dialog.dismiss();
             });
 
@@ -117,6 +119,8 @@ public class Drawer_Item {
                 context.startActivity(play);
                 Toast.makeText(context, "⇣ ⇣  Scroll Down To Rate Us ⇣ ⇣ ", Toast.LENGTH_SHORT).show();
             }
+            produceVibration(70L, 85, this.context);
+
 
         } // end of play store rating condition
 //        else if (item.getItemId() == R.id.applicationFeedback) {
@@ -135,7 +139,7 @@ public class Drawer_Item {
                     if (currentFragment instanceof Fragment_History_Screen) {
                         ((Fragment_History_Screen) currentFragment).refreshData();
                     }
-
+                    produceVibration(80L,80, this.context);
                     Toast.makeText(context, "History Deleted Successfully", Toast.LENGTH_SHORT).show();
 
                 });
@@ -147,6 +151,11 @@ public class Drawer_Item {
     private void find_All_ID() {
 
 
+    }
+
+    private void produceVibration(Long effectDuration, int amplitude, Context context) {
+        Get_Vibration getVibration = new Get_Vibration();
+        getVibration.getVibrationEffect(effectDuration,amplitude, context);
     }
 
 

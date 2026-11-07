@@ -1,6 +1,6 @@
 package com.gonakli.railHub.Utility.TrainExtraInfo;
 
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
 
 public class RunningDays {
     public static String getTrainRunningDays( Train_Schedule_Structure trainSchedule ) {

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.gonakli.railHub.Structure_Class.Input_Field_Last_Search_Structure;
+import com.gonakli.railHub.Pojo_Classes.Input_Field_Last_Search_Structure;
 
 public class Input_Field_Last_Search_DB_Helper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Recent Searches";

@@ -1,4 +1,4 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.Pojo_Classes;
 
 public class Train_List_Structure_New {
     private final String trainNumber, trainName, sourceStationName, destinationStationName;

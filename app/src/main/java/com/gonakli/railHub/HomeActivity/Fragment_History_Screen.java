@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.gonakli.railHub.ADAPTERS.User_History_ListView_Adapter;
 import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
+import com.gonakli.railHub.Pojo_Classes.User_History_Structure;
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.User_History_Structure;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class Fragment_History_Screen extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         history = inflater.inflate(R.layout.history_activity_fragment, container, false);
         requireActivity().setTitle("Search History");
         find_all_id();
@@ -39,20 +39,20 @@ public class Fragment_History_Screen extends Fragment {
     private void list_view_setUp() {
         new Thread(() -> {
             arrHistoryData = fetchHistory();
-           if(isAdded() && getActivity() != null) {
-               requireActivity().runOnUiThread(() -> {
-                   if(!isAdded() || getContext() == null) return;
-                   if (arrHistoryData.isEmpty()) {
-                       emptyStateContainer.setVisibility(View.VISIBLE);
-                   } else {
-                       emptyStateContainer.setVisibility(View.GONE);
-                       adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
+            if (isAdded() && getActivity() != null) {
+                requireActivity().runOnUiThread(() -> {
+                    if (!isAdded() || getContext() == null) return;
+                    if (arrHistoryData.isEmpty()) {
+                        emptyStateContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyStateContainer.setVisibility(View.GONE);
+                        adapter = new User_History_ListView_Adapter(requireContext(), arrHistoryData);
 
-                       historyListView.setAdapter(adapter); // ✅ अब main thread पर
+                        historyListView.setAdapter(adapter); // ✅ अब main thread पर
 
-                   }
-               });
-           }
+                    }
+                });
+            }
 
         }).start();
 
@@ -65,13 +65,14 @@ public class Fragment_History_Screen extends Fragment {
 
     public void refreshData() {
         arrHistoryData.clear();
-        adapter.notifyDataSetChanged();
-        list_view_setUp();
-
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+            list_view_setUp();
+        }
     }
 
     private ArrayList<User_History_Structure> fetchHistory() {
-        try(User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());){
+        try (User_Routes_History_DB_Helper helper = new User_Routes_History_DB_Helper(requireContext());) {
             return helper.getHistory();
         }
 

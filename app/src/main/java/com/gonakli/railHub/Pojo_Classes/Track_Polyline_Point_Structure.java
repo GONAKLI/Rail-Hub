@@ -1,4 +1,4 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.Pojo_Classes;
 
 public class Track_Polyline_Point_Structure {
     private final double lat;

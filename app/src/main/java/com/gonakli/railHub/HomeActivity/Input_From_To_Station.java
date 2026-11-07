@@ -27,8 +27,8 @@ import com.gonakli.railHub.ADAPTERS.Stations_Dropdown_Adapter;
 import com.gonakli.railHub.DB_WORK.Input_Field_Last_Search_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.Input_Field_Last_Search_Structure;
-import com.gonakli.railHub.Structure_Class.Station_List_Structure;
+import com.gonakli.railHub.Pojo_Classes.Input_Field_Last_Search_Structure;
+import com.gonakli.railHub.Pojo_Classes.Station_List_Structure;
 import com.gonakli.railHub.UserRouteTrains.User_Route_Train_List;
 
 import java.util.ArrayList;

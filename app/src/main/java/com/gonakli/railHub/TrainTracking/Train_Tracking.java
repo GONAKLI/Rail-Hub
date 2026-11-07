@@ -36,12 +36,11 @@ import com.gonakli.railHub.Permissions.Location_Permissions;
 import com.gonakli.railHub.R;
 import com.gonakli.railHub.Services.API_Call.Train_Tracking_API_Call;
 import com.gonakli.railHub.Services.LocationService.myLocationServiceClass;
-import com.gonakli.railHub.Structure_Class.API_Response_Train_Tracking;
-import com.gonakli.railHub.Structure_Class.Track_Polyline_Point_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Tracking_Live_Structure_Class;
-import com.gonakli.railHub.Structure_Class.Train_Tracking_Structure;
+import com.gonakli.railHub.Pojo_Classes.API_Response_Train_Tracking;
+import com.gonakli.railHub.Pojo_Classes.Track_Polyline_Point_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Tracking_Structure;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Subtract_Days_In_Millis;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -195,7 +194,7 @@ public class Train_Tracking extends AppCompatActivity {
         String stData = "";
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
         ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();
-        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat, lng, arrTrainStations, arrPolylinePoints);
+        Map_Lat_Lng_On_Track st = new Map_Lat_Lng_On_Track(lat, lng, arrTrainStations, arrPolylinePoints);
         st.trackMyUserTrain();
         Train_Tracking_Structure trainLocationData = st.getReport();
         if (adapter != null) {
@@ -455,7 +454,7 @@ public class Train_Tracking extends AppCompatActivity {
         String stData = "";
         ArrayList<Train_Schedule_Station_Structure> arrTrainStations = myTrainData.getStationList();
         ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints = myTrainData.getPolylinePoints();
-        Train_Tracking_Live_Structure_Class st = new Train_Tracking_Live_Structure_Class(lat, lng, arrTrainStations, arrPolylinePoints);
+        Map_Lat_Lng_On_Track st = new Map_Lat_Lng_On_Track(lat, lng, arrTrainStations, arrPolylinePoints);
         st.trackMyUserTrain();
         Train_Tracking_Structure trainLocationData = st.getReport();
         if (adapter != null) {

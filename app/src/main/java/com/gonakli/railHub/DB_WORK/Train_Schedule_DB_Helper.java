@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 
 //import com.gonakli.railHub.ArrayGenerater.Make_Array_Of_Train_Schedule;
-import com.gonakli.railHub.Structure_Class.Track_Polyline_Point_Structure;
-import com.gonakli.railHub.Structure_Class.Train_List_Structure_New;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railHub.Pojo_Classes.Track_Polyline_Point_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_List_Structure_New;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;

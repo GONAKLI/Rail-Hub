@@ -1,4 +1,4 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.Pojo_Classes;
 
 public class Train_Tracking_Structure {
     private final Train_Schedule_Station_Structure previousStation, currentStation, nextStation;

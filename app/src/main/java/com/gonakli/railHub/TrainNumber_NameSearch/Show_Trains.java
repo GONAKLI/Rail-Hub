@@ -14,7 +14,7 @@ import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.ADAPTERS.Train_List_Recycler_Adapter;
 import com.gonakli.railHub.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.Train_List_Structure_New;
+import com.gonakli.railHub.Pojo_Classes.Train_List_Structure_New;
 
 import java.util.ArrayList;
 

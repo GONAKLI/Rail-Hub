@@ -1,4 +1,4 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.Pojo_Classes;
 
 public class Input_Field_Last_Search_Structure {
     private final String fromCode;

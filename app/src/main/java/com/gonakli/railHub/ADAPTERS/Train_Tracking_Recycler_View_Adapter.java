@@ -18,10 +18,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.API_Response_Train_Tracking;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Tracking_Structure;
+import com.gonakli.railHub.Pojo_Classes.API_Response_Train_Tracking;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Tracking_Structure;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Time_Tense;
 
 import java.text.ParseException;

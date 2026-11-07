@@ -7,8 +7,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.gonakli.railHub.Structure_Class.PassengerList_Structure;
-import com.gonakli.railHub.Structure_Class.Pnr_Api_Response_Structure;
+import com.gonakli.railHub.Pojo_Classes.PassengerList_Structure;
+import com.gonakli.railHub.Pojo_Classes.Pnr_Api_Response_Structure;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

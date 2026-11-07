@@ -28,13 +28,13 @@ import com.airbnb.lottie.LottieDrawable;
 import com.gonakli.railHub.API_Limit.Pnr_Check_Api_Limit;
 import com.gonakli.railHub.DB_WORK.PNR_Data_DB_Helper;
 import com.gonakli.railHub.DB_WORK.Station_List_DB_Helper;
+import com.gonakli.railHub.Pojo_Classes.PassengerList_Structure;
+import com.gonakli.railHub.Pojo_Classes.Pnr_Api_Response_Structure;
 import com.gonakli.railHub.R;
 import com.gonakli.railHub.Services.API_Call.PNR_Enquiry_API_CALL;
-import com.gonakli.railHub.Structure_Class.PassengerList_Structure;
-import com.gonakli.railHub.Structure_Class.Pnr_Api_Response_Structure;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Date_Tense;
+import com.gonakli.railHub.Utility.VibrationEffect.Get_Vibration;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -154,11 +154,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
     }
 
     private void customize_card_on_journey_date(String responseMsg, viewHolder holder) {
-        if(responseMsg.equalsIgnoreCase("past")){
+        if (responseMsg.equalsIgnoreCase("past")) {
             holder.itemView.setBackgroundColor(Color.parseColor("#FF3C28"));
-        } else if(responseMsg.equalsIgnoreCase("present")) {
+        } else if (responseMsg.equalsIgnoreCase("present")) {
             holder.itemView.setBackgroundColor(Color.parseColor("#99F49C"));
-        }else if (responseMsg.equalsIgnoreCase("future")) {
+        } else if (responseMsg.equalsIgnoreCase("future")) {
             holder.itemView.setBackgroundColor(Color.parseColor("#ffe6f0"));
         }
     }
@@ -168,16 +168,18 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
             ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("pnrNumber", pnrNum);
             clipboardManager.setPrimaryClip(clipData);
+            produceVibration(85L, 95, context);
             Toast.makeText(context, "Pnr number copied", Toast.LENGTH_SHORT).show();
         });
     }
 
-    public void setExtraRefForAnimation(LottieAnimationView LoadingAnimationView){
+    public void setExtraRefForAnimation(LottieAnimationView LoadingAnimationView) {
         Log.d("pnrCount", "manageEmptyStateContainer: animation vala call hua h");
 
         this.LoadingAnimationView = LoadingAnimationView;
     }
-    public void setEmptyPnrLinearLayout(LinearLayout emptyStateContainer){
+
+    public void setEmptyPnrLinearLayout(LinearLayout emptyStateContainer) {
         Log.d("pnrCount", "manageEmptyStateContainer: function " + emptyStateContainer);
 
         this.emptyStateContainer = emptyStateContainer;
@@ -257,6 +259,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                                 db.deletePnrFromDB(pnrNum);
                                 db.close();
                                 ((Activity) context).runOnUiThread(() -> {
+                                    produceVibration(80L, 90, context);
                                     refreshAdapter();
                                 });
                             }).start();
@@ -288,6 +291,7 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
                 holder.btnRefreshPnr.startAnimation(animation);
                 Toast.makeText(context, "Pnr Status is already upTodate", Toast.LENGTH_SHORT).show();
             }
+            produceVibration(75L, 95, this.context);
 
         });
     }
@@ -309,9 +313,9 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
 
     }
 
-    private void manageEmptyStateContainer(int pnrCount){
+    private void manageEmptyStateContainer(int pnrCount) {
         Log.d("pnrCount", "manageEmptyStateContainer: " + pnrCount + " " + emptyStateContainer);
-        if(emptyStateContainer != null) {
+        if (emptyStateContainer != null) {
 
             if (pnrCount > 0) {
                 emptyStateContainer.setVisibility(View.GONE);
@@ -326,5 +330,11 @@ public class All_Pnr_Data_Recycler_View_Adapter extends RecyclerView.Adapter<All
         if (iPnrApiService != null) {
             context.stopService(iPnrApiService);
         }
+    }
+
+
+    private void produceVibration(Long effectDuration, int amplitude, Context context) {
+        Get_Vibration getVibration = new Get_Vibration();
+        getVibration.getVibrationEffect(effectDuration, amplitude, context);
     }
 }

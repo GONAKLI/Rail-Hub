@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.NearBy_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.NearBy_Station_Structure;
 
 import java.util.ArrayList;
 

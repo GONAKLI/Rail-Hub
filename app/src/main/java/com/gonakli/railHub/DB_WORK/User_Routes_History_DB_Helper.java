@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.gonakli.railHub.Structure_Class.User_History_Structure;
+import com.gonakli.railHub.Pojo_Classes.User_History_Structure;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

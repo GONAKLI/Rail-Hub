@@ -1,11 +1,15 @@
-package com.gonakli.railHub.Structure_Class;
+package com.gonakli.railHub.TrainTracking;
 
 import android.location.Location;
 import android.util.Log;
 
+import com.gonakli.railHub.Pojo_Classes.Track_Polyline_Point_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Tracking_Structure;
+
 import java.util.ArrayList;
 
-public class Train_Tracking_Live_Structure_Class {
+public class Map_Lat_Lng_On_Track {
 
     private static final float ARRIVED_THRESHOLD = 300f;       // Inside station radius (200m)
     private static final float DEPARTED_THRESHOLD = 1000f;      // Departed window (1 KM)
@@ -27,9 +31,9 @@ public class Train_Tracking_Live_Structure_Class {
 
     private Train_Schedule_Station_Structure previousStation, nextStation, currentStation;
 
-    public Train_Tracking_Live_Structure_Class(double userLat, double userLng,
-                                               ArrayList<Train_Schedule_Station_Structure> arrStationsList,
-                                               ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints) {
+    public Map_Lat_Lng_On_Track(double userLat, double userLng,
+                                ArrayList<Train_Schedule_Station_Structure> arrStationsList,
+                                ArrayList<Track_Polyline_Point_Structure> arrPolylinePoints) {
         this.userLat = userLat;
         this.userLng = userLng;
         this.arrStationsList = arrStationsList;

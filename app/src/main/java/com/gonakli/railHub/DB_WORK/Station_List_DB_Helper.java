@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 // import com.gonakli.railHub.ArrayGenerater.Make_Array_Of_Trains_And_Stations_List;
-import com.gonakli.railHub.Structure_Class.Station_List_Structure;
+import com.gonakli.railHub.Pojo_Classes.Station_List_Structure;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;

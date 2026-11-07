@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.gonakli.railHub.Structure_Class.API_Response_Train_Tracking;
+import com.gonakli.railHub.Pojo_Classes.API_Response_Train_Tracking;
 
 import org.json.JSONArray;
 import org.json.JSONException;

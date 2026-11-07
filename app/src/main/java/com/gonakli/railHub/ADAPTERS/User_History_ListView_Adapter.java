@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.User_History_Structure;
+import com.gonakli.railHub.Pojo_Classes.User_History_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Train_Journey_Date_Selector;
 

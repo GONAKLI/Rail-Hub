@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
 import com.gonakli.railHub.R;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Station_Structure;
-import com.gonakli.railHub.Structure_Class.Train_Schedule_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
+import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Day_Of_Week;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Journey_Time_Finder;
