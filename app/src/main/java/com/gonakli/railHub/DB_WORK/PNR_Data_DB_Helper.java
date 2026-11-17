@@ -12,10 +12,7 @@ import androidx.annotation.Nullable;
 import com.gonakli.railHub.Pojo_Classes.PassengerList_Structure;
 import com.gonakli.railHub.Pojo_Classes.Pnr_Api_Response_Structure;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PNR_DATABASE";
@@ -38,7 +35,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
     private final String TABLE_COLUMN_BOOKING_DATE = "bookingDate";
     private final String TABLE_COLUMN_TICKET_TYPE = "ticketType";
     private final String TABLE_COLUMN_CHART_STATUS = "chartStatus";
-    private final String TABLE_COLUMN_CREATED_AT = "createdAt";
+    private final String TABLE_COLUMN_LAST_UPDATED_AT = "updatedAt";
 
     // passenger list Table
 
@@ -77,16 +74,17 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        System.currentTimeMillis();
         String sqlQuery = String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s TEXT PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT" +
                 ", %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT" +
-                ", %s TEXT, %s TEXT, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)",
+                ", %s TEXT, %s TEXT, %s TEXT, %s INTEGER)",
                 TABLE_NAME,TABLE_COLUMN_PNR_NUMBER,TABLE_COLUMN_DATE_OF_JOURNEY,
                 TABLE_COLUMN_TRAIN_START_DATE,TABLE_COLUMN_TRAIN_NUMBER,TABLE_COLUMN_TRAIN_NAME,
                 TABLE_COLUMN_SOURCE_STATION,TABLE_COLUMN_DESTINATION_STATION,TABLE_COLUMN_RESERVATION_UPTO,
                 TABLE_COLUMN_BOARDING_POINT,TABLE_COLUMN_JOURNEY_CLASS,TABLE_COLUMN_NUMBER_OF_PASSENGER,
                 TABLE_COLUMN_BOOKING_FARE,TABLE_COLUMN_TICKET_FARE,TABLE_COLUMN_QUOTA,TABLE_COLUMN_BOOKING_DATE,
-                TABLE_COLUMN_TICKET_TYPE, TABLE_COLUMN_CHART_STATUS,TABLE_COLUMN_CREATED_AT);
+                TABLE_COLUMN_TICKET_TYPE, TABLE_COLUMN_CHART_STATUS, TABLE_COLUMN_LAST_UPDATED_AT);
         db.execSQL(sqlQuery);
 
         String sqlQueryForPassenger = String.format("CREATE TABLE IF NOT EXISTS %s" +
@@ -157,6 +155,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             values.put(TABLE_COLUMN_BOOKING_DATE, bookingDate );
             values.put(TABLE_COLUMN_TICKET_TYPE, ticketType );
             values.put(TABLE_COLUMN_CHART_STATUS, chartStatus);
+            values.put(TABLE_COLUMN_LAST_UPDATED_AT, System.currentTimeMillis());
             db.insertWithOnConflict(TABLE_NAME,null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
             for(PassengerList_Structure passenger: arrPassengerList){
@@ -217,7 +216,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
     public ArrayList<Pnr_Api_Response_Structure> getPnrDataFromDB(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Pnr_Api_Response_Structure> arrPnrList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME +" ORDER BY " + TABLE_COLUMN_CREATED_AT + " DESC", null );
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME +" ORDER BY " + TABLE_COLUMN_LAST_UPDATED_AT + " DESC", null );
         while(cursor.moveToNext()){
             Pnr_Api_Response_Structure pnrObj = new Pnr_Api_Response_Structure(true, "");
             String pnrNumber = cursor.getString(cursor.getColumnIndexOrThrow(TABLE_COLUMN_PNR_NUMBER));
@@ -325,6 +324,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             values.put(TABLE_COLUMN_BOOKING_DATE, bookingDate );
             values.put(TABLE_COLUMN_TICKET_TYPE, ticketType );
             values.put(TABLE_COLUMN_CHART_STATUS, chartStatus);
+            values.put(TABLE_COLUMN_LAST_UPDATED_AT, System.currentTimeMillis());
             db.update(TABLE_NAME,  values, TABLE_COLUMN_PNR_NUMBER + " = ? ", new String[]{pnrNumber});
 
             db.delete(PASS_TABLE_NAME, TABLE_COLUMN_PNR_NUMBER + " = ?", new String[]{pnrNumber});
