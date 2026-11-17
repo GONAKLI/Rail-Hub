@@ -80,7 +80,7 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
         String sqlQuery = String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s TEXT PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT" +
                 ", %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT" +
-                ", %s TEXT, %s TEXT, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP)",
+                ", %s TEXT, %s TEXT, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)",
                 TABLE_NAME,TABLE_COLUMN_PNR_NUMBER,TABLE_COLUMN_DATE_OF_JOURNEY,
                 TABLE_COLUMN_TRAIN_START_DATE,TABLE_COLUMN_TRAIN_NUMBER,TABLE_COLUMN_TRAIN_NAME,
                 TABLE_COLUMN_SOURCE_STATION,TABLE_COLUMN_DESTINATION_STATION,TABLE_COLUMN_RESERVATION_UPTO,
@@ -304,7 +304,6 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             String  ticketFare = obj.getTicketFare();
             String bookingDate = obj.getBookingDate();
             String ticketType = obj.getTicketType();
-            String updatedTimeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
             ArrayList<PassengerList_Structure> arrPassengerList = obj.getArrPassengerList();
             ArrayList<Object> arrInformationMessage = obj.getArrInformationMessage();
 
@@ -326,8 +325,6 @@ public class PNR_Data_DB_Helper extends SQLiteOpenHelper {
             values.put(TABLE_COLUMN_BOOKING_DATE, bookingDate );
             values.put(TABLE_COLUMN_TICKET_TYPE, ticketType );
             values.put(TABLE_COLUMN_CHART_STATUS, chartStatus);
-
-            values.put(TABLE_COLUMN_CREATED_AT, updatedTimeStamp);
             db.update(TABLE_NAME,  values, TABLE_COLUMN_PNR_NUMBER + " = ? ", new String[]{pnrNumber});
 
             db.delete(PASS_TABLE_NAME, TABLE_COLUMN_PNR_NUMBER + " = ?", new String[]{pnrNumber});
