@@ -33,14 +33,15 @@ import com.gonakli.railHub.API_Limit.Train_Finder_Api_Limit;
 import com.gonakli.railHub.DB_WORK.Train_Schedule_DB_Helper;
 import com.gonakli.railHub.Permissions.GPS_Req;
 import com.gonakli.railHub.Permissions.Location_Permissions;
-import com.gonakli.railHub.R;
-import com.gonakli.railHub.Services.API_Call.Train_Tracking_API_Call;
-import com.gonakli.railHub.Services.LocationService.myLocationServiceClass;
 import com.gonakli.railHub.Pojo_Classes.API_Response_Train_Tracking;
 import com.gonakli.railHub.Pojo_Classes.Track_Polyline_Point_Structure;
 import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
 import com.gonakli.railHub.Pojo_Classes.Train_Tracking_Structure;
+import com.gonakli.railHub.R;
+import com.gonakli.railHub.Services.API_Call.Train_Tracking_API_Call;
+import com.gonakli.railHub.Services.LocationService.myLocationServiceClass;
+import com.gonakli.railHub.SpeedWork.SpeedTracker;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Subtract_Days_In_Millis;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -61,7 +62,7 @@ public class Train_Tracking extends AppCompatActivity {
     Toolbar toolbar;
     TextView tvStatusMessage, tvUpdatedTime, tvNextStopName, tvNextStopMeta;
     TextView tvDestinationName, tvDestinationMeta, tvDelayStatus;
-    TextView tvFromStation, tvToStation;
+    TextView tvFromStation, tvToStation, speedoMeterBox;
     TextView trackingHeaderPreviousStation, trackingHeaderCurrentStation, trackingHeaderNextStation, trackingHeaderStatusInfo;
     ImageButton refreshButton, btnRefreshLiveTracking;
     Location_Permissions obj;
@@ -79,6 +80,7 @@ public class Train_Tracking extends AppCompatActivity {
     Train_Schedule_Structure myTrainData;
     RecyclerView live_train_tracking_recycler_view;
     private boolean isUiLoaded = false;
+    private final SpeedTracker speedTracker = new SpeedTracker();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -265,8 +267,8 @@ public class Train_Tracking extends AppCompatActivity {
         isInsideTrain = !isInsideTrain;
 
         if (isInsideTrain) {
-
             btnRefreshLiveTracking.setVisibility(View.GONE);
+            speedoMeterBox.setVisibility(View.VISIBLE);
             trainApiStatusMsg = null;
             // ================= STATE 1: INSIDE TRAIN (ACTIVE / ON) =================
             insideTrainBtn.setText("Stop, I'm Outside");
@@ -281,7 +283,10 @@ public class Train_Tracking extends AppCompatActivity {
             Toast.makeText(Train_Tracking.this, "Live Tracking Started", Toast.LENGTH_SHORT).show();
 
         } else {
+            if(speedTracker !=null ) speedTracker.clearState();
             btnRefreshLiveTracking.setVisibility(View.VISIBLE);
+            speedoMeterBox.setVisibility(View.GONE);
+
             // ================= STATE 2: NOT IN TRAIN (INACTIVE / OFF) =================
             insideTrainBtn.setText("Inside Train ?");
             insideTrainBtn.setIconResource(R.drawable.nearby_station_icon);
@@ -370,6 +375,7 @@ public class Train_Tracking extends AppCompatActivity {
         trackingHeaderNextStation = findViewById(R.id.trackingHeaderNextStation);
         trackingHeaderStatusInfo = findViewById(R.id.trackingHeaderStatusInfo);
         liveTrackingLoadingAnimation = findViewById(R.id.liveTrackingLoadingAnimation);
+        speedoMeterBox = findViewById(R.id.speedoMeterBox);
     }
 
     @Override
@@ -443,8 +449,9 @@ public class Train_Tracking extends AppCompatActivity {
                 lat = intent.getDoubleExtra("lat", 0);
                 lng = intent.getDoubleExtra("lng", 0);
                 if (lat == 0 || lng == 0) return;
-                Log.d("Serviceclass", "onReceive: receiver h" + lat);
+               Log.d("Serviceclass", "onReceive: receiver h" + lat);
                 track_user();
+                performSpeedWork(lat,lng);
             }
         }
     };
@@ -595,4 +602,9 @@ public class Train_Tracking extends AppCompatActivity {
         snackbar.setAnchorView(live_train_tracking_recycler_view);
         snackbar.show();
     }
+
+    private void performSpeedWork(double lat, double lng){
+        int currentSpeed = speedTracker.getSpeed(lat, lng);
+        speedoMeterBox.setText(String.valueOf(currentSpeed));
+    };
 }

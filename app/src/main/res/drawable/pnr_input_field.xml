@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape android:shape="rectangle"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-<stroke android:width="7.5dp" android:color="#337FA0" />
-    <corners android:radius="10dp" />
-    <solid android:color="#C79F92" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/card_background" />
+
+    <corners android:radius="13dp" />
+
+    <stroke
+        android:width="1dp"
+        android:color="#E2E6EF" />
+
 </shape>
