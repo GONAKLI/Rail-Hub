@@ -15,14 +15,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gonakli.railHub.DB_WORK.User_Routes_History_DB_Helper;
-import com.gonakli.railHub.R;
 import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Station_Structure;
 import com.gonakli.railHub.Pojo_Classes.Train_Schedule_Structure;
+import com.gonakli.railHub.R;
 import com.gonakli.railHub.TrainTracking.Train_Tracking;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Day_Of_Week;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Journey_Time_Finder;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Time_Converter;
 import com.gonakli.railHub.Utility.DateAndTimeRelated.Train_Journey_Date_Selector;
+import com.gonakli.railHub.Utility.TrainExtraInfo.FormatTrainRunningToday;
 import com.gonakli.railHub.Utility.TrainExtraInfo.RunningDays;
 import com.gonakli.railHub.Utility.TrainExtraInfo.ShowTrainInfoDialog;
 
@@ -53,7 +54,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         ArrayList<Train_Schedule_Station_Structure> arrStation = arrScheduleList.get(position).getStationList();
         String arrivalTime = "", finalDestinationReachTime = "";
-        String runningDays = RunningDays.getTrainRunningDays(arrScheduleList.get(position));
+        String baseRunningDays = RunningDays.getTrainRunningDays(arrScheduleList.get(position));
         int startDayCount = Integer.MIN_VALUE;
         int endDayCount = Integer.MIN_VALUE;
 
@@ -84,7 +85,7 @@ public class User_Route_Train_Recycler_View_Adapter extends RecyclerView.Adapter
         Log.d("timeTesting", "onBindViewHolder: arr " + arrivalTime);
 
         Log.d("timeTesting", "onBindViewHolder: dest " + finalDestinationReachTime);
-
+        String runningDays = FormatTrainRunningToday.runningTodayFormatter(baseRunningDays, startDayCount);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 

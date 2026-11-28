@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:padding="16dp"
     android:background="@drawable/bg_passenger_pnr_card"
-    android:elevation="8dp">
+    android:elevation="8dp"
+    android:padding="16dp">
 
     <!-- Title -->
     <TextView
         android:id="@+id/layoutTitle"
+        style="@style/bottomDialogTrainInfoTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Train Information"
-        style="@style/bottomDialogTrainInfoTitle" />
+        android:text="Train Information" />
 
     <!-- Train Name -->
     <LinearLayout
@@ -24,7 +24,7 @@
 
         <TextView
             style="@style/bottomDialogTrainInfoKeys"
-            android:text="Train Name :-"/>
+            android:text="Train Name :-" />
 
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainName"
@@ -60,13 +60,12 @@
 
         <TextView
             style="@style/bottomDialogTrainInfoKeys"
-            android:text="Start From :-" />
+            android:text="Starts From :-" />
 
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainStartingPoint"
             style="@style/bottomDialogTrainInfoValues"
-            android:text="Kalka"
-            />
+            android:text="Kalka" />
     </LinearLayout>
 
     <!-- End At -->
@@ -78,14 +77,12 @@
 
         <TextView
             style="@style/bottomDialogTrainInfoKeys"
-            android:text="End At :-"
-             />
+            android:text="Ends At :-" />
 
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainEndingPoint"
             style="@style/bottomDialogTrainInfoValues"
-            android:text="Shimla"
-             />
+            android:text="Shimla" />
     </LinearLayout>
 
     <!-- Service -->
@@ -97,14 +94,12 @@
 
         <TextView
             style="@style/bottomDialogTrainInfoKeys"
-            android:text="Service :-"
-             />
+            android:text="Base Service Days :-" />
 
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainService"
             style="@style/bottomDialogTrainInfoValues"
-            android:text="Daily"
-             />
+            android:text="Daily" />
     </LinearLayout>
 
     <!-- Travel Time -->
@@ -116,7 +111,7 @@
 
         <TextView
             style="@style/bottomDialogTrainInfoKeys"
-            android:text="Travel Time :-" />
+            android:text="Total Train Journey :-" />
 
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainTravelTime"
@@ -138,7 +133,7 @@
         <TextView
             android:id="@+id/userRouteBottomDialogueTrainTotalDistance"
             style="@style/bottomDialogTrainInfoValues"
-            android:text="115 km"/>
+            android:text="115 km" />
     </LinearLayout>
 
     <!-- Total Stops -->
@@ -164,11 +159,11 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/userRouteBottomDialogueTrainTotalStopsContainer"
-        android:text="Close"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
         android:backgroundTint="#FF6E40"
-        android:elevation="2dp" />
+        android:elevation="2dp"
+        android:text="Close"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
